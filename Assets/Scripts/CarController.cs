@@ -6,19 +6,20 @@ public class CarController : MonoBehaviour
 {
     public Rigidbody rb;
 
-    public float forwardAccel, reverseAccel, maxSpeed, turnStrength, gravityForce, dragOnGround;
+    public float maxForwardAccel = 18, maxReverseAccel = 9, turnStrength = 30, gravityForce = 10, dragOnGround = 3, delayAmount = 0.2f;
 
-    private float speedInput, turnInput;
+    private float speedInput, turnInput, accelDelay, decelDelay, forwardAccelBuildUp, reverseAccelBuildUp;
 
     private bool grounded;
 
     public LayerMask whatIsGround;
-    public float groundRayLength;
+    public float groundRayLength = 5;
     public Transform groundRayPoint;
 
     public Transform leftFrontWheel, rightFrontWheel;
-    public float maxWheelTurn;
+    public float maxWheelTurn = 25;
 
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -29,22 +30,99 @@ public class CarController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(forwardAccelBuildUp);
         speedInput = 0f;
+        //forwardAccelBuildUp = 0;
 
-        if(Input.GetAxis("Vertical") > 0 )
+        accelDelay += Time.deltaTime;
+        decelDelay += Time.deltaTime;
+
+
+
+        if (Input.GetAxis("Vertical") > 0)
         {
-            speedInput = Input.GetAxis("Vertical") * forwardAccel * 1000f;
+
+            if (reverseAccelBuildUp <= 0)
+            {
+                if (accelDelay >= delayAmount && forwardAccelBuildUp < maxForwardAccel)
+                {
+                    forwardAccelBuildUp += 1;
+
+                    accelDelay = 0;
+                }
+
+                speedInput = Input.GetAxis("Vertical") * forwardAccelBuildUp * 1000f;
+            }
+            else
+            {
+                if (decelDelay >= delayAmount && reverseAccelBuildUp > 0)
+                {
+                    reverseAccelBuildUp -= 1;
+                }
+            }
         }
         else if (Input.GetAxis("Vertical") < 0)
         {
-            speedInput = Input.GetAxis("Vertical") * reverseAccel * 1000f;
+            
+            if (forwardAccelBuildUp <= 0)
+            {
+                if (accelDelay >= delayAmount && reverseAccelBuildUp < maxReverseAccel)
+                {
+                    reverseAccelBuildUp += 1;
+
+                    accelDelay = 0;
+                }
+
+                speedInput = Input.GetAxis("Vertical") * reverseAccelBuildUp * 1000f;
+            }
+            else
+            {
+                if (decelDelay >= delayAmount && forwardAccelBuildUp > 0)
+                {
+                    forwardAccelBuildUp -= 1;
+                }
+                
+            }
+            
+        }
+        else
+        {
+            if (decelDelay >= delayAmount && forwardAccelBuildUp > 0 || reverseAccelBuildUp > 0)
+            {
+                forwardAccelBuildUp -= 1;
+                reverseAccelBuildUp -= 1;
+
+                decelDelay = 0;
+
+            }
         }
 
-        turnInput = Input.GetAxis("Horizontal");
+        if(forwardAccelBuildUp < 0)
+        {
+            forwardAccelBuildUp = 0;
+        }
+        else if (reverseAccelBuildUp < 0)
+        {
+            reverseAccelBuildUp = 0;
+        }
+
+            turnInput = Input.GetAxis("Horizontal");
 
         if (grounded)
         {
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
+
+            if (Input.GetKey(KeyCode.Space) && Input.GetAxis("Vertical") > 0)
+            {
+                int driftInput = Mathf.RoundToInt(Input.GetAxis("Horizontal"));
+
+                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, driftInput * (turnStrength * 2) * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
+
+
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
+            }
         }
 
         leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, (turnInput * maxWheelTurn) - 180, leftFrontWheel.localRotation.eulerAngles.z);
