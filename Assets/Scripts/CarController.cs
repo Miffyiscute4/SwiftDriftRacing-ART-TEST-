@@ -19,6 +19,8 @@ public class CarController : MonoBehaviour
     public Transform leftFrontWheel, rightFrontWheel;
     public float maxWheelTurn = 25;
 
+    public GameManager gameManager;
+
     
     // Start is called before the first frame update
     void Start()
@@ -30,7 +32,18 @@ public class CarController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(forwardAccelBuildUp);
+        if (gameManager.totalcoins >= 10)
+        {
+            maxForwardAccel = 20;
+            maxReverseAccel = 10;
+        }
+        else if (gameManager.totalcoins <= 10)
+        {
+            maxForwardAccel = gameManager.totalcoins + 10;
+            maxReverseAccel = gameManager.totalcoins + 2;
+        }
+        
+
         speedInput = 0f;
         //forwardAccelBuildUp = 0;
 
