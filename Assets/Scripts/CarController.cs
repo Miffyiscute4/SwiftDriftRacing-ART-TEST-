@@ -8,11 +8,11 @@ public class CarController : MonoBehaviour
 
     public float maxForwardAccel = 18, maxReverseAccel = 9, turnStrength = 30, gravityForce = 10, dragOnGround = 3, delayAmount = 0.2f;
 
-    private float speedInput, turnInput, accelDelay, decelDelay, forwardAccelBuildUp, reverseAccelBuildUp;
+    private float speedInput, turnInput, accelDelay, decelDelay, boostDelay, forwardAccelBuildUp, reverseAccelBuildUp;
 
     private bool grounded;
 
-    public bool isOffTrack = false;
+    public bool isOffTrack = false, isBoosted = false;
     public LayerMask whatIsGround;
     public float groundRayLength = 5;
     public Transform groundRayPoint;
@@ -33,24 +33,9 @@ public class CarController : MonoBehaviour
 
     void Update()
     {
-        if (!isOffTrack)
-        {
-            if (gameManager.totalcoins >= 10)
-            {
-                maxForwardAccel = 20;
-                maxReverseAccel = 10;
-            }
-            else if (gameManager.totalcoins <= 10)
-            {
-                maxForwardAccel = gameManager.totalcoins + 10;
-                maxReverseAccel = gameManager.totalcoins + 2;
-            }
-        }
-        else
-        {
-            maxForwardAccel = 10;
-            maxReverseAccel = 2;
-        }
+        Debug.Log(forwardAccelBuildUp);
+
+       
         
         
 
@@ -61,53 +46,103 @@ public class CarController : MonoBehaviour
         decelDelay += Time.deltaTime;
 
 
+        
 
-        if (Input.GetAxis("Vertical") > 0)
+        if (!isOffTrack)
         {
-
-            if (reverseAccelBuildUp <= 0)
+            if (isBoosted)
             {
-                if (accelDelay >= delayAmount && forwardAccelBuildUp < maxForwardAccel)
-                {
-                    forwardAccelBuildUp += 1;
+                boostDelay += Time.deltaTime;
 
-                    accelDelay = 0;
-                }
-
-                speedInput = Input.GetAxis("Vertical") * forwardAccelBuildUp * 1000f;
-            }
-            else
-            {
-                if (decelDelay >= delayAmount && reverseAccelBuildUp > 0)
+                if (boostDelay >= 3)
                 {
-                    reverseAccelBuildUp -= 1;
-                }
-            }
-        }
-        else if (Input.GetAxis("Vertical") < 0)
-        {
-            
-            if (forwardAccelBuildUp <= 0)
-            {
-                if (accelDelay >= delayAmount && reverseAccelBuildUp < maxReverseAccel)
-                {
-                    reverseAccelBuildUp += 1;
 
-                    accelDelay = 0;
-                }
+                    forwardAccelBuildUp = maxForwardAccel;
 
-                speedInput = Input.GetAxis("Vertical") * reverseAccelBuildUp * 1000f;
-            }
-            else
-            {
-                if (decelDelay >= delayAmount && forwardAccelBuildUp > 0)
-                {
-                    forwardAccelBuildUp -= 1;
-                }
+                    isBoosted = false;
                 
+                }
+                else
+                {
+                    rb.AddForce(transform.forward * 25000);
+                }
             }
-            
+            else
+            {
+                boostDelay = 0;
+
+                if (gameManager.totalcoins >= 10)
+                {
+                    maxForwardAccel = 20;
+                    maxReverseAccel = 10;
+                }
+                else if (gameManager.totalcoins <= 10)
+                {
+                    maxForwardAccel = gameManager.totalcoins + 10;
+                    maxReverseAccel = gameManager.totalcoins + 2;
+                }
+            }
+
+
         }
+        else
+        {
+            maxForwardAccel = 10;
+            maxReverseAccel = 2;
+
+            isBoosted = false;
+        }
+
+        if (!isBoosted)
+        {
+            if (Input.GetAxis("Vertical") > 0)
+            {
+
+                if (reverseAccelBuildUp <= 0)
+                {
+                    if (accelDelay >= delayAmount && forwardAccelBuildUp < maxForwardAccel)
+                    {
+                        forwardAccelBuildUp += 1;
+
+                        accelDelay = 0;
+                    }
+
+                    speedInput = Input.GetAxis("Vertical") * forwardAccelBuildUp * 1000f;
+                }
+                else
+                {
+                    if (decelDelay >= delayAmount && reverseAccelBuildUp > 0)
+                    {
+                        reverseAccelBuildUp -= 1;
+                    }
+                }
+            }
+            else if (Input.GetAxis("Vertical") < 0)
+            {
+
+                if (forwardAccelBuildUp <= 0)
+                {
+                    if (accelDelay >= delayAmount && reverseAccelBuildUp < maxReverseAccel)
+                    {
+                        reverseAccelBuildUp += 1;
+
+                        accelDelay = 0;
+                    }
+
+                    speedInput = Input.GetAxis("Vertical") * reverseAccelBuildUp * 1000f;
+                }
+                else
+                {
+                    if (decelDelay >= delayAmount && forwardAccelBuildUp > 0)
+                    {
+                        forwardAccelBuildUp -= 1;
+                    }
+
+                }
+
+            }
+        }    
+        
         else
         {
             if (decelDelay >= delayAmount && forwardAccelBuildUp > 0 || reverseAccelBuildUp > 0)

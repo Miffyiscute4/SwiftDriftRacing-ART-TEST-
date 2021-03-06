@@ -9,6 +9,7 @@ TagManager:
   - Lava
   - Coin
   - Big_Coin
+  - BoostPad
   layers:
   - Default
   - TransparentFX

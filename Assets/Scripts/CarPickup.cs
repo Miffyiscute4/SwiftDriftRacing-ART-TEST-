@@ -51,6 +51,11 @@ public class CarPickup : MonoBehaviour
         {
             carController.isOffTrack = true;
         }
+
+        if (other.gameObject.tag == "BoostPad")
+        {
+            carController.isBoosted = true;
+        }
     }
 
     void OnTriggerStay(Collider other)
