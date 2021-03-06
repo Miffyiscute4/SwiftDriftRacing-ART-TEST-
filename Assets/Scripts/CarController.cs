@@ -12,6 +12,7 @@ public class CarController : MonoBehaviour
 
     private bool grounded;
 
+    public bool isOffTrack = false;
     public LayerMask whatIsGround;
     public float groundRayLength = 5;
     public Transform groundRayPoint;
@@ -32,16 +33,25 @@ public class CarController : MonoBehaviour
 
     void Update()
     {
-        if (gameManager.totalcoins >= 10)
+        if (!isOffTrack)
         {
-            maxForwardAccel = 20;
-            maxReverseAccel = 10;
+            if (gameManager.totalcoins >= 10)
+            {
+                maxForwardAccel = 20;
+                maxReverseAccel = 10;
+            }
+            else if (gameManager.totalcoins <= 10)
+            {
+                maxForwardAccel = gameManager.totalcoins + 10;
+                maxReverseAccel = gameManager.totalcoins + 2;
+            }
         }
-        else if (gameManager.totalcoins <= 10)
+        else
         {
-            maxForwardAccel = gameManager.totalcoins + 10;
-            maxReverseAccel = gameManager.totalcoins + 2;
+            maxForwardAccel = 10;
+            maxReverseAccel = 2;
         }
+        
         
 
         speedInput = 0f;
@@ -171,6 +181,6 @@ public class CarController : MonoBehaviour
 
             rb.AddForce(Vector3.up * -gravityForce * 100f);
         }
-        
+
     }
 }

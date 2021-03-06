@@ -24,4 +24,9 @@ public class GameManager : MonoBehaviour
     {
         totalcoins += coinAmount;
     }
+
+    public void SubtractCoins(int coinAmount)
+    {
+        totalcoins -= coinAmount;
+    }
 }

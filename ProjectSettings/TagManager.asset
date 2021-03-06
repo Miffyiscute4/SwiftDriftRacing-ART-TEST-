@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ice
+  - OffTrack
+  - Lava
+  - Coin
+  - Big_Coin
   layers:
   - Default
   - TransparentFX
