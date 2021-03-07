@@ -10,6 +10,8 @@ TagManager:
   - Coin
   - Big_Coin
   - BoostPad
+  - PowerUpBox
+  - PowerUpBox_Special
   layers:
   - Default
   - TransparentFX

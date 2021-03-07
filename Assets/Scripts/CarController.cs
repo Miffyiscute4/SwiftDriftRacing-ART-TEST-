@@ -33,20 +33,28 @@ public class CarController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(forwardAccelBuildUp);
+        VerticalInput();
+        TurnInput();
+    }
 
-       
-        
-        
+    void FixedUpdate()
+    {
+        GroundCheck();
+        ApplyForce();
+    }
+
+
+
+
+
+    void VerticalInput()
+    {
+        Debug.Log(isBoosted);
 
         speedInput = 0f;
-        //forwardAccelBuildUp = 0;
 
         accelDelay += Time.deltaTime;
         decelDelay += Time.deltaTime;
-
-
-        
 
         if (!isOffTrack)
         {
@@ -60,12 +68,13 @@ public class CarController : MonoBehaviour
                     forwardAccelBuildUp = maxForwardAccel;
 
                     isBoosted = false;
-                
+
                 }
                 else
                 {
                     rb.AddForce(transform.forward * 25000);
                 }
+
             }
             else
             {
@@ -141,8 +150,8 @@ public class CarController : MonoBehaviour
                 }
 
             }
-        }    
-        
+        }
+
         else
         {
             if (decelDelay >= delayAmount && forwardAccelBuildUp > 0 || reverseAccelBuildUp > 0)
@@ -155,7 +164,7 @@ public class CarController : MonoBehaviour
             }
         }
 
-        if(forwardAccelBuildUp < 0)
+        if (forwardAccelBuildUp < 0)
         {
             forwardAccelBuildUp = 0;
         }
@@ -164,12 +173,23 @@ public class CarController : MonoBehaviour
             reverseAccelBuildUp = 0;
         }
 
-            turnInput = Input.GetAxis("Horizontal");
+
+    }
+
+
+
+
+
+    void TurnInput()
+    {
+
+
+        turnInput = Input.GetAxis("Horizontal");
 
         if (grounded)
         {
 
-            if (Input.GetKey(KeyCode.Space) && Input.GetAxis("Vertical") > 0)
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0)
             {
                 int driftInput = Mathf.RoundToInt(Input.GetAxis("Horizontal"));
 
@@ -185,12 +205,20 @@ public class CarController : MonoBehaviour
 
         leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, (turnInput * maxWheelTurn) - 180, leftFrontWheel.localRotation.eulerAngles.z);
         rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, turnInput * maxWheelTurn, rightFrontWheel.localRotation.eulerAngles.z);
-       
+
         transform.position = rb.transform.position;
+
+
     }
 
-    void FixedUpdate()
+
+
+
+
+    void GroundCheck()
     {
+
+
         grounded = false;
         RaycastHit hit;
 
@@ -200,6 +228,17 @@ public class CarController : MonoBehaviour
 
             transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
         }
+
+
+    }
+
+
+
+
+
+    void ApplyForce()
+    {
+
 
         if (grounded)
         {
@@ -216,6 +255,7 @@ public class CarController : MonoBehaviour
 
             rb.AddForce(Vector3.up * -gravityForce * 100f);
         }
+
 
     }
 }

@@ -7,23 +7,27 @@ public class GameManager : MonoBehaviour
 {
     public int totalcoins;
 
-    public Text coinText;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public string slotNumber, reserveSlotNumber;
+
+    public Text coinText, slotText, reserveSlot;
 
     // Update is called once per frame
     void Update()
     {
         coinText.text = "Coins: " + totalcoins;
+        slotText.text = "Slot: " + slotNumber;
+        reserveSlot.text = "Slot" + reserveSlotNumber;
+
     }
 
     public void AddCoins(int coinAmount)
     {
         totalcoins += coinAmount;
     }
+
+
+
+
 
     public void SubtractCoins(int coinAmount)
     {
