@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CarAI_Path : MonoBehaviour
 {
-
+    public Vector3 nodeCurrent;
     public Color lineColour;
 
     private List<Transform> nodes = new List<Transform>();
@@ -32,6 +32,9 @@ public class CarAI_Path : MonoBehaviour
         {
             
             Vector3 currentNode = nodes[i].position;
+
+            nodeCurrent = currentNode;
+
             Vector3 previousNode = Vector3.zero;
 
 

@@ -8,6 +8,8 @@ public class Car_Bot : MonoBehaviour
     public Transform path;
     public float maxSteerAngle = 40;
     public Rigidbody rb;
+    public float speed;
+    public CarAI_Path carPath;
 
     private List<Transform> nodes;
     private int currentNode = 0;
@@ -37,6 +39,12 @@ public class Car_Bot : MonoBehaviour
     void FixedUpdate()
     {
         ApplySteer();
+        Drive();
+    }
+
+    void Update()
+    {
+        transform.position = rb.transform.position;
     }
 
     void ApplySteer()
@@ -46,8 +54,21 @@ public class Car_Bot : MonoBehaviour
 
         float newSteer = (relativeVector.x / relativeVector.magnitude) * maxSteerAngle;
 
-        transform.rotation = Quaternion.Euler(0f, newSteer, 0f);
+        transform.rotation = Quaternion.Euler(0f, transform.rotation.y + newSteer, 0f);
 
-        //Debug.Log(relativeVector);
+        Debug.Log(newSteer);
+        Debug.Log("currentNode" + currentNode);
+
+    }
+
+    void Drive()
+    {
+        rb.AddForce(transform.forward * speed);
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(Vector3.zero, carPath.nodeCurrent);
     }
 }
