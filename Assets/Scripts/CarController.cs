@@ -49,7 +49,7 @@ public class CarController : MonoBehaviour
 
     void VerticalInput()
     {
-        Debug.Log(isBoosted);
+        //Debug.Log(isBoosted);
 
         speedInput = 0f;
 

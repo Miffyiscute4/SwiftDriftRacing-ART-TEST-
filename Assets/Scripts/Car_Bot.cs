@@ -9,11 +9,11 @@ public class Car_Bot : MonoBehaviour
     public float maxSteerAngle = 40;
     public Rigidbody rb;
     public float speed;
-    public CarAI_Path carPath;
+    //public CarAI_Path carPath;
 
     private List<Transform> nodes;
-    private int currentNode = 0;
-
+    private int currentNode = 1;
+    Vector3 currentNodePosition;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,24 +40,28 @@ public class Car_Bot : MonoBehaviour
     {
         ApplySteer();
         Drive();
+        CheckWayPoint();
     }
 
     void Update()
     {
         transform.position = rb.transform.position;
+
+        currentNodePosition = nodes[currentNode].position;
     }
 
     void ApplySteer()
     {
-        Vector3 relativeVector = transform.InverseTransformPoint(nodes[currentNode].position);
-        relativeVector /= relativeVector.magnitude;
+        /* Vector3 relativeVector = transform.InverseTransformPoint(nodes[currentNode].position);
+         relativeVector /= relativeVector.magnitude;
 
-        float newSteer = (relativeVector.x / relativeVector.magnitude) * maxSteerAngle;
+         float newSteer = (relativeVector.x / relativeVector.magnitude) * maxSteerAngle;
 
-        transform.rotation = Quaternion.Euler(0f, transform.rotation.y + newSteer, 0f);
+         transform.rotation = Quaternion.Euler(0f, newSteer, 0f);
 
-        Debug.Log(newSteer);
-        Debug.Log("currentNode" + currentNode);
+         Debug.Log("currentNode = " + currentNode);*/
+
+        transform.LookAt(new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z));
 
     }
 
@@ -68,7 +72,24 @@ public class Car_Bot : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(Vector3.zero, carPath.nodeCurrent);
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, currentNodePosition);
+    }
+
+    void CheckWayPoint()
+    {
+        if (Vector3.Distance(transform.position, nodes[currentNode].position) < 10)
+        {
+            if (currentNode == nodes.Count - 1)
+            {
+                currentNode = 0;
+            }
+            else
+            {
+                currentNode++;
+            }
+
+
+        }
     }
 }
