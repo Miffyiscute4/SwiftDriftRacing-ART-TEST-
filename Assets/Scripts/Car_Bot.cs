@@ -18,6 +18,8 @@ public class Car_Bot : MonoBehaviour
     [Header("Sensors")]
     public float sensorLength = 5f, frontSideSensorPos, frontSensorAngle = 30;
     public Vector3 frontSensorPos = new Vector3(0, 0.2f, 0.5f);
+
+    private bool avoiding = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -66,7 +68,12 @@ public class Car_Bot : MonoBehaviour
 
          Debug.Log("currentNode = " + currentNode);*/
 
-        transform.LookAt(new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z));
+        //transform.LookAt(new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z));
+        if (!avoiding)
+        {
+            transform.LookAt(new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z));
+        }
+        
 
     }
 
@@ -83,7 +90,7 @@ public class Car_Bot : MonoBehaviour
 
     void CheckWayPoint()
     {
-        if (Vector3.Distance(transform.position, nodes[currentNode].position) < 10)
+        if (Vector3.Distance(transform.position, nodes[currentNode].position) < 25)
         {
             if (currentNode == nodes.Count - 1)
             {
@@ -92,6 +99,7 @@ public class Car_Bot : MonoBehaviour
             else
             {
                 currentNode++;
+                
             }
 
 
@@ -101,34 +109,69 @@ public class Car_Bot : MonoBehaviour
     void Sensors()
     {
         RaycastHit hit;
-        Vector3 sensorStartPos = transform.position + frontSensorPos;
+        Vector3 sensorStartPos = transform.position;
+        sensorStartPos += transform.forward * frontSensorPos.z;
+        sensorStartPos += transform.up * frontSensorPos.y;
 
-        if(Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
-        {
-           Debug.DrawLine(sensorStartPos, hit.point, Color.blue); 
-        }
+        //sensorStartPos = transform.position;
 
-        sensorStartPos.z += frontSideSensorPos;
-        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
-        {
-            Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
-        }
+        float avoidMultiplier = 0f;
+        avoiding = false;
 
-        sensorStartPos.z -= 2 * frontSideSensorPos;
-        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
-        {
-            Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
-        }
+        
 
-        if(Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
-        {
-           Debug.DrawLine(sensorStartPos, hit.point, Color.blue); 
-        }
-
-        if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
+        //FRONT RIGHT SENSOR
+        sensorStartPos += transform.right * frontSideSensorPos;
+        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Terrain"))
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
+            avoiding = true;
+            avoidMultiplier -= 1f;
+        }
+        //FRONT RIGHT ANGLE SENSOR
+        else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
+        {
+            Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
+            avoiding = true;
+            avoidMultiplier -= 0.5f;
         }
 
+        //FRONT RIGHT SENSOR
+        sensorStartPos -= transform.right * frontSideSensorPos * 2;
+        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Terrain"))
+        {
+            Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
+            avoiding = true;
+            avoidMultiplier += 1f;
+        }//FRONT LEFT ANGLE SENSOR
+        else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
+        {
+            Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
+            avoiding = true;
+            avoidMultiplier += 0.5f;
+        }
+
+        //FRONTm CENTER SENSOR
+        if (avoidMultiplier == 0 && Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Terrain"))
+        {
+            Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
+            avoiding = true;
+
+            if (hit.normal.x > 0)
+            {
+                avoidMultiplier = -1;
+            }
+            else
+            {
+                avoidMultiplier = 1;
+            }
+        }
+
+        if (avoiding)
+        {
+            sensorStartPos = transform.position;
+            transform.Rotate(transform.rotation.x, avoidMultiplier, transform.rotation.z);
+        }
+        //Debug.Log(avoiding);
     }
 }
