@@ -14,6 +14,10 @@ public class Car_Bot : MonoBehaviour
     private List<Transform> nodes;
     private int currentNode = 1;
     Vector3 currentNodePosition;
+
+    [Header("Sensors")]
+    public float sensorLength = 5f, frontSideSensorPos, frontSensorAngle = 30;
+    public Vector3 frontSensorPos = new Vector3(0, 0.2f, 0.5f);
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +45,7 @@ public class Car_Bot : MonoBehaviour
         ApplySteer();
         Drive();
         CheckWayPoint();
+        Sensors();
     }
 
     void Update()
@@ -91,5 +96,39 @@ public class Car_Bot : MonoBehaviour
 
 
         }
+    }
+
+    void Sensors()
+    {
+        RaycastHit hit;
+        Vector3 sensorStartPos = transform.position + frontSensorPos;
+
+        if(Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
+        {
+           Debug.DrawLine(sensorStartPos, hit.point, Color.blue); 
+        }
+
+        sensorStartPos.z += frontSideSensorPos;
+        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
+        {
+            Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
+        }
+
+        sensorStartPos.z -= 2 * frontSideSensorPos;
+        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
+        {
+            Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
+        }
+
+        if(Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
+        {
+           Debug.DrawLine(sensorStartPos, hit.point, Color.blue); 
+        }
+
+        if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
+        {
+            Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
+        }
+
     }
 }
