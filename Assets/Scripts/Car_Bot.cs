@@ -71,7 +71,11 @@ public class Car_Bot : MonoBehaviour
         //transform.LookAt(new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z));
         if (!avoiding)
         {
-            transform.LookAt(new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z));
+            Vector3 difference = new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z) -transform.position;
+
+            Quaternion lookRotation = Quaternion.LookRotation(difference);
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
         }
         
 
