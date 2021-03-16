@@ -6,20 +6,20 @@ public class Car_Bot : MonoBehaviour
 {
 
     public Transform path;
-    public float maxSteerAngle = 40;
+    public float maxSteerAngle = 40, turnSpeed;
     public Rigidbody rb;
-    public float speed;
+    //public float speed;
     //public CarAI_Path carPath;
 
     private List<Transform> nodes;
-    private int currentNode = 1;
+    private int currentNode = 1, forwardAccelBuildUp = 0, maxForwardAccelBuildUp;
     Vector3 currentNodePosition;
 
-    [Header("Sensors")]
     public float sensorLength = 5f, frontSideSensorPos, frontSensorAngle = 30;
     public Vector3 frontSensorPos = new Vector3(0, 0.2f, 0.5f);
 
     private bool avoiding = false;
+    private float accelDelay, decelDelay;
     // Start is called before the first frame update
     void Start()
     {
@@ -83,7 +83,26 @@ public class Car_Bot : MonoBehaviour
 
     void Drive()
     {
-        rb.AddForce(transform.forward * speed);
+        rb.AddForce(transform.forward * forwardAccelBuildUp * 500);
+
+        accelDelay += Time.deltaTime;
+        decelDelay += Time.deltaTime;
+
+        if (accelDelay >= 0.2 && accelDelay <= maxForwardAccelBuildUp)
+        {
+            forwardAccelBuildUp++;
+        }
+
+        if (forwardAccelBuildUp > 10)
+        {
+            forwardAccelBuildUp = 10;
+        }
+
+        turnSpeed = forwardAccelBuildUp / 10;
+
+        maxForwardAccelBuildUp = 10/*+ coin value */;
+
+        Debug.Log(forwardAccelBuildUp);
     }
 
     void OnDrawGizmos()
@@ -174,7 +193,7 @@ public class Car_Bot : MonoBehaviour
         if (avoiding)
         {
             sensorStartPos = transform.position;
-            transform.Rotate(transform.rotation.x, avoidMultiplier, transform.rotation.z);
+            transform.Rotate(transform.rotation.x, avoidMultiplier * turnSpeed, transform.rotation.z);
         }
         //Debug.Log(avoiding);
     }

@@ -317,8 +317,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   path: {fileID: 659774424}
   maxSteerAngle: 40
+  turnSpeed: 0
   rb: {fileID: 1638867400}
-  speed: 0
   sensorLength: 5
   frontSideSensorPos: 0
   frontSensorAngle: 30
@@ -1238,8 +1238,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   path: {fileID: 659774424}
   maxSteerAngle: 40
+  turnSpeed: 0
   rb: {fileID: 609083551}
-  speed: 50
   sensorLength: 25
   frontSideSensorPos: 0.8
   frontSensorAngle: 30
@@ -2158,7 +2158,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 609083549}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 70
   m_Drag: 3
   m_AngularDrag: 4
   m_UseGravity: 1
@@ -3516,7 +3516,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.031062745, y: 0.004078842, z: -0.00012676249, w: 0.99950916}
+  m_LocalRotation: {x: 0.031062745, y: 0.004078844, z: -0.00012676256, w: 0.99950916}
   m_LocalPosition: {x: 386.21082, y: 0.40999997, z: 432.07446}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -3888,7 +3888,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020550303}
-  m_LocalRotation: {x: 0.031062745, y: 0.004078842, z: -0.00012676249, w: 0.99950916}
+  m_LocalRotation: {x: 0.031062745, y: 0.004078844, z: -0.00012676256, w: 0.99950916}
   m_LocalPosition: {x: 386.21082, y: 0.40999997, z: 432.07446}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4609,7 +4609,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1382658182}
   m_LocalRotation: {x: -0, y: -0.38268307, z: -0, w: 0.92387974}
-  m_LocalPosition: {x: 64, y: -7, z: 332}
+  m_LocalPosition: {x: 94.2, y: -7, z: 320.5}
   m_LocalScale: {x: 37.616, y: 37.616, z: 37.616}
   m_Children: []
   m_Father: {fileID: 0}

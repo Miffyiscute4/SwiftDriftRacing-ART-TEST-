@@ -111,7 +111,7 @@ public class CarController : MonoBehaviour
                 {
                     if (accelDelay >= delayAmount && forwardAccelBuildUp < maxForwardAccel)
                     {
-                        forwardAccelBuildUp += 1;
+                        forwardAccelBuildUp++;
 
                         accelDelay = 0;
                     }
@@ -122,7 +122,7 @@ public class CarController : MonoBehaviour
                 {
                     if (decelDelay >= delayAmount && reverseAccelBuildUp > 0)
                     {
-                        reverseAccelBuildUp -= 1;
+                        reverseAccelBuildUp--;
                     }
                 }
             }
