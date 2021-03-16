@@ -20,6 +20,11 @@ public class Car_Bot : MonoBehaviour
 
     private bool avoiding = false;
     private float accelDelay, decelDelay;
+
+    public LayerMask whatIsGround;
+    public float groundRayLength = 5;
+    public Transform groundRayPoint;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +53,7 @@ public class Car_Bot : MonoBehaviour
         Drive();
         CheckWayPoint();
         Sensors();
+        GroundCheck();
     }
 
     void Update()
@@ -81,9 +87,18 @@ public class Car_Bot : MonoBehaviour
 
     }
 
+    void GroundCheck()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(groundRayPoint.position, -transform.up, out hit, groundRayLength, whatIsGround))
+        {
+            transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+        }
+    }
     void Drive()
     {
-        rb.AddForce(transform.forward * forwardAccelBuildUp * 500);
+        rb.AddForce(transform.forward * forwardAccelBuildUp * 1000);
 
         accelDelay += Time.deltaTime;
         decelDelay += Time.deltaTime;
