@@ -18,7 +18,7 @@ public class Car_Bot : MonoBehaviour
     public float sensorLength = 5f, frontSideSensorPos, frontSensorAngle = 30;
     public Vector3 frontSensorPos = new Vector3(0, 0.2f, 0.5f);
 
-    private bool avoiding = false;
+    private bool avoiding = false, aimingForObject = false;
     private float accelDelay, decelDelay;
 
     public LayerMask whatIsGround;
@@ -75,7 +75,7 @@ public class Car_Bot : MonoBehaviour
          Debug.Log("currentNode = " + currentNode);*/
 
         //transform.LookAt(new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z));
-        if (!avoiding)
+        if (!avoiding && !aimingForObject)
         {
             Vector3 difference = new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z) -transform.position;
 
@@ -96,6 +96,9 @@ public class Car_Bot : MonoBehaviour
             transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
         }
     }
+
+
+
     void Drive()
     {
         rb.AddForce(transform.forward * forwardAccelBuildUp * 1000);
@@ -119,6 +122,8 @@ public class Car_Bot : MonoBehaviour
 
         Debug.Log(forwardAccelBuildUp);
     }
+
+
 
     void OnDrawGizmos()
     {
@@ -144,6 +149,8 @@ public class Car_Bot : MonoBehaviour
         }
     }
 
+
+
     void Sensors()
     {
         RaycastHit hit;
@@ -160,11 +167,26 @@ public class Car_Bot : MonoBehaviour
 
         //FRONT RIGHT SENSOR
         sensorStartPos += transform.right * frontSideSensorPos;
-        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Terrain"))
+        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Coin"))
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
             avoidMultiplier -= 1f;
+
+            if (hit.collider.CompareTag("Coin") && !avoiding)
+            {
+                aimingForObject = true;
+
+                Vector3 difference = new Vector3(-hit.collider.transform.position.x, transform.position.y, -hit.collider.transform.position.z) - transform.position;
+
+                Quaternion lookRotation = Quaternion.LookRotation(difference);
+
+                transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
+            }
+            else
+            {
+                aimingForObject = false;
+            }
         }
         //FRONT RIGHT ANGLE SENSOR
         else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
@@ -172,25 +194,70 @@ public class Car_Bot : MonoBehaviour
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
             avoidMultiplier -= 0.5f;
+
+            if (hit.collider.CompareTag("Coin") && !avoiding)
+            {
+                aimingForObject = true;
+
+                Vector3 difference = new Vector3(hit.collider.transform.position.x, -transform.position.y, hit.collider.transform.position.z) - transform.position;
+
+                Quaternion lookRotation = Quaternion.LookRotation(difference);
+
+                transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
+            }
+            else
+            {
+                aimingForObject = false;
+            }
         }
 
         //FRONT RIGHT SENSOR
         sensorStartPos -= transform.right * frontSideSensorPos * 2;
-        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Terrain"))
+        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Coin"))
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
             avoidMultiplier += 1f;
+
+            if (hit.collider.CompareTag("Coin") && !avoiding)
+            {
+                aimingForObject = true;
+
+                Vector3 difference = new Vector3(-hit.collider.transform.position.x, transform.position.y, -hit.collider.transform.position.z) - transform.position;
+
+                Quaternion lookRotation = Quaternion.LookRotation(difference);
+
+                transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
+            }
+            else
+            {
+                aimingForObject = false;
+            }
         }//FRONT LEFT ANGLE SENSOR
         else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
             avoidMultiplier += 0.5f;
+
+            if (hit.collider.CompareTag("Coin") && !avoiding)
+            {
+                aimingForObject = true;
+
+                Vector3 difference = new Vector3(-hit.collider.transform.position.x, transform.position.y, -hit.collider.transform.position.z) - transform.position;
+
+                Quaternion lookRotation = Quaternion.LookRotation(difference);
+
+                transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
+            }
+            else
+            {
+                aimingForObject = false;
+            }
         }
 
-        //FRONTm CENTER SENSOR
-        if (avoidMultiplier == 0 && Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Terrain"))
+        //FRONT CENTER SENSOR
+        if (avoidMultiplier == 0 && Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
@@ -203,6 +270,9 @@ public class Car_Bot : MonoBehaviour
             {
                 avoidMultiplier = 1;
             }
+
+            
+
         }
 
         if (avoiding)
