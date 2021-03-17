@@ -35,6 +35,9 @@ public class CarController : MonoBehaviour
     {
         VerticalInput();
         TurnInput();
+        Debug.Log(forwardAccelBuildUp);
+        //Debug.Log(Input.GetAxis("Vertical"));
+
     }
 
     void FixedUpdate()
@@ -133,7 +136,7 @@ public class CarController : MonoBehaviour
                 {
                     if (accelDelay >= delayAmount && reverseAccelBuildUp < maxReverseAccel)
                     {
-                        reverseAccelBuildUp += 1;
+                        reverseAccelBuildUp++;
 
                         accelDelay = 0;
                     }
@@ -144,7 +147,7 @@ public class CarController : MonoBehaviour
                 {
                     if (decelDelay >= delayAmount && forwardAccelBuildUp > 0)
                     {
-                        forwardAccelBuildUp -= 1;
+                        forwardAccelBuildUp--;
                     }
 
                 }
@@ -164,6 +167,14 @@ public class CarController : MonoBehaviour
             }
         }
 
+        if (Input.GetAxis("Vertical") == 0)
+        {
+
+            forwardAccelBuildUp--;
+            Debug.Log("Input.GetAxis('vertical') = 0");
+
+        }
+
         if (forwardAccelBuildUp < 0)
         {
             forwardAccelBuildUp = 0;
@@ -174,7 +185,9 @@ public class CarController : MonoBehaviour
         }
 
 
+
     }
+
 
 
 
@@ -184,13 +197,21 @@ public class CarController : MonoBehaviour
     {
 
 
-        turnInput = Input.GetAxis("Horizontal");
+       turnInput = Input.GetAxis("Horizontal");
 
         if (grounded)
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0)
             {
-                driftInput = (int)Input.GetAxis("Horizontal");
+                
+                if (turnInput > 0)
+                {
+                    driftInput = 1;
+                }
+                else if (turnInput < 0)
+                {
+                    driftInput = -1;
+                }    
             }
             else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0)
             {

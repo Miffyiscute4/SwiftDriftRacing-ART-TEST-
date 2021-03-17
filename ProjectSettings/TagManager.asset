@@ -12,7 +12,7 @@ TagManager:
   - BoostPad
   - PowerUpBox
   - PowerUpBox_Special
-  - Terrain
+  - Ramp
   layers:
   - Default
   - TransparentFX

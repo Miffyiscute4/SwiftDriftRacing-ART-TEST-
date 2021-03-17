@@ -106,7 +106,7 @@ public class Car_Bot : MonoBehaviour
         accelDelay += Time.deltaTime;
         decelDelay += Time.deltaTime;
 
-        if (accelDelay >= 0.2 && accelDelay <= maxForwardAccelBuildUp)
+        if (accelDelay >= 0.5 && accelDelay <= maxForwardAccelBuildUp)
         {
             forwardAccelBuildUp++;
         }
@@ -116,7 +116,7 @@ public class Car_Bot : MonoBehaviour
             forwardAccelBuildUp = 10;
         }
 
-        turnSpeed = forwardAccelBuildUp / 10;
+        turnSpeed = forwardAccelBuildUp;
 
         maxForwardAccelBuildUp = 10/*+ coin value */;
 
@@ -167,97 +167,41 @@ public class Car_Bot : MonoBehaviour
 
         //FRONT RIGHT SENSOR
         sensorStartPos += transform.right * frontSideSensorPos;
-        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Coin"))
+        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp"))// && !hit.collider.gameObject == rb)
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
             avoidMultiplier -= 1f;
 
-            if (hit.collider.CompareTag("Coin") && !avoiding)
-            {
-                aimingForObject = true;
-
-                Vector3 difference = new Vector3(-hit.collider.transform.position.x, transform.position.y, -hit.collider.transform.position.z) - transform.position;
-
-                Quaternion lookRotation = Quaternion.LookRotation(difference);
-
-                transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
-            }
-            else
-            {
-                aimingForObject = false;
-            }
         }
         //FRONT RIGHT ANGLE SENSOR
-        else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
+        else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp"))// && !hit.collider.gameObject == rb)
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
             avoidMultiplier -= 0.5f;
 
-            if (hit.collider.CompareTag("Coin") && !avoiding)
-            {
-                aimingForObject = true;
-
-                Vector3 difference = new Vector3(hit.collider.transform.position.x, -transform.position.y, hit.collider.transform.position.z) - transform.position;
-
-                Quaternion lookRotation = Quaternion.LookRotation(difference);
-
-                transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
-            }
-            else
-            {
-                aimingForObject = false;
-            }
         }
 
         //FRONT RIGHT SENSOR
         sensorStartPos -= transform.right * frontSideSensorPos * 2;
-        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Coin"))
+        if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp")) //&& !hit.collider.gameObject == rb)
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
             avoidMultiplier += 1f;
 
-            if (hit.collider.CompareTag("Coin") && !avoiding)
-            {
-                aimingForObject = true;
-
-                Vector3 difference = new Vector3(-hit.collider.transform.position.x, transform.position.y, -hit.collider.transform.position.z) - transform.position;
-
-                Quaternion lookRotation = Quaternion.LookRotation(difference);
-
-                transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
-            }
-            else
-            {
-                aimingForObject = false;
-            }
         }//FRONT LEFT ANGLE SENSOR
-        else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength))
+        else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp")) //&& !hit.collider.gameObject == rb)
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
             avoidMultiplier += 0.5f;
 
-            if (hit.collider.CompareTag("Coin") && !avoiding)
-            {
-                aimingForObject = true;
-
-                Vector3 difference = new Vector3(-hit.collider.transform.position.x, transform.position.y, -hit.collider.transform.position.z) - transform.position;
-
-                Quaternion lookRotation = Quaternion.LookRotation(difference);
-
-                transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
-            }
-            else
-            {
-                aimingForObject = false;
-            }
         }
 
         //FRONT CENTER SENSOR
-        if (avoidMultiplier == 0 && Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength))
+        if (avoidMultiplier == 0 && Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp"))// && !hit.collider.gameObject == rb)
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
@@ -278,7 +222,7 @@ public class Car_Bot : MonoBehaviour
         if (avoiding)
         {
             sensorStartPos = transform.position;
-            transform.Rotate(transform.rotation.x, avoidMultiplier * turnSpeed, transform.rotation.z);
+            transform.Rotate(transform.rotation.x, avoidMultiplier * (turnSpeed / 10), transform.rotation.z);
         }
         //Debug.Log(avoiding);
     }
