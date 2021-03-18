@@ -25,6 +25,14 @@ public class Car_Bot : MonoBehaviour
     public float groundRayLength = 5;
     public Transform groundRayPoint;
 
+    public int maxSpeed;
+
+    public GameObject objectToAimFor;
+
+    public float distanceTillNextNode;
+
+    public CarBotPickup bot;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,7 +83,7 @@ public class Car_Bot : MonoBehaviour
          Debug.Log("currentNode = " + currentNode);*/
 
         //transform.LookAt(new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z));
-        if (!avoiding && !aimingForObject)
+        if (!avoiding/* && !aimingForObject*/)
         {
             Vector3 difference = new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z) -transform.position;
 
@@ -83,7 +91,20 @@ public class Car_Bot : MonoBehaviour
 
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
         }
+
+        else if (!avoiding && aimingForObject && objectToAimFor != null)
+        {
+            Vector3 difference = new Vector3(objectToAimFor.transform.position.x, transform.position.y, objectToAimFor.transform.position.z) - transform.position;
+
+            Quaternion lookRotation = Quaternion.LookRotation(difference);
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
+        }
         
+        if (objectToAimFor = null)
+        {
+            aimingForObject = false;
+        }
 
     }
 
@@ -106,19 +127,19 @@ public class Car_Bot : MonoBehaviour
         accelDelay += Time.deltaTime;
         decelDelay += Time.deltaTime;
 
-        if (accelDelay >= 0.5 && accelDelay <= maxForwardAccelBuildUp)
+        if (accelDelay >= 0.3 && accelDelay <= maxForwardAccelBuildUp)
         {
             forwardAccelBuildUp++;
         }
 
-        if (forwardAccelBuildUp > 10)
+        if (forwardAccelBuildUp > maxSpeed)
         {
-            forwardAccelBuildUp = 10;
+            forwardAccelBuildUp = maxSpeed;
         }
 
         turnSpeed = forwardAccelBuildUp;
 
-        maxForwardAccelBuildUp = 10/*+ coin value */;
+        maxForwardAccelBuildUp = maxSpeed + bot.coinCount;
 
         Debug.Log(forwardAccelBuildUp);
     }
@@ -133,7 +154,7 @@ public class Car_Bot : MonoBehaviour
 
     void CheckWayPoint()
     {
-        if (Vector3.Distance(transform.position, nodes[currentNode].position) < 25)
+        if (Vector3.Distance(transform.position, nodes[currentNode].position) < distanceTillNextNode)
         {
             if (currentNode == nodes.Count - 1)
             {
@@ -173,6 +194,12 @@ public class Car_Bot : MonoBehaviour
             avoiding = true;
             avoidMultiplier -= 1f;
 
+            if (hit.collider.CompareTag("Collectable"))
+            {
+                objectToAimFor = hit.collider.gameObject;
+                aimingForObject = true;
+            }
+
         }
         //FRONT RIGHT ANGLE SENSOR
         else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp"))// && !hit.collider.gameObject == rb)
@@ -180,6 +207,12 @@ public class Car_Bot : MonoBehaviour
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
             avoidMultiplier -= 0.5f;
+
+            if (hit.collider.CompareTag("Collectable"))
+            {
+                objectToAimFor = hit.collider.gameObject;
+                aimingForObject = true;
+            }
 
         }
 
@@ -191,12 +224,26 @@ public class Car_Bot : MonoBehaviour
             avoiding = true;
             avoidMultiplier += 1f;
 
+
+            if (hit.collider.CompareTag("Collectable"))
+            {
+                objectToAimFor = hit.collider.gameObject;
+                aimingForObject = true;
+            }
+
         }//FRONT LEFT ANGLE SENSOR
         else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp")) //&& !hit.collider.gameObject == rb)
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
             avoidMultiplier += 0.5f;
+
+            if (hit.collider.CompareTag("Collectable"))
+            {
+                objectToAimFor = hit.collider.gameObject;
+                aimingForObject = true;
+            }
+
 
         }
 
@@ -215,14 +262,21 @@ public class Car_Bot : MonoBehaviour
                 avoidMultiplier = 1;
             }
 
-            
+            if (hit.collider.CompareTag("Collectable"))
+            {
+                objectToAimFor = hit.collider.gameObject;
+                aimingForObject = true;
+            }
+
 
         }
 
-        if (avoiding)
+        if (avoiding && !aimingForObject)
         {
             sensorStartPos = transform.position;
             transform.Rotate(transform.rotation.x, avoidMultiplier * (turnSpeed / 10), transform.rotation.z);
+
+
         }
         //Debug.Log(avoiding);
     }

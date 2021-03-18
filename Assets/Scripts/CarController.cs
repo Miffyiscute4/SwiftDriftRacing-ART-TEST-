@@ -6,7 +6,7 @@ public class CarController : MonoBehaviour
 {
     public Rigidbody rb;
 
-    public float maxForwardAccel = 18, maxReverseAccel = 9, turnStrength = 30, gravityForce = 10, dragOnGround = 3, delayAmount = 0.2f;
+    public float maxForwardAccel = 18, maxReverseAccel = 9, turnStrength = 30, gravityForce = 10, dragOnGround = 3, delayAmount = 0.3f, maxSpeed;
 
     private float speedInput, turnInput, accelDelay, decelDelay, boostDelay, forwardAccelBuildUp, reverseAccelBuildUp, driftInput;
 
@@ -78,28 +78,28 @@ public class CarController : MonoBehaviour
                     rb.AddForce(transform.forward * 25000);
                 }
 
-            }
+            }/*
             else
             {
                 boostDelay = 0;
 
-                if (gameManager.totalcoins >= 10)
+                if (gameManager.totalcoins >= maxSpeed + gameManager.totalcoins)
                 {
-                    maxForwardAccel = 20;
+                    maxForwardAccel = maxSpeed + gameManager.totalcoins;
                     maxReverseAccel = 10;
                 }
-                else if (gameManager.totalcoins <= 10)
+                else if (gameManager.totalcoins <= maxSpeed)
                 {
-                    maxForwardAccel = gameManager.totalcoins + 10;
+                    maxForwardAccel = gameManager.totalcoins + maxSpeed;
                     maxReverseAccel = gameManager.totalcoins + 2;
                 }
-            }
+            }*/
 
 
         }
         else
         {
-            maxForwardAccel = 10;
+            maxForwardAccel = maxSpeed;
             maxReverseAccel = 2;
 
             isBoosted = false;
@@ -159,8 +159,8 @@ public class CarController : MonoBehaviour
         {
             if (decelDelay >= delayAmount && forwardAccelBuildUp > 0 || reverseAccelBuildUp > 0)
             {
-                forwardAccelBuildUp -= 1;
-                reverseAccelBuildUp -= 1;
+                forwardAccelBuildUp--;
+                reverseAccelBuildUp--;
 
                 decelDelay = 0;
 
@@ -169,9 +169,12 @@ public class CarController : MonoBehaviour
 
         if (Input.GetAxis("Vertical") == 0)
         {
-
-            forwardAccelBuildUp--;
-            Debug.Log("Input.GetAxis('vertical') = 0");
+            if(accelDelay < delayAmount)
+            {
+                forwardAccelBuildUp--;
+                Debug.Log("Input.GetAxis('vertical') = 0");
+            }
+            
 
         }
 

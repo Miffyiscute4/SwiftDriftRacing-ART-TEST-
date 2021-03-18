@@ -13,6 +13,7 @@ TagManager:
   - PowerUpBox
   - PowerUpBox_Special
   - Ramp
+  - Collectable
   layers:
   - Default
   - TransparentFX
