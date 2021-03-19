@@ -141,7 +141,7 @@ public class Car_Bot : MonoBehaviour
 
         maxForwardAccelBuildUp = maxSpeed + bot.coinCount;
 
-        Debug.Log(forwardAccelBuildUp);
+        //Debug.Log(forwardAccelBuildUp + " " + bot.coinCount);
     }
 
 

@@ -113,6 +113,7 @@ public class CarPickup : MonoBehaviour
                 powerUpSlot2 = Random.Range(1, 1);
             }
         }
+
     }
 
 

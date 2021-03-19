@@ -78,7 +78,7 @@ public class CarController : MonoBehaviour
                     rb.AddForce(transform.forward * 25000);
                 }
 
-            }/*
+            }
             else
             {
                 boostDelay = 0;
@@ -93,7 +93,7 @@ public class CarController : MonoBehaviour
                     maxForwardAccel = gameManager.totalcoins + maxSpeed;
                     maxReverseAccel = gameManager.totalcoins + 2;
                 }
-            }*/
+            }
 
 
         }
@@ -172,7 +172,7 @@ public class CarController : MonoBehaviour
             if(accelDelay < delayAmount)
             {
                 forwardAccelBuildUp--;
-                Debug.Log("Input.GetAxis('vertical') = 0");
+                //Debug.Log("Input.GetAxis('vertical') = 0");
             }
             
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CarBotPickup : MonoBehaviour
 {
+    public AudioSource powerUpBoxSound;
 
     public int coinCount = 0;
 
@@ -21,9 +22,17 @@ public class CarBotPickup : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Coin")
+        if (other.gameObject.tag == "Coin" && coinCount < 10)
         {
             coinCount++;
+
+            Destroy(other.gameObject);
+        }
+
+        if (other.gameObject.tag == "PowerUpBox")
+        {
+            Destroy(other.gameObject);
+            powerUpBoxSound.Play();
         }
     }
 }
