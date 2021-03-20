@@ -11,28 +11,30 @@ public class Car_Bot_Collision : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Coin" && coinCount < 10)
-        {
-            coinCount++;
+        /* if (other.gameObject.tag == "Coin" && coinCount < 10)
+         {
+             coinCount++;
 
-            Destroy(other.gameObject);
-        }
+             Destroy(other.gameObject);
+         }
 
-        if (other.gameObject.tag == "PowerUpBox")
-        {
-            Destroy(other.gameObject);
-            powerUpBoxSound.Play();
-        }
+         if (other.gameObject.tag == "PowerUpBox")
+         {
+             Destroy(other.gameObject);
+             powerUpBoxSound.Play();
+         }
+     }*/
     }
+
 }

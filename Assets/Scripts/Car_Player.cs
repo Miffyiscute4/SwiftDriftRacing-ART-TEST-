@@ -15,7 +15,7 @@ public class Car_Player : MonoBehaviour
     public bool isOffTrack = false, isBoosted = false;
     public LayerMask whatIsGround;
     public float groundRayLength = 5;
-    public Transform groundRayPoint;
+    public Transform groundRayPoint, powerUpInstantiatePoint;
 
     public Transform leftFrontWheel, rightFrontWheel;
     public float maxWheelTurn = 25;
@@ -38,7 +38,20 @@ public class Car_Player : MonoBehaviour
     {
         VerticalInput();
         TurnInput();
-        Debug.Log(forwardAccelBuildUp);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            UsePowerUp();
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        {
+            SwapPowerUp();
+        }
+
+
+
+        //Debug.Log(forwardAccelBuildUp);
         //Debug.Log(Input.GetAxis("Vertical"));
 
     }
@@ -317,13 +330,42 @@ public class Car_Player : MonoBehaviour
 
     void UsePowerUp()
     {
+
         if (currentPowerUpSlot == 1)
         {
             powerUpSlot1 = null;
+
+            switch (powerUpSlot1)
+            {
+                case "boost":
+
+                    isBoosted = true;
+
+                    break;
+
+                case "dart":
+
+                    Instantiate(gameManager.dart, powerUpInstantiatePoint);
+
+                    break;
+
+            }
         }
         else
         {
             powerUpSlot2 = null;
+        }
+    }
+
+    void SwapPowerUp()
+    {
+        if (currentPowerUpSlot == 1)
+        {
+            currentPowerUpSlot = 2;
+        }
+        else
+        {
+            currentPowerUpSlot = 1;
         }
     }
 

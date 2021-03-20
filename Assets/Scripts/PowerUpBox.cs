@@ -12,7 +12,7 @@ public class PowerUpBox : MonoBehaviour
     Car_Player carPlayer;
     Car_Bot carBot;
 
-    public string[] powerUpList;
+    public string[] powerUpList = { "333", "444" };
 
     void Update()
     {
@@ -41,7 +41,10 @@ public class PowerUpBox : MonoBehaviour
 
             carPlayer = other.gameObject.GetComponent<Car_Player>();
 
-            carPlayer.AddPowerUp((powerUpList[Random.Range(0, powerUpList.Length)]));
+
+            Debug.Log(other);
+            
+            carPlayer.AddPowerUp(powerUpList[Random.Range(0, powerUpList.Length)]);
         }
 
         if (other.gameObject.tag == "Bot")

@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
 
     public Text coinText, slotText, reserveSlot;
 
+    //powerups
+    public GameObject dart;
+
     // Update is called once per frame
     void Update()
     {
