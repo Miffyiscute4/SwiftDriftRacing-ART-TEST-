@@ -31,7 +31,10 @@ public class Car_Bot : MonoBehaviour
 
     public float distanceTillNextNode;
 
-    public CarBotPickup bot;
+    public Car_Bot_Collision bot;
+
+    string powerUpSlot1, powerUpSlot2;
+    int currentPowerUpSlot;
 
     // Start is called before the first frame update
     void Start()
@@ -279,5 +282,17 @@ public class Car_Bot : MonoBehaviour
 
         }
         //Debug.Log(avoiding);
+    }
+
+    public void AddPowerUp(string powerUp)
+    {
+        if (powerUpSlot1 != null)
+        {
+            powerUpSlot1 = powerUp;
+        }
+        else
+        {
+            powerUpSlot2 = powerUp;
+        }
     }
 }

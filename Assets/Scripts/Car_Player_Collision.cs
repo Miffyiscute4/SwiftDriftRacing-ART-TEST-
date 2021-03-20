@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarPickup : MonoBehaviour
+public class Car_Player_Collisions : MonoBehaviour
 {
 
     public AudioSource coin1,coin2,coin1Drop,coin2Drop, powerUpBoxSound;
     public GameManager gameManager;
-    public CarController carController;
+    public Car_Player carController;
     public GameObject coinObject, bigCoinObject;
     public Transform coinInstantiatePoint;
 
     private int powerUpSlot1 = 0, powerUpSlot2 = 0;
     private float lavaTimer = 0, PowerUpRegenTimer = 0;
-    private GameObject powerUpBox;
 
     private bool isCurrentPowerUpSlot1;
     // Update is called once per frame
@@ -50,12 +49,6 @@ public class CarPickup : MonoBehaviour
             gameManager.reserveSlotNumber = "1. PowerUp: " + powerUpSlot1;
         }
 
-        if (PowerUpRegenTimer >= 5 && powerUpBox != null)
-        {
-            powerUpBox.SetActive(true);
-            PowerUpRegenTimer += 0;
-            powerUpBox = null;
-        }
     }
 
 
@@ -91,27 +84,6 @@ public class CarPickup : MonoBehaviour
         if (other.gameObject.tag == "BoostPad")
         {
             carController.isBoosted = true;
-        }
-
-        if (other.gameObject.tag == "PowerUpBox")
-        {
-
-            other.gameObject.SetActive(false);
-
-            PowerUpRegenTimer = 0;
-
-            powerUpBox = other.gameObject;
-
-            powerUpBoxSound.Play();
-
-            if (isCurrentPowerUpSlot1 && powerUpSlot1 == 0 || !isCurrentPowerUpSlot1 && powerUpSlot2 != 0)
-            {
-                powerUpSlot1 = Random.Range(1, 1);
-            }
-            else if (!isCurrentPowerUpSlot1 && powerUpSlot2 == 0 || isCurrentPowerUpSlot1 && powerUpSlot1 != 0)
-            {
-                powerUpSlot2 = Random.Range(1, 1);
-            }
         }
 
     }

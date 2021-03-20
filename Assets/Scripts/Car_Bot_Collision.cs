@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarBotPickup : MonoBehaviour
+public class Car_Bot_Collision : MonoBehaviour
 {
     public AudioSource powerUpBoxSound;
 

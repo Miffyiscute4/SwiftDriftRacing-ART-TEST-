@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarController : MonoBehaviour
+public class Car_Player : MonoBehaviour
 {
     public Rigidbody rb;
 
@@ -21,6 +21,9 @@ public class CarController : MonoBehaviour
     public float maxWheelTurn = 25;
 
     public GameManager gameManager;
+
+    string powerUpSlot1, powerUpSlot2;
+    int currentPowerUpSlot;
 
     
     // Start is called before the first frame update
@@ -297,4 +300,31 @@ public class CarController : MonoBehaviour
 
 
     }
+
+
+
+    public void AddPowerUp(string powerUp)
+    {
+        if (powerUpSlot1 != null)
+        {
+            powerUpSlot1 = powerUp;
+        }
+        else
+        {
+            powerUpSlot2 = powerUp;
+        }
+    }
+
+    void UsePowerUp()
+    {
+        if (currentPowerUpSlot == 1)
+        {
+            powerUpSlot1 = null;
+        }
+        else
+        {
+            powerUpSlot2 = null;
+        }
+    }
+
 }
