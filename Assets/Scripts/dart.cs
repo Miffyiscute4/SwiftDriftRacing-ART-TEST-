@@ -6,12 +6,13 @@ public class Dart : MonoBehaviour
 {
 
     float destroyTimer;
-
+    public float speed;
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = transform.forward;
+        transform.Translate(-transform.right * speed);
+
 
 
         destroyTimer = Time.deltaTime;

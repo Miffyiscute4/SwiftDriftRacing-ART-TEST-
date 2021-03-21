@@ -142,7 +142,15 @@ public class Car_Bot : MonoBehaviour
 
         turnSpeed = forwardAccelBuildUp;
 
-        maxForwardAccelBuildUp = maxSpeed + bot.coinCount;
+        if (bot.coinCount < 10)
+        {
+            maxForwardAccelBuildUp = maxSpeed + bot.coinCount;
+        }
+        else
+        {
+            maxForwardAccelBuildUp = maxSpeed + 10;
+        }
+        
 
         //Debug.Log(forwardAccelBuildUp + " " + bot.coinCount);
     }

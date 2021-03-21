@@ -22,7 +22,7 @@ public class Car_Bot_Collision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        /* if (other.gameObject.tag == "Coin" && coinCount < 10)
+         if (other.gameObject.tag == "Coin")
          {
              coinCount++;
 
@@ -34,7 +34,7 @@ public class Car_Bot_Collision : MonoBehaviour
              Destroy(other.gameObject);
              powerUpBoxSound.Play();
          }
-     }*/
-    }
+     }
+    
 
 }

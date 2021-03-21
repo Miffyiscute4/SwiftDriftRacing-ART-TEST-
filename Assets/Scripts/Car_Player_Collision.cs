@@ -8,7 +8,7 @@ public class Car_Player_Collision : MonoBehaviour
     public AudioSource coin1, coin2, coin1Drop, coin2Drop, powerUpBoxSound;
     public GameManager gameManager;
     public Car_Player carPlayer;
-    public GameObject coinObject, bigCoinObject;
+    public GameObject coinObject, bigCoinObject, powerUpBoxObject;
     public Transform coinInstantiatePoint;
 
     private float lavaTimer = 0, PowerUpRegenTimer = 0;
@@ -18,6 +18,12 @@ public class Car_Player_Collision : MonoBehaviour
     string powerUpSlot1, powerUpSlot2;
     int currentPowerUpSlot;
     public Transform powerUpInstantiatePoint;
+
+    float powerUpBoxDelay;
+
+    public string[] powerUpType;
+
+    public GameObject dartObject;
 
     // Update is called once per frame
 
@@ -39,6 +45,17 @@ public class Car_Player_Collision : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
             SwapPowerUp();
+        }
+
+        if (powerUpBoxObject != null && !powerUpBoxObject.activeInHierarchy)
+        {
+            powerUpBoxDelay += Time.deltaTime;
+
+            if (powerUpBoxDelay >= 3)
+            {
+                powerUpBoxObject.SetActive(true);
+                powerUpBoxDelay = 0;
+            }
         }
 
         //Debug.Log(coinCount);
@@ -79,6 +96,14 @@ public class Car_Player_Collision : MonoBehaviour
             carPlayer.isBoosted = true;
         }
 
+        if (other.gameObject.tag == "PowerUpBox")
+        {
+            AddPowerUp(powerUpType[Random.Range(0, powerUpType.Length)]);
+
+            powerUpBoxObject = other.gameObject;
+            powerUpBoxObject.SetActive(false);
+        }
+
     }
 
 
@@ -87,7 +112,7 @@ public class Car_Player_Collision : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Lava" && lavaTimer >= 2 && gameManager.totalcoins > 0)
+        if (other.gameObject.tag == "Lava" && lavaTimer >= 2 && coinCount > 0)
         {
             //Quaternion carDirection = Quaternion.Euler(carController.transform.localRotation.x, carController.transform.localRotation.y + 90, carController.transform.localRotation.z);
 
@@ -136,18 +161,19 @@ public class Car_Player_Collision : MonoBehaviour
     {
         powerUpBoxSound.Play();
 
-        //Debug.Log(powerUpSlot1);
+        Debug.Log("slot 1: "+powerUpSlot1);
 
-        if (powerUpSlot1 != null)
+
+        if (powerUpSlot1 == null)
         {
             powerUpSlot1 = powerUp; //Debug.Log("1");
-        //    Debug.Log(powerUpSlot1);
+            Debug.Log("powerup slot 1: " + powerUpSlot1);
         }
         else
         {
             powerUpSlot2 = powerUp; //Debug.Log("2");
 
-          //  Debug.Log(powerUpSlot1);
+            Debug.Log("powerup slot 2: " + powerUpSlot2);
         }
 
 
@@ -159,7 +185,8 @@ public class Car_Player_Collision : MonoBehaviour
 
         if (currentPowerUpSlot == 1)
         {
-            
+           
+            //Debug.Log(powerUpSlot1);
 
             switch (powerUpSlot1)
             {
@@ -167,23 +194,24 @@ public class Car_Player_Collision : MonoBehaviour
 
                     carPlayer.isBoosted = true;
 
+                    powerUpSlot1 = null;
                     break;
 
                 case "dart":
 
-                    Instantiate(gameManager.dart, powerUpInstantiatePoint);
+                    Instantiate(dartObject, powerUpInstantiatePoint.position, dartObject.transform.rotation);
 
+                    powerUpSlot1 = null;
                     break;
 
 
                 
             }
-
             //powerUpSlot1 = null;
         }
         else
         {
-            powerUpSlot2 = null;
+            //powerUpSlot2 = null;
         }
     }
 
