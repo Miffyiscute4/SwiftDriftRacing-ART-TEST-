@@ -12,7 +12,8 @@ public class Car_Bot : MonoBehaviour
     //public CarAI_Path carPath;
 
     private List<Transform> nodes;
-    private int currentNode = 1, forwardAccelBuildUp = 0, maxForwardAccelBuildUp;
+    private int currentNode = 1;
+    [HideInInspector] public float forwardAccelBuildUp = 0, maxForwardAccelBuildUp;
     Vector3 currentNodePosition;
 
     public float sensorLength = 5f, frontSideSensorPos, frontSensorAngle = 30;
@@ -65,6 +66,8 @@ public class Car_Bot : MonoBehaviour
         CheckWayPoint();
         Sensors();
         GroundCheck();
+
+        //Debug.Log(forwardAccelBuildUp);
     }
 
     void Update()
@@ -130,9 +133,10 @@ public class Car_Bot : MonoBehaviour
         accelDelay += Time.deltaTime;
         decelDelay += Time.deltaTime;
 
-        if (accelDelay >= 0.3 && accelDelay <= maxForwardAccelBuildUp)
+        if (accelDelay >= 0.5 && accelDelay <= maxForwardAccelBuildUp)
         {
             forwardAccelBuildUp++;
+            accelDelay = 0;
         }
 
         if (forwardAccelBuildUp > maxSpeed)

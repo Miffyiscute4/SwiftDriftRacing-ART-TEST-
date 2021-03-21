@@ -5,6 +5,7 @@ using UnityEngine;
 public class Car_Bot_Collision : MonoBehaviour
 {
     public AudioSource powerUpBoxSound;
+    public Car_Bot bot;
 
     public int coinCount = 0;
 
@@ -34,7 +35,12 @@ public class Car_Bot_Collision : MonoBehaviour
              Destroy(other.gameObject);
              powerUpBoxSound.Play();
          }
-     }
+
+        if (other.gameObject.tag == "weapon")
+        {
+            bot.forwardAccelBuildUp = bot.forwardAccelBuildUp / 2;
+        }
+    }
     
 
 }

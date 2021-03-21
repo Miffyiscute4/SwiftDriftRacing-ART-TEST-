@@ -75,6 +75,7 @@ public class Car_Player : MonoBehaviour
                 else
                 {
                     rb.AddForce(transform.forward * 25000);
+                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * 1 * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
                 }
 
             }

@@ -15,6 +15,7 @@ TagManager:
   - Ramp
   - Collectable
   - Bot
+  - weapon
   layers:
   - Default
   - TransparentFX

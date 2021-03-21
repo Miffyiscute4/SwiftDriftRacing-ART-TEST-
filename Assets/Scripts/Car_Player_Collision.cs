@@ -17,7 +17,7 @@ public class Car_Player_Collision : MonoBehaviour
 
     string powerUpSlot1, powerUpSlot2;
     int currentPowerUpSlot;
-    public Transform powerUpInstantiatePoint;
+    public Transform powerUpInstantiatePoint, carDirection;
 
     float powerUpBoxDelay;
 
@@ -199,7 +199,7 @@ public class Car_Player_Collision : MonoBehaviour
 
                 case "dart":
 
-                    Instantiate(dartObject, powerUpInstantiatePoint.position, dartObject.transform.rotation);
+                    Instantiate(dartObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
 
                     powerUpSlot1 = null;
                     break;

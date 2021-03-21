@@ -11,7 +11,7 @@ public class Dart : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(-transform.right * speed);
+        transform.Translate(Vector3.forward* speed);
 
 
 
@@ -19,10 +19,11 @@ public class Dart : MonoBehaviour
         if (destroyTimer >= 7.5)
         {
             Destroy(gameObject);
+            destroyTimer = 0;
         }
     }
 
-    void OnCollisionEnter(Collision other)
+    void OnTriggernEnter(Collider other)
     {
         Destroy(gameObject);
     }
