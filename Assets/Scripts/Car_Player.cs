@@ -15,15 +15,14 @@ public class Car_Player : MonoBehaviour
     public bool isOffTrack = false, isBoosted = false;
     public LayerMask whatIsGround;
     public float groundRayLength = 5;
-    public Transform groundRayPoint, powerUpInstantiatePoint;
+    public Transform groundRayPoint;
 
     public Transform leftFrontWheel, rightFrontWheel;
     public float maxWheelTurn = 25;
 
-    public GameManager gameManager;
+    public Car_Player_Collision playerCollision;
 
-    string powerUpSlot1, powerUpSlot2;
-    int currentPowerUpSlot;
+    //public GameManager gameManager;
 
     
     // Start is called before the first frame update
@@ -38,22 +37,6 @@ public class Car_Player : MonoBehaviour
     {
         VerticalInput();
         TurnInput();
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            UsePowerUp();
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
-        {
-            SwapPowerUp();
-        }
-
-
-
-        //Debug.Log(forwardAccelBuildUp);
-        //Debug.Log(Input.GetAxis("Vertical"));
-
     }
 
     void FixedUpdate()
@@ -99,15 +82,15 @@ public class Car_Player : MonoBehaviour
             {
                 boostDelay = 0;
 
-                if (gameManager.totalcoins >= maxSpeed + gameManager.totalcoins)
+                if (playerCollision.coinCount >= maxSpeed + playerCollision.coinCount)
                 {
-                    maxForwardAccel = maxSpeed + gameManager.totalcoins;
+                    maxForwardAccel = maxSpeed + playerCollision.coinCount;
                     maxReverseAccel = 10;
                 }
-                else if (gameManager.totalcoins <= maxSpeed)
+                else if (playerCollision.coinCount <= maxSpeed)
                 {
-                    maxForwardAccel = gameManager.totalcoins + maxSpeed;
-                    maxReverseAccel = gameManager.totalcoins + 2;
+                    maxForwardAccel = playerCollision.coinCount + maxSpeed;
+                    maxReverseAccel = playerCollision.coinCount + 2;
                 }
             }
 
@@ -316,57 +299,6 @@ public class Car_Player : MonoBehaviour
 
 
 
-    public void AddPowerUp(string powerUp)
-    {
-        if (powerUpSlot1 != null)
-        {
-            powerUpSlot1 = powerUp;
-        }
-        else
-        {
-            powerUpSlot2 = powerUp;
-        }
-    }
-
-    void UsePowerUp()
-    {
-
-        if (currentPowerUpSlot == 1)
-        {
-            powerUpSlot1 = null;
-
-            switch (powerUpSlot1)
-            {
-                case "boost":
-
-                    isBoosted = true;
-
-                    break;
-
-                case "dart":
-
-                    Instantiate(gameManager.dart, powerUpInstantiatePoint);
-
-                    break;
-
-            }
-        }
-        else
-        {
-            powerUpSlot2 = null;
-        }
-    }
-
-    void SwapPowerUp()
-    {
-        if (currentPowerUpSlot == 1)
-        {
-            currentPowerUpSlot = 2;
-        }
-        else
-        {
-            currentPowerUpSlot = 1;
-        }
-    }
+    
 
 }

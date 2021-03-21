@@ -8,11 +8,12 @@ public class PowerUpBox : MonoBehaviour
     float regenTimer = 0;
 
     public AudioSource sound_PowerUpBox;
+    public GameManager gameManager;
 
-    Car_Player carPlayer;
+    Car_Player_Collision carPlayer;
     Car_Bot carBot;
 
-    public string[] powerUpList = { "333", "444" };
+    public string[] powerUpList;
 
     void Update()
     {
@@ -23,10 +24,10 @@ public class PowerUpBox : MonoBehaviour
             if (regenTimer >= 3)
             {
                 gameObject.SetActive(true);
-                regenTimer = 0;
             }
         }
-        
+
+        regenTimer = 0; Debug.Log(powerUpList.Length);
     }
 
 
@@ -35,27 +36,28 @@ public class PowerUpBox : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
-            gameObject.SetActive(false);
-
-            sound_PowerUpBox.Play();
-
-            carPlayer = other.gameObject.GetComponent<Car_Player>();
 
 
-            Debug.Log(other);
+            //sound_PowerUpBox.Play();
+
             
+
+            carPlayer = other.gameObject.GetComponent<Car_Player_Collision>();
             carPlayer.AddPowerUp(powerUpList[Random.Range(0, powerUpList.Length)]);
+
+            //gameObject.SetActive(false);
         }
 
         if (other.gameObject.tag == "Bot")
         {
-            gameObject.SetActive(false);
 
-            sound_PowerUpBox.Play();
+            //sound_PowerUpBox.Play();
+            
 
             carBot = other.gameObject.GetComponent<Car_Bot>();
-
             carBot.AddPowerUp(powerUpList[Random.Range(0, powerUpList.Length)]);
+
+            gameObject.SetActive(false);
         }
 
 

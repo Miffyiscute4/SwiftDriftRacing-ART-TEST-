@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class dart : MonoBehaviour
+public class Dart : MonoBehaviour
 {
 
     float destroyTimer;

@@ -14,6 +14,7 @@ TagManager:
   - PowerUpBox_Special
   - Ramp
   - Collectable
+  - Bot
   layers:
   - Default
   - TransparentFX

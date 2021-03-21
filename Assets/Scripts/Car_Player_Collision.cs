@@ -2,25 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Car_Player_Collisions : MonoBehaviour
+public class Car_Player_Collision : MonoBehaviour
 {
 
-    public AudioSource coin1,coin2,coin1Drop,coin2Drop, powerUpBoxSound;
+    public AudioSource coin1, coin2, coin1Drop, coin2Drop, powerUpBoxSound;
     public GameManager gameManager;
-    public Car_Player carController;
+    public Car_Player carPlayer;
     public GameObject coinObject, bigCoinObject;
     public Transform coinInstantiatePoint;
 
-    private int powerUpSlot1 = 0, powerUpSlot2 = 0;
     private float lavaTimer = 0, PowerUpRegenTimer = 0;
+    public int coinCount;
 
-    private bool isCurrentPowerUpSlot1;
+
+    string powerUpSlot1, powerUpSlot2;
+    int currentPowerUpSlot;
+    public Transform powerUpInstantiatePoint;
+
     // Update is called once per frame
 
     void Start()
     {
-        isCurrentPowerUpSlot1 = true;
+        currentPowerUpSlot = 1;
     }
+
     void Update()
     {
         lavaTimer += Time.deltaTime;
@@ -33,22 +38,10 @@ public class Car_Player_Collisions : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
-            isCurrentPowerUpSlot1 = !isCurrentPowerUpSlot1;
+            SwapPowerUp();
         }
 
-        if (isCurrentPowerUpSlot1)
-        {
-            gameManager.slotNumber = "1. PowerUp:" + powerUpSlot1;
-
-            gameManager.reserveSlotNumber = "2. PowerUp:" + powerUpSlot2;
-        }
-        else
-        {
-            gameManager.slotNumber = "2. PowerUp:" + powerUpSlot2;
-
-            gameManager.reserveSlotNumber = "1. PowerUp: " + powerUpSlot1;
-        }
-
+        //Debug.Log(coinCount);
     }
 
 
@@ -61,29 +54,29 @@ public class Car_Player_Collisions : MonoBehaviour
         {
             Destroy(other.gameObject);
             coin1.Play();
-            gameManager.AddCoins(1);
+            coinCount++;
         }
 
         if (other.gameObject.tag == "Big_Coin")
         {
             Destroy(other.gameObject);
             coin2.Play();
-            gameManager.AddCoins(5);
+            coinCount += 5;
         }
 
         if (other.gameObject.tag == "Ice")
         {
-            carController.turnStrength *= 2;
+            carPlayer.turnStrength *= 2;
         }
 
         if (other.gameObject.tag == "OffTrack")
         {
-            carController.isOffTrack = true;
+            carPlayer.isOffTrack = true;
         }
 
         if (other.gameObject.tag == "BoostPad")
         {
-            carController.isBoosted = true;
+            carPlayer.isBoosted = true;
         }
 
     }
@@ -96,75 +89,113 @@ public class Car_Player_Collisions : MonoBehaviour
     {
         if (other.gameObject.tag == "Lava" && lavaTimer >= 2 && gameManager.totalcoins > 0)
         {
-            Quaternion carDirection = Quaternion.Euler(carController.transform.localRotation.x, carController.transform.localRotation.y + 90, carController.transform.localRotation.z);
+            //Quaternion carDirection = Quaternion.Euler(carController.transform.localRotation.x, carController.transform.localRotation.y + 90, carController.transform.localRotation.z);
 
-            if (gameManager.totalcoins >= 5)
-            {
-                gameManager.SubtractCoins(5);
-                Instantiate(coinObject, coinInstantiatePoint.position, carDirection);
-                lavaTimer = 0;
-                coin2Drop.Play();
-            }
-            else
-            {
-                gameManager.SubtractCoins(1);
-                Instantiate(coinObject, coinInstantiatePoint.position, carDirection);
-                lavaTimer = 0;
-                coin1Drop.Play();
-            }
-            
+            /* if (gameManager.totalcoins >= 5)
+             {
+                 gameManager.SubtractCoins(5);
+                 Instantiate(coinObject, coinInstantiatePoint.position, carDirection);
+                 lavaTimer = 0;
+                 coin2Drop.Play();
+             }
+             else
+             {
+                 gameManager.SubtractCoins(1);
+                 Instantiate(coinObject, coinInstantiatePoint.position, carDirection);
+                 lavaTimer = 0;
+                 coin1Drop.Play();
+             }
+
+         }*/
         }
+
+
+
+
+
+
     }
-
-
-
-
 
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Ice")
         {
-            carController.turnStrength /= 2;
+            carPlayer.turnStrength /= 2;
         }
 
         if (other.gameObject.tag == "OffTrack")
         {
-            carController.isOffTrack = false;
+            carPlayer.isOffTrack = false;
         }
 
+    }
+
+    //--------------------------------------------------------------------------------------------------------------
+
+    public void AddPowerUp(string powerUp)
+    {
+        powerUpBoxSound.Play();
+
+        //Debug.Log(powerUpSlot1);
+
+        if (powerUpSlot1 != null)
+        {
+            powerUpSlot1 = powerUp; //Debug.Log("1");
+        //    Debug.Log(powerUpSlot1);
+        }
+        else
+        {
+            powerUpSlot2 = powerUp; //Debug.Log("2");
+
+          //  Debug.Log(powerUpSlot1);
+        }
+
+
+        //Debug.Log(powerUpSlot1);
     }
 
     void UsePowerUp()
     {
-        if (isCurrentPowerUpSlot1)
+
+        if (currentPowerUpSlot == 1)
         {
+            
+
             switch (powerUpSlot1)
             {
-                case 1:
+                case "boost":
 
-                    carController.isBoosted = true;
+                    carPlayer.isBoosted = true;
 
                     break;
+
+                case "dart":
+
+                    Instantiate(gameManager.dart, powerUpInstantiatePoint);
+
+                    break;
+
+
+                
             }
 
-            powerUpSlot1 = 0;
+            //powerUpSlot1 = null;
         }
-        else if (!isCurrentPowerUpSlot1)
+        else
         {
-            switch (powerUpSlot2)
-            {
-                case 1:
-
-                    carController.isBoosted = true;
-
-                    break;
-            }
-
-            powerUpSlot2 = 0;
+            powerUpSlot2 = null;
         }
-        
     }
 
-
+    void SwapPowerUp()
+    {
+        if (currentPowerUpSlot == 1)
+        {
+            currentPowerUpSlot = 2;
+        }
+        else
+        {
+            currentPowerUpSlot = 1;
+        }
+    }
 }
-
