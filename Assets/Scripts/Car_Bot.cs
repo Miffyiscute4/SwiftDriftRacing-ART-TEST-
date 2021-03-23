@@ -13,7 +13,7 @@ public class Car_Bot : MonoBehaviour
 
     private List<Transform> nodes;
     private int currentNode = 1;
-    [HideInInspector] public float forwardAccelBuildUp = 0, maxForwardAccelBuildUp;
+    [HideInInspector] public float forwardAccelBuildUp = 0, maxForwardAccelBuildUp, boostDelay;
     Vector3 currentNodePosition;
 
     public float sensorLength = 5f, frontSideSensorPos, frontSensorAngle = 30;
@@ -36,6 +36,9 @@ public class Car_Bot : MonoBehaviour
 
     string powerUpSlot1, powerUpSlot2;
     int currentPowerUpSlot;
+
+    //--------------------------------
+    public bool isOffTrack = false, isBoosted = false;
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +64,7 @@ public class Car_Bot : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        MaterialEffects();
         ApplySteer();
         Drive();
         CheckWayPoint();
@@ -305,6 +309,56 @@ public class Car_Bot : MonoBehaviour
         else
         {
             powerUpSlot2 = powerUp;
+        }
+    }
+
+    void MaterialEffects()
+    {
+        if (!isOffTrack)
+        {
+            if (isBoosted)
+            {
+                boostDelay += Time.deltaTime;
+
+                if (boostDelay >= 3)
+                {
+
+                    forwardAccelBuildUp = maxSpeed;
+
+                    isBoosted = false;
+
+                }
+                else
+                {
+                    rb.AddForce(transform.forward * 25000);
+                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, 1 * turnSpeed * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
+                }
+
+            }
+            else
+            {
+                boostDelay = 0;
+
+                if (bot.coinCount >= maxSpeed + bot.coinCount)
+                {
+                    maxSpeed = maxSpeed + bot.coinCount;
+                    //maxReverseAccel = 10;
+                }
+                else if (bot.coinCount <= maxSpeed)
+                {
+                    maxSpeed = bot.coinCount + maxSpeed;
+                    //maxReverseAccel = bot.coinCount + 2;
+                }
+            }
+
+
+        }
+        else
+        {
+            //maxForwardAccel = maxSpeed;
+            //maxReverseAccel = 2;
+
+            isBoosted = false;
         }
     }
 }
