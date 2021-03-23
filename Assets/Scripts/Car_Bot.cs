@@ -132,35 +132,39 @@ public class Car_Bot : MonoBehaviour
 
     void Drive()
     {
-        rb.AddForce(transform.forward * forwardAccelBuildUp * 1000);
-
-        accelDelay += Time.deltaTime;
-        decelDelay += Time.deltaTime;
-
-        if (accelDelay >= 0.5 && accelDelay <= maxForwardAccelBuildUp)
+        if (!isBoosted)
         {
-            forwardAccelBuildUp++;
-            accelDelay = 0;
-        }
+                rb.AddForce(transform.forward * forwardAccelBuildUp * 1000);
 
-        if (forwardAccelBuildUp > maxSpeed)
-        {
-            forwardAccelBuildUp = maxSpeed;
-        }
+                accelDelay += Time.deltaTime;
+                decelDelay += Time.deltaTime;
 
-        turnSpeed = forwardAccelBuildUp;
+                if (accelDelay >= 0.5 && accelDelay <= maxForwardAccelBuildUp)
+                {
+                    forwardAccelBuildUp++;
+                    accelDelay = 0;
+                }
 
-        if (bot.coinCount < 10)
-        {
-            maxForwardAccelBuildUp = maxSpeed + bot.coinCount;
-        }
-        else
-        {
-            maxForwardAccelBuildUp = maxSpeed + 10;
-        }
+                if (forwardAccelBuildUp > maxSpeed)
+                {
+                    forwardAccelBuildUp = maxSpeed;
+                }
+
+                turnSpeed = forwardAccelBuildUp;
+
+                if (bot.coinCount < 10)
+                {
+                    maxForwardAccelBuildUp = maxSpeed + bot.coinCount;
+                }
+                else
+                {
+                    maxForwardAccelBuildUp = maxSpeed + 10;
+                }
         
 
-        //Debug.Log(forwardAccelBuildUp + " " + bot.coinCount);
+                //Debug.Log(forwardAccelBuildUp + " " + bot.coinCount);
+        }
+        
     }
 
 
@@ -300,17 +304,6 @@ public class Car_Bot : MonoBehaviour
         //Debug.Log(avoiding);
     }
 
-    public void AddPowerUp(string powerUp)
-    {
-        if (powerUpSlot1 != null)
-        {
-            powerUpSlot1 = powerUp;
-        }
-        else
-        {
-            powerUpSlot2 = powerUp;
-        }
-    }
 
     void MaterialEffects()
     {
@@ -331,24 +324,13 @@ public class Car_Bot : MonoBehaviour
                 else
                 {
                     rb.AddForce(transform.forward * 25000);
-                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, 1 * turnSpeed * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
+                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, 1 * turnSpeed * Time.deltaTime * 1, 0f));
                 }
 
             }
             else
             {
-                boostDelay = 0;
 
-                if (bot.coinCount >= maxSpeed + bot.coinCount)
-                {
-                    maxSpeed = maxSpeed + bot.coinCount;
-                    //maxReverseAccel = 10;
-                }
-                else if (bot.coinCount <= maxSpeed)
-                {
-                    maxSpeed = bot.coinCount + maxSpeed;
-                    //maxReverseAccel = bot.coinCount + 2;
-                }
             }
 
 

@@ -29,23 +29,26 @@ public class Car_Bot_Collision : MonoBehaviour
     void Start()
     {
         randomNum1 = Random.Range(1, 10);
+
+        currentPowerUpSlot = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
 
-
-
+        //Debug.Log(usePowerUpTimer + " " + randomNum1);
 
         usePowerUpTimer += Time.deltaTime;
 
-        if (usePowerUpTimer == randomNum1 && powerUpSlot1 != null && powerUpSlot2 != null)
+        if (usePowerUpTimer >= randomNum1 && (powerUpSlot1 != null || powerUpSlot2 != null))
         {
 
             UsePowerUp();
-
+            Debug.Log("Powerup function called");
             randomNum1 = Random.Range(1, 10);
+
+            usePowerUpTimer = 0;
         }
 
 
@@ -115,7 +118,7 @@ public class Car_Bot_Collision : MonoBehaviour
         if (currentPowerUpSlot == 1)
         {
            
-            //Debug.Log(powerUpSlot1);
+            Debug.Log(powerUpSlot1 + " working");
 
             switch (powerUpSlot1)
             {

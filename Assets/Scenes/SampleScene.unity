@@ -456,6 +456,7 @@ MonoBehaviour:
   rb: {fileID: 1638867400}
   forwardAccelBuildUp: 0
   maxForwardAccelBuildUp: 0
+  boostDelay: 0
   sensorLength: 5
   frontSideSensorPos: 0
   frontSensorAngle: 30
@@ -469,6 +470,8 @@ MonoBehaviour:
   objectToAimFor: {fileID: 0}
   distanceTillNextNode: 0
   bot: {fileID: 0}
+  isOffTrack: 0
+  isBoosted: 0
 --- !u!4 &116650939 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000013257298028, guid: bb21eca8388294517aedb926b64d69b2,
@@ -1508,6 +1511,7 @@ MonoBehaviour:
   rb: {fileID: 609083551}
   forwardAccelBuildUp: 0
   maxForwardAccelBuildUp: 0
+  boostDelay: 0
   sensorLength: 85
   frontSideSensorPos: 0.8
   frontSensorAngle: 30
@@ -1521,6 +1525,8 @@ MonoBehaviour:
   objectToAimFor: {fileID: 0}
   distanceTillNextNode: 40
   bot: {fileID: 609083556}
+  isOffTrack: 0
+  isBoosted: 0
 --- !u!23 &286034584
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1598,6 +1604,7 @@ Transform:
   - {fileID: 1578727476}
   - {fileID: 893142484}
   - {fileID: 538810777}
+  - {fileID: 1309601209}
   m_Father: {fileID: 286034582}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2792,8 +2799,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUpBoxSound: {fileID: 1452654687}
-  bot: {fileID: 286034583}
+  carBot: {fileID: 286034583}
+  coinObject: {fileID: 7733070381150921504, guid: e55fed3e16d0c8b45b0b210f0e4f7d50,
+    type: 3}
+  bigCoinObject: {fileID: 808520133216416857, guid: 51b29099576f0b14482a1b675e6b97d9,
+    type: 3}
+  powerUpBoxObject: {fileID: 0}
+  coinInstantiatePoint: {fileID: 0}
   coinCount: 0
+  powerUpInstantiatePoint: {fileID: 1309601209}
+  carDirection: {fileID: 0}
+  powerUpType:
+  - boost
+  - dart
+  dartObject: {fileID: 3052293523159680178, guid: 19ebe47ff6e472f499cb2df5279b5602,
+    type: 3}
 --- !u!1 &643612307
 GameObject:
   m_ObjectHideFlags: 0
@@ -4297,7 +4317,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.021875035, y: 0.70964384, z: -0.022054307, w: 0.7038756}
+  m_LocalRotation: {x: 0.021875031, y: 0.70964384, z: -0.022054303, w: 0.7038756}
   m_LocalPosition: {x: 115.869995, y: 0.16000009, z: 324.17657}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -4705,7 +4725,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020550303}
-  m_LocalRotation: {x: 0.021875035, y: 0.70964384, z: -0.022054307, w: 0.7038756}
+  m_LocalRotation: {x: 0.021875031, y: 0.70964384, z: -0.022054303, w: 0.7038756}
   m_LocalPosition: {x: 115.869995, y: 0.16000009, z: 324.17657}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5323,6 +5343,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e55fed3e16d0c8b45b0b210f0e4f7d50, type: 3}
+--- !u!1 &1309601208
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1309601209}
+  m_Layer: 0
+  m_Name: PowerUpInstantiatePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1309601209
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309601208}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.3126638, y: -0.9150348, z: -23.224117}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 297910764}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1318487746 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000013257298028, guid: bb21eca8388294517aedb926b64d69b2,
@@ -8898,7 +8948,7 @@ PrefabInstance:
     - target: {fileID: 6340936772955314163, guid: 527b36e50617d9a49804ce200f526c14,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 142
+      value: 161.1
       objectReference: {fileID: 0}
     - target: {fileID: 6340936772955314163, guid: 527b36e50617d9a49804ce200f526c14,
         type: 3}
@@ -8908,7 +8958,7 @@ PrefabInstance:
     - target: {fileID: 6340936772955314163, guid: 527b36e50617d9a49804ce200f526c14,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 326
+      value: 326.2
       objectReference: {fileID: 0}
     - target: {fileID: 6340936772955314163, guid: 527b36e50617d9a49804ce200f526c14,
         type: 3}
