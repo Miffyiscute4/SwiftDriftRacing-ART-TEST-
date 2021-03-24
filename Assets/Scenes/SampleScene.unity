@@ -460,6 +460,8 @@ MonoBehaviour:
   sensorLength: 5
   frontSideSensorPos: 0
   frontSensorAngle: 30
+  dragOnGround: 3
+  gravityForce: 10
   frontSensorPos: {x: 0, y: 0.2, z: 0.5}
   whatIsGround:
     serializedVersion: 2
@@ -1515,11 +1517,13 @@ MonoBehaviour:
   sensorLength: 85
   frontSideSensorPos: 0.8
   frontSensorAngle: 30
+  dragOnGround: 3
+  gravityForce: 10
   frontSensorPos: {x: 0, y: -0.5, z: 0}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
-  groundRayLength: 5
+  groundRayLength: 3
   groundRayPoint: {fileID: 893142484}
   maxSpeed: 15
   objectToAimFor: {fileID: 0}
@@ -1938,7 +1942,7 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
-  groundRayLength: 5
+  groundRayLength: 3
   groundRayPoint: {fileID: 1508675800}
   leftFrontWheel: {fileID: 3775746020085010797}
   rightFrontWheel: {fileID: 997068502996638538}
@@ -4317,7 +4321,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.021875031, y: 0.70964384, z: -0.022054303, w: 0.7038756}
+  m_LocalRotation: {x: 0.021875033, y: 0.70964384, z: -0.022054305, w: 0.7038756}
   m_LocalPosition: {x: 115.869995, y: 0.16000009, z: 324.17657}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -4725,7 +4729,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020550303}
-  m_LocalRotation: {x: 0.021875031, y: 0.70964384, z: -0.022054303, w: 0.7038756}
+  m_LocalRotation: {x: 0.021875033, y: 0.70964384, z: -0.022054305, w: 0.7038756}
   m_LocalPosition: {x: 115.869995, y: 0.16000009, z: 324.17657}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

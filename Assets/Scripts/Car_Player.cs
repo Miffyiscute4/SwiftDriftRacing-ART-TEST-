@@ -37,12 +37,16 @@ public class Car_Player : MonoBehaviour
     {
         VerticalInput();
         TurnInput();
+
+        //Debug.Log(forwardAccelBuildUp);
     }
 
     void FixedUpdate()
     {
         GroundCheck();
         ApplyForce();
+
+        Debug.Log(forwardAccelBuildUp);
     }
 
 
@@ -69,8 +73,10 @@ public class Car_Player : MonoBehaviour
 
                     forwardAccelBuildUp = maxForwardAccel;
 
-                    isBoosted = false;
+                    boostDelay = 0;
 
+
+                    isBoosted = false;
                 }
                 else
                 {
@@ -83,7 +89,7 @@ public class Car_Player : MonoBehaviour
             {
                 boostDelay = 0;
 
-                if (playerCollision.coinCount >= maxSpeed + playerCollision.coinCount)
+                if (playerCollision.coinCount >= maxSpeed + playerCollision.coinCount /*&& Input.GetAxis("Horizontal") != 0*/)
                 {
                     maxForwardAccel = maxSpeed + playerCollision.coinCount;
                     maxReverseAccel = 10;
@@ -92,18 +98,22 @@ public class Car_Player : MonoBehaviour
                 {
                     maxForwardAccel = playerCollision.coinCount + maxSpeed;
                     maxReverseAccel = playerCollision.coinCount + 2;
-                }
+                }/*
+                else
+                {
+                    forwardAccelBuildUp--;
+                }*/
             }
 
 
         }
-        else
+        /*else
         {
-            maxForwardAccel = maxSpeed;
-            maxReverseAccel = 2;
+            //maxForwardAccel = maxSpeed;
+            //maxReverseAccel = 2;
 
-            isBoosted = false;
-        }
+            //isBoosted = false;
+        }*/
 
         if (!isBoosted)
         {
@@ -157,14 +167,10 @@ public class Car_Player : MonoBehaviour
 
         else
         {
-            if (decelDelay >= delayAmount && forwardAccelBuildUp > 0 || reverseAccelBuildUp > 0)
-            {
-                forwardAccelBuildUp--;
-                reverseAccelBuildUp--;
+            forwardAccelBuildUp--;
+            reverseAccelBuildUp--;
 
-                decelDelay = 0;
-
-            }
+            decelDelay = 0;
         }
 
         if (Input.GetAxis("Vertical") == 0)
@@ -178,11 +184,11 @@ public class Car_Player : MonoBehaviour
 
         }
 
-        if (forwardAccelBuildUp < 0)
+        if (forwardAccelBuildUp <= 0)
         {
             forwardAccelBuildUp = 0;
         }
-        else if (reverseAccelBuildUp < 0)
+        else if (reverseAccelBuildUp <= 0)
         {
             reverseAccelBuildUp = 0;
         }
@@ -262,7 +268,9 @@ public class Car_Player : MonoBehaviour
         {
             grounded = true;
 
-            transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+            Quaternion smoothtransition = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, smoothtransition, Time.deltaTime * 6);
         }
         else
         {
@@ -292,7 +300,7 @@ public class Car_Player : MonoBehaviour
         {
             rb.drag = 0.1f;
 
-            rb.AddForce(Vector3.up * -gravityForce * 100f);
+            rb.AddForce(Vector3.up * -gravityForce * 500f);
         }
 
 

@@ -16,10 +16,10 @@ public class Car_Bot : MonoBehaviour
     [HideInInspector] public float forwardAccelBuildUp = 0, maxForwardAccelBuildUp, boostDelay;
     Vector3 currentNodePosition;
 
-    public float sensorLength = 5f, frontSideSensorPos, frontSensorAngle = 30;
+    public float sensorLength = 5f, frontSideSensorPos, frontSensorAngle = 30, dragOnGround = 3, gravityForce = 10;
     public Vector3 frontSensorPos = new Vector3(0, 0.2f, 0.5f);
 
-    private bool avoiding = false, aimingForObject = false;
+    private bool avoiding = false, aimingForObject = false, grounded;
     private float accelDelay, decelDelay;
 
     public LayerMask whatIsGround;
@@ -124,7 +124,26 @@ public class Car_Bot : MonoBehaviour
 
         if (Physics.Raycast(groundRayPoint.position, -transform.up, out hit, groundRayLength, whatIsGround))
         {
-            transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+            grounded = true;
+
+            Quaternion smoothtransition = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, smoothtransition, Time.deltaTime * 6);
+        }
+        else
+        {
+            grounded = false;
+        }
+
+        if (grounded)
+        {
+            rb.drag = dragOnGround;
+        }
+        else
+        {
+            rb.drag = 0.1f;
+
+            rb.AddForce(Vector3.up * -gravityForce * 500f);
         }
     }
 
