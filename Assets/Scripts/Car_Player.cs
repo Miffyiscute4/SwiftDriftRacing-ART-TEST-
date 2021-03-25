@@ -46,7 +46,7 @@ public class Car_Player : MonoBehaviour
         GroundCheck();
         ApplyForce();
 
-        Debug.Log(forwardAccelBuildUp);
+        //Debug.Log(forwardAccelBuildUp);
     }
 
 
@@ -89,31 +89,32 @@ public class Car_Player : MonoBehaviour
             {
                 boostDelay = 0;
 
-                if (playerCollision.coinCount >= maxSpeed + playerCollision.coinCount /*&& Input.GetAxis("Horizontal") != 0*/)
+                if (playerCollision.coinCount >= maxSpeed + playerCollision.coinCount && Input.GetAxis("Vertical") != 0)
                 {
                     maxForwardAccel = maxSpeed + playerCollision.coinCount;
                     maxReverseAccel = 10;
                 }
-                else if (playerCollision.coinCount <= maxSpeed)
+                else if (playerCollision.coinCount <= maxSpeed && Input.GetAxis("Vertical") != 0)
                 {
                     maxForwardAccel = playerCollision.coinCount + maxSpeed;
                     maxReverseAccel = playerCollision.coinCount + 2;
-                }/*
-                else
+                }
+                else if (decelDelay >= delayAmount / 4)
                 {
                     forwardAccelBuildUp--;
-                }*/
+                    decelDelay = 0;
+                }
             }
 
 
         }
-        /*else
+        else
         {
             //maxForwardAccel = maxSpeed;
             //maxReverseAccel = 2;
 
             //isBoosted = false;
-        }*/
+        }
 
         if (!isBoosted)
         {
