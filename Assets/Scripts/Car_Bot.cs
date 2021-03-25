@@ -43,7 +43,7 @@ public class Car_Bot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb.transform.parent = null;
+        //rb.transform.parent = null;
 
         Transform[] pathTransforms = path.GetComponentsInChildren<Transform>();
         nodes = new List<Transform>();
@@ -128,7 +128,7 @@ public class Car_Bot : MonoBehaviour
 
             Quaternion smoothtransition = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
 
-            transform.rotation = Quaternion.Lerp(transform.rotation, smoothtransition, Time.deltaTime * 6);
+            transform.rotation = Quaternion.Lerp(transform.rotation, smoothtransition, Time.deltaTime * 10);
         }
         else
         {

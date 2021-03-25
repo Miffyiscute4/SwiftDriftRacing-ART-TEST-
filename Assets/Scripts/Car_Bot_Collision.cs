@@ -22,9 +22,9 @@ public class Car_Bot_Collision : MonoBehaviour
 
     public string[] powerUpType;
 
-    public GameObject dartObject;
+    [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject;
 
-    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible;
+    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb;
 
 
     // Start is called before the first frame update
@@ -38,6 +38,7 @@ public class Car_Bot_Collision : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        BoolActions();
 
         //Debug.Log(usePowerUpTimer + " " + randomNum1);
 
@@ -89,7 +90,17 @@ public class Car_Bot_Collision : MonoBehaviour
         {
             if (!isInvincible)
             {
-                carBot.forwardAccelBuildUp = carBot.forwardAccelBuildUp / 2;
+                switch (other.gameObject.name)
+                {
+                    case "Dart":
+                        carBot.forwardAccelBuildUp = carBot.forwardAccelBuildUp / 2;
+                        break;
+
+                    case "Explosion":
+                        carBot.forwardAccelBuildUp = 0;
+                        break;
+                }
+               
             }
             
         }
@@ -137,7 +148,7 @@ public class Car_Bot_Collision : MonoBehaviour
 
                 case "dart":
 
-                    Instantiate(dartObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
+                    isShootingDart = true;
 
                     powerUpSlot1 = null;
                     break;
@@ -149,6 +160,12 @@ public class Car_Bot_Collision : MonoBehaviour
                     powerUpSlot1 = null;
                     break;
 
+                case "Bomb":
+
+                    isShootingBomb = true;
+
+                    powerUpSlot1 = null;
+                    break;
 
 
 
@@ -179,10 +196,7 @@ public class Car_Bot_Collision : MonoBehaviour
         {
             carBot.isBoosted = true;
 
-            if (!carBot.isBoosted)
-            {
-                isBoosted = false;
-            }
+            isBoosted = false;
         }
         else if (isShootingDart)
         {
@@ -192,7 +206,7 @@ public class Car_Bot_Collision : MonoBehaviour
         }
         else if (isInvincible)
         {
-            invincibleTimer = Time.deltaTime;
+            invincibleTimer += Time.deltaTime;
 
             if (invincibleTimer >= 8)
             {
@@ -201,6 +215,13 @@ public class Car_Bot_Collision : MonoBehaviour
                 isInvincible = false;
             }
 
+        }
+
+        if (isShootingBomb)
+        {
+            Instantiate(bombObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
+
+            isShootingBomb = false;
         }
 
     }

@@ -23,9 +23,9 @@ public class Car_Player_Collision : MonoBehaviour
 
     public string[] powerUpType;
 
-    public GameObject dartObject;
+    [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject;
 
-    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible;
+    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb;
 
     // Update is called once per frame
 
@@ -112,7 +112,18 @@ public class Car_Player_Collision : MonoBehaviour
         {
             if (!isInvincible)
             {
-                carPlayer.forwardAccelBuildUp = carPlayer.forwardAccelBuildUp / 2;
+                switch (other.gameObject.name)
+                {
+                    case "Dart":
+                        carPlayer.forwardAccelBuildUp = carPlayer.forwardAccelBuildUp / 2;
+                        break;
+
+                    case "Explosion":
+                        carPlayer.forwardAccelBuildUp = 0;
+                        break;
+                }
+
+                
             }
 
         }
@@ -221,6 +232,13 @@ public class Car_Player_Collision : MonoBehaviour
                     powerUpSlot1 = null;
                     break;
 
+                case "Bomb":
+
+                    isShootingBomb = true;
+
+                    powerUpSlot1 = null;
+                    break;
+
 
 
             }
@@ -262,7 +280,7 @@ public class Car_Player_Collision : MonoBehaviour
 
         if (isInvincible)
         {
-            invincibleTimer = Time.deltaTime;
+            invincibleTimer += Time.deltaTime;
 
             if (invincibleTimer >= 8)
             {
@@ -271,6 +289,13 @@ public class Car_Player_Collision : MonoBehaviour
                 isInvincible = false;
             }
             
+        }
+
+        if (isShootingBomb)
+        {
+            Instantiate(bombObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
+
+            isShootingBomb = false;
         }
 
     }

@@ -30,7 +30,7 @@ public class Car_Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb.transform.parent = null;
+        //rb.transform.parent = null;
     }
 
     // Update is called once per frame
@@ -275,7 +275,7 @@ public class Car_Player : MonoBehaviour
 
             Quaternion smoothtransition = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
 
-            transform.rotation = Quaternion.Lerp(transform.rotation, smoothtransition, Time.deltaTime * 6);
+            transform.rotation = Quaternion.Lerp(transform.rotation, smoothtransition, Time.deltaTime * 10);
         }
         else
         {
