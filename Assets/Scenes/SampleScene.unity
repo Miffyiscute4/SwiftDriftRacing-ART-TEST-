@@ -952,6 +952,9 @@ MonoBehaviour:
   - dart
   dartObject: {fileID: 3052293523159680178, guid: 19ebe47ff6e472f499cb2df5279b5602,
     type: 3}
+  isBoosted: 0
+  isShootingDart: 0
+  isInvincible: 0
 --- !u!1001 &156803938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1937,6 +1940,8 @@ MonoBehaviour:
   dragOnGround: 3
   delayAmount: 0.5
   maxSpeed: 15
+  forwardAccelBuildUp: 0
+  reverseAccelBuildUp: 0
   isOffTrack: 0
   isBoosted: 0
   whatIsGround:
@@ -2818,6 +2823,9 @@ MonoBehaviour:
   - dart
   dartObject: {fileID: 3052293523159680178, guid: 19ebe47ff6e472f499cb2df5279b5602,
     type: 3}
+  isBoosted: 0
+  isShootingDart: 0
+  isInvincible: 0
 --- !u!1 &643612307
 GameObject:
   m_ObjectHideFlags: 0

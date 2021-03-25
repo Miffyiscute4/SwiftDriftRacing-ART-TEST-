@@ -11,7 +11,7 @@ public class Car_Player_Collision : MonoBehaviour
     public GameObject coinObject, bigCoinObject, powerUpBoxObject;
     public Transform coinInstantiatePoint;
 
-    private float lavaTimer = 0, PowerUpRegenTimer = 0;
+    private float lavaTimer = 0, PowerUpRegenTimer = 0, invincibleTimer = 0;
     public int coinCount;
 
 
@@ -25,6 +25,8 @@ public class Car_Player_Collision : MonoBehaviour
 
     public GameObject dartObject;
 
+    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible;
+
     // Update is called once per frame
 
     void Start()
@@ -36,6 +38,8 @@ public class Car_Player_Collision : MonoBehaviour
     {
         lavaTimer += Time.deltaTime;
         PowerUpRegenTimer += Time.deltaTime;
+
+        BoolActions();
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -102,6 +106,15 @@ public class Car_Player_Collision : MonoBehaviour
 
             powerUpBoxObject = other.gameObject;
             powerUpBoxObject.SetActive(false);
+        }
+
+        if (other.gameObject.tag == "weapon")
+        {
+            if (!isInvincible)
+            {
+                carPlayer.forwardAccelBuildUp = carPlayer.forwardAccelBuildUp / 2;
+            }
+
         }
 
     }
@@ -191,21 +204,25 @@ public class Car_Player_Collision : MonoBehaviour
             switch (powerUpSlot1)
             {
                 case "boost":
-
-                    carPlayer.isBoosted = true;
+                    isBoosted = true;
 
                     powerUpSlot1 = null;
                     break;
 
                 case "dart":
+                    isShootingDart = true;
+                    powerUpSlot1 = null;
+                    break;
 
-                    Instantiate(dartObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
+                case "invincibilityOrb":
+
+                    isInvincible = true;
 
                     powerUpSlot1 = null;
                     break;
 
 
-                
+
             }
             //powerUpSlot1 = null;
         }
@@ -225,5 +242,36 @@ public class Car_Player_Collision : MonoBehaviour
         {
             currentPowerUpSlot = 1;
         }
+    }
+
+    public void BoolActions()
+    {
+        if (isBoosted)
+        {
+            carPlayer.isBoosted = true;
+
+            isBoosted = false;
+        }
+
+        if (isShootingDart)
+        {
+            Instantiate(dartObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
+
+            isShootingDart = false;
+        }
+
+        if (isInvincible)
+        {
+            invincibleTimer = Time.deltaTime;
+
+            if (invincibleTimer >= 8)
+            {
+                invincibleTimer = 0;
+
+                isInvincible = false;
+            }
+            
+        }
+
     }
 }

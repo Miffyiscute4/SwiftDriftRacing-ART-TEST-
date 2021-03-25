@@ -10,7 +10,7 @@ public class Car_Bot_Collision : MonoBehaviour
     public GameObject coinObject, bigCoinObject, powerUpBoxObject;
     public Transform coinInstantiatePoint;
 
-    private float lavaTimer = 0, PowerUpRegenTimer = 0, usePowerUpTimer = 0;
+    private float lavaTimer = 0, PowerUpRegenTimer = 0, usePowerUpTimer = 0, invincibleTimer;
     public int coinCount;
 
 
@@ -23,6 +23,8 @@ public class Car_Bot_Collision : MonoBehaviour
     public string[] powerUpType;
 
     public GameObject dartObject;
+
+    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible;
 
 
     // Start is called before the first frame update
@@ -85,7 +87,11 @@ public class Car_Bot_Collision : MonoBehaviour
 
         if (other.gameObject.tag == "weapon")
         {
-            carBot.forwardAccelBuildUp = carBot.forwardAccelBuildUp / 2;
+            if (!isInvincible)
+            {
+                carBot.forwardAccelBuildUp = carBot.forwardAccelBuildUp / 2;
+            }
+            
         }
     }
 
@@ -124,7 +130,7 @@ public class Car_Bot_Collision : MonoBehaviour
             {
                 case "boost":
 
-                    carBot.isBoosted = true;
+                    isBoosted = true;
 
                     powerUpSlot1 = null;
                     break;
@@ -136,8 +142,16 @@ public class Car_Bot_Collision : MonoBehaviour
                     powerUpSlot1 = null;
                     break;
 
+                case "invincibilityOrb":
 
-                
+                    isInvincible = true;
+
+                    powerUpSlot1 = null;
+                    break;
+
+
+
+
             }
             //powerUpSlot1 = null;
         }
@@ -159,5 +173,36 @@ public class Car_Bot_Collision : MonoBehaviour
         }
     }
 
+    public void BoolActions()
+    {
+        if (isBoosted)
+        {
+            carBot.isBoosted = true;
+
+            if (!carBot.isBoosted)
+            {
+                isBoosted = false;
+            }
+        }
+        else if (isShootingDart)
+        {
+            Instantiate(dartObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
+
+            isShootingDart = false;
+        }
+        else if (isInvincible)
+        {
+            invincibleTimer = Time.deltaTime;
+
+            if (invincibleTimer >= 8)
+            {
+                invincibleTimer = 0;
+
+                isInvincible = false;
+            }
+
+        }
+
+    }
 
 }

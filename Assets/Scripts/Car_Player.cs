@@ -8,7 +8,9 @@ public class Car_Player : MonoBehaviour
 
     public float maxForwardAccel = 18, maxReverseAccel = 9, turnStrength = 30, gravityForce = 10, dragOnGround = 3, delayAmount = 0.3f, maxSpeed;
 
-    private float speedInput, turnInput, accelDelay, decelDelay, boostDelay, forwardAccelBuildUp, reverseAccelBuildUp, driftInput;
+    [HideInInspector] public float forwardAccelBuildUp, reverseAccelBuildUp;
+
+    private float speedInput, turnInput, accelDelay, decelDelay, boostDelay, driftInput;
 
     private bool grounded;
 
@@ -74,6 +76,8 @@ public class Car_Player : MonoBehaviour
                     forwardAccelBuildUp = maxForwardAccel;
 
                     boostDelay = 0;
+
+                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, driftInput * (forwardAccelBuildUp / 10) * (turnStrength * 2) * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
 
 
                     isBoosted = false;
