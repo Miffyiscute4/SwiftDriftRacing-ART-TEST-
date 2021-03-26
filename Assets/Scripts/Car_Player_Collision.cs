@@ -118,7 +118,7 @@ public class Car_Player_Collision : MonoBehaviour
                         carPlayer.forwardAccelBuildUp = carPlayer.forwardAccelBuildUp / 2;
                         break;
 
-                    case "Explosion":
+                    case "Explosion(Clone)":
                         carPlayer.forwardAccelBuildUp = 0;
                         break;
                 }

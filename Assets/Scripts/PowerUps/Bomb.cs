@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bomb : MonoBehaviour
 {
     public LayerMask whatIsGround;
-    public GameObject explosion;
+    public GameObject explosion, prefabParent;
     Animator anim;
 
     // Start is called before the first frame update
@@ -20,17 +20,10 @@ public class Bomb : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-
-
-            
-    }
-
     void DestroyObject()
     {
         Instantiate(explosion, transform.position, transform.rotation);
-        Destroy(gameObject);
+        Destroy(prefabParent);
     }
 }
 

@@ -383,8 +383,9 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
-  explosion: {fileID: 8757776943471676018, guid: 0f6952dbfc4324c46923838dd355136f,
+  explosion: {fileID: 6193439046351878362, guid: 0f6952dbfc4324c46923838dd355136f,
     type: 3}
+  prefabParent: {fileID: 1470850371591197711}
 --- !u!33 &7108641665416233215
 MeshFilter:
   m_ObjectHideFlags: 0
