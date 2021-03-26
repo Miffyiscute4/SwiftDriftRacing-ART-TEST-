@@ -40,7 +40,7 @@ public class Car_Player : MonoBehaviour
         VerticalInput();
         TurnInput();
 
-        //Debug.Log(forwardAccelBuildUp);
+        Debug.Log(forwardAccelBuildUp);
     }
 
     void FixedUpdate()
@@ -48,7 +48,7 @@ public class Car_Player : MonoBehaviour
         GroundCheck();
         ApplyForce();
 
-        //Debug.Log(forwardAccelBuildUp);
+        //Debug.Log(maxSpeed);
     }
 
 

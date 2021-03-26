@@ -25,7 +25,7 @@ public class Car_Player_Collision : MonoBehaviour
 
     [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject;
 
-    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb;
+    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic;
 
     // Update is called once per frame
 
@@ -73,16 +73,34 @@ public class Car_Player_Collision : MonoBehaviour
     {
         if (other.gameObject.tag == "Coin")
         {
-            Destroy(other.gameObject);
-            coin1.Play();
-            coinCount++;
+            if (isMagnetic)
+            {
+                other.gameObject.transform.position += transform.position;
+            }
+            else if (!isMagnetic)
+            {
+                Destroy(other.gameObject);
+                coin1.Play();
+                coinCount++;
+            }
         }
 
         if (other.gameObject.tag == "Big_Coin")
         {
-            Destroy(other.gameObject);
-            coin2.Play();
-            coinCount += 5;
+            if (isMagnetic)
+            {
+                //other.gameObject.transform.position = Vector3.MoveTowards(other.gameObject.transform.position, transform.position, Time.deltaTime);
+
+                other.gameObject.transform.LookAt(transform.position);
+                other.gameObject.transform.position = transform.forward * 0.1f;
+            }
+            else if (!isMagnetic)
+            {
+                Destroy(other.gameObject);
+                coin2.Play();
+                coinCount += 5;
+            }
+            
         }
 
         if (other.gameObject.tag == "Ice")
@@ -121,6 +139,7 @@ public class Car_Player_Collision : MonoBehaviour
                     case "Explosion(Clone)":
                         carPlayer.forwardAccelBuildUp = 0;
                         break;
+
                 }
 
                 
@@ -239,6 +258,13 @@ public class Car_Player_Collision : MonoBehaviour
                     powerUpSlot1 = null;
                     break;
 
+                case "Magnet":
+
+                    isMagnetic = true;
+
+                    powerUpSlot1 = null;
+                    break;
+
 
 
             }
@@ -296,6 +322,20 @@ public class Car_Player_Collision : MonoBehaviour
             Instantiate(bombObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
 
             isShootingBomb = false;
+        }
+
+        if (isMagnetic)
+        {
+            invincibleTimer += Time.deltaTime;
+
+            if (invincibleTimer >= 999999999999)
+            {
+                invincibleTimer = 0;
+
+                isMagnetic = false;
+            }
+
+            
         }
 
     }
