@@ -19,13 +19,15 @@ public class Car_Player_Collision : MonoBehaviour
     int currentPowerUpSlot;
     public Transform powerUpInstantiatePoint, carDirection;
 
-    float powerUpBoxDelay;
+    float powerUpBoxDelay, coinTimer;
 
     public string[] powerUpType;
 
     [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject;
 
     [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic;
+
+
 
     // Update is called once per frame
 
@@ -87,14 +89,8 @@ public class Car_Player_Collision : MonoBehaviour
 
         if (other.gameObject.tag == "Big_Coin")
         {
-            if (isMagnetic)
-            {
-                //other.gameObject.transform.position = Vector3.MoveTowards(other.gameObject.transform.position, transform.position, Time.deltaTime);
-
-                other.gameObject.transform.LookAt(transform.position);
-                other.gameObject.transform.position = transform.forward * 0.1f;
-            }
-            else if (!isMagnetic)
+           
+            if (!isMagnetic)
             {
                 Destroy(other.gameObject);
                 coin2.Play();
@@ -172,10 +168,37 @@ public class Car_Player_Collision : MonoBehaviour
                  Instantiate(coinObject, coinInstantiatePoint.position, carDirection);
                  lavaTimer = 0;
                  coin1Drop.Play();
-             }
+             }*/
 
-         }*/
+         }
+
+
+        if (isMagnetic && (other.gameObject.tag == "Coin" || other.gameObject.tag == "Big_Coin"))
+        {
+            other.gameObject.transform.position = Vector3.MoveTowards(other.gameObject.transform.position, transform.position, Time.deltaTime * 10);
+
+            coinTimer += Time.deltaTime;
+
+            if (coinTimer >= 0.5)
+            {
+                Destroy(other.gameObject);
+                coin2.Play();
+
+                if ((other.gameObject.tag == "Coin"))
+                {
+                    coinCount++;
+                }
+                else
+                {
+                    coinCount += 5;
+                }
+            }
+
+            //other.gameObject.transform.LookAt(transform.position);
+            //other.gameObject.transform.position = other.gameObject.transform.forward * 0.1f;
         }
+
+        
 
 
 

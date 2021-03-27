@@ -91,23 +91,7 @@ public class Car_Player : MonoBehaviour
             }
             else
             {
-                boostDelay = 0;
 
-                if (playerCollision.coinCount >= maxSpeed + playerCollision.coinCount && Input.GetAxis("Vertical") != 0)
-                {
-                    maxForwardAccel = maxSpeed + playerCollision.coinCount;
-                    maxReverseAccel = 10;
-                }
-                else if (playerCollision.coinCount <= maxSpeed && Input.GetAxis("Vertical") != 0)
-                {
-                    maxForwardAccel = playerCollision.coinCount + maxSpeed;
-                    maxReverseAccel = playerCollision.coinCount + 2;
-                }
-                else if (decelDelay >= delayAmount / 4)
-                {
-                    forwardAccelBuildUp--;
-                    decelDelay = 0;
-                }
             }
 
 
@@ -127,7 +111,7 @@ public class Car_Player : MonoBehaviour
 
                 if (reverseAccelBuildUp <= 0)
                 {
-                    if (accelDelay >= delayAmount && forwardAccelBuildUp < maxForwardAccel)
+                    if (accelDelay >= delayAmount && forwardAccelBuildUp < maxForwardAccel + playerCollision.coinCount && forwardAccelBuildUp != maxForwardAccel + 10)
                     {
                         forwardAccelBuildUp++;
 
@@ -149,7 +133,7 @@ public class Car_Player : MonoBehaviour
 
                 if (forwardAccelBuildUp <= 0)
                 {
-                    if (accelDelay >= delayAmount && reverseAccelBuildUp < maxReverseAccel)
+                    if (accelDelay >= delayAmount && reverseAccelBuildUp < maxReverseAccel + playerCollision.coinCount)
                     {
                         reverseAccelBuildUp++;
 
@@ -165,9 +149,24 @@ public class Car_Player : MonoBehaviour
                         forwardAccelBuildUp--;
                     }
 
+
                 }
 
             }
+            else
+            {
+
+                if (decelDelay >= delayAmount && forwardAccelBuildUp > 0)
+                {
+                    forwardAccelBuildUp--;
+                    reverseAccelBuildUp--;
+
+                    decelDelay = 0;
+                }
+
+                
+            }
+
         }
 
         else
