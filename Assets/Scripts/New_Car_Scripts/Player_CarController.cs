@@ -11,19 +11,20 @@ public class Player_CarController : MonoBehaviour
 
     //car variables
     [Header("Car Variables")]
-    public float speedMultiplier = 7.5f; public float maxSpeed = 15; public float verticalDelayTime = 0.5f; public float turnStrength = 30; public float driftMultiplier = 2;
+    public float speedMultiplier = 10; public float maxSpeed = 20; public float verticalDelayTime = 0.2f; public float turnStrength = 7.5f; public float driftMultiplier = 1.25f;
 
-    float speedInput, currentSpeed, driftInput;
+    float speedInput, driftInput;
+    internal float currentSpeed;
 
     //groundcheck
     [Header("Ground Check")]
     public LayerMask whatIsGround;
     public float groundRayLength;
 
-    bool isGrounded;
+    internal bool isGrounded;
 
     //counters
-    float stopWatch_VerticalBuildUp;
+    internal float stopWatch_VerticalBuildUp;
 
     // Start is called before the first frame update
     void Start()
@@ -118,7 +119,7 @@ public class Player_CarController : MonoBehaviour
 
 
 
-    void GroundCheck()
+    public void GroundCheck()
     {
         RaycastHit hit;
 
@@ -138,7 +139,7 @@ public class Player_CarController : MonoBehaviour
 
 
 
-    void ApplyForce()
+    public void ApplyForce()
     {
         if (isGrounded)
         {
