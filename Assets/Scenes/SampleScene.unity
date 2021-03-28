@@ -899,11 +899,14 @@ MonoBehaviour:
     type: 3}
   bombObject: {fileID: 1470850371591197711, guid: 8d477f8bfd516c84e80c663d83b3310a,
     type: 3}
+  rocketObject: {fileID: 3259167072088051318, guid: 7c3f997ed7cb87e4fa1f3c3915161d5c,
+    type: 3}
   isBoosted: 0
   isShootingDart: 0
   isInvincible: 0
   isShootingBomb: 0
   isMagnetic: 0
+  isShootingRocket: 0
 --- !u!1001 &156803938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1719,7 +1722,7 @@ GameObject:
   - component: {fileID: 355785142}
   m_Layer: 0
   m_Name: cube
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2494,7 +2497,7 @@ GameObject:
   - component: {fileID: 609083551}
   m_Layer: 2
   m_Name: CarSphere
-  m_TagString: Untagged
+  m_TagString: Bot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

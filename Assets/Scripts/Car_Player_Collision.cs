@@ -23,9 +23,9 @@ public class Car_Player_Collision : MonoBehaviour
 
     public string[] powerUpType;
 
-    [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject;
+    [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject; public GameObject rocketObject;
 
-    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic;
+    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic; public bool isShootingRocket;
 
 
 
@@ -359,6 +359,13 @@ public class Car_Player_Collision : MonoBehaviour
             }
 
             
+        }
+
+        if (isShootingRocket)
+        {
+            Instantiate(rocketObject, powerUpInstantiatePoint.transform.position, powerUpInstantiatePoint.transform.rotation);
+
+            isShootingRocket = false;
         }
 
     }

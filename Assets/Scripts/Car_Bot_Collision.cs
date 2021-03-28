@@ -99,6 +99,10 @@ public class Car_Bot_Collision : MonoBehaviour
                     case "Explosion":
                         carBot.forwardAccelBuildUp = 0;
                         break;
+
+                    /*case "Rocket":
+                        carBot.forwardAccelBuildUp = 0;
+                        break;*/
                 }
                
             }

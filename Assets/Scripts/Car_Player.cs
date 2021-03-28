@@ -40,7 +40,7 @@ public class Car_Player : MonoBehaviour
         VerticalInput();
         TurnInput();
 
-        Debug.Log(forwardAccelBuildUp);
+        //Debug.Log(forwardAccelBuildUp);
     }
 
     void FixedUpdate()
