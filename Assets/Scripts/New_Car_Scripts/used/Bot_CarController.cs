@@ -16,6 +16,7 @@ public class Bot_CarController: Player_CarController
     [Header("Aiming & Avoiding")]
     private bool avoiding = false; private bool aimingForObject = false;
     public GameObject objectToAimFor;
+    bool isDrifting;
 
     //sensor
     [Header("Sensor")]
@@ -59,6 +60,13 @@ public class Bot_CarController: Player_CarController
         Sensors();
     }
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, currentNodePosition);
+        
+    }
+
     void CheckWayPoint()
     {
         if (Vector3.Distance(transform.position, nodes[currentNode].position) < distanceTillNextNode)
@@ -74,37 +82,41 @@ public class Bot_CarController: Player_CarController
         }
     }
 
-    void Turn()
+    void Vertical()
     {
+        stopWatch_VerticalBuildUp += Time.deltaTime;
 
-            rb.AddForce(transform.forward * currentSpeed * speedMultiplier * 10);
+        if (stopWatch_VerticalBuildUp >= verticalDelayTime && currentSpeed < maxSpeed)
+        {
+            currentSpeed++;
+            stopWatch_VerticalBuildUp = 0;
+        }
 
-            stopWatch_VerticalBuildUp += Time.deltaTime;
-
-            if (stopWatch_VerticalBuildUp < verticalDelayTime && currentSpeed < maxSpeed)
-            {
-                currentSpeed++;
-                stopWatch_VerticalBuildUp = 0;
-            }
-
-
+        if (!isDrifting)
+        {
+            turnStrength = currentSpeed / 2;
+        }
+        else
+        {
             turnStrength = currentSpeed;
+        }
 
-            /*if (bot.coinCount < 10)
-            {
-                maxForwardAccelBuildUp = maxSpeed + bot.coinCount;
-            }
-            else
-            {
-                maxForwardAccelBuildUp = maxSpeed + 10;
-            }*/
+        
+
+        if (carCol.coinCount < carCol.maxCoinCount)
+        {
+            speedInput = (currentSpeed + carCol.coinCount) * speedMultiplier * 1;
+        }
+        else
+        {
+            speedInput = (currentSpeed + carCol.maxCoinCount) * speedMultiplier * 1;
+        }
     }
 
 
 
-    void Vertical()
+    void Turn()
     {
-        
         if (!avoiding)
         {
             Vector3 difference = new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z) - transform.position;
@@ -127,6 +139,9 @@ public class Bot_CarController: Player_CarController
         {
             aimingForObject = false;
         }
+
+        /*leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, turnStrength * 90 - 180, leftFrontWheel.localRotation.eulerAngles.z);
+        rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, turnStrength * 90, rightFrontWheel.localRotation.eulerAngles.z);*/
 
     }
 
@@ -227,9 +242,24 @@ public class Bot_CarController: Player_CarController
                 objectToAimFor = hit.collider.gameObject;
                 aimingForObject = true;
             }
-
+       
 
         }
+
+        if (hit.collider != null)
+        {
+            float theDistance = Vector3.Distance(transform.position, hit.collider.gameObject.transform.position);
+            Debug.Log(theDistance);
+            if (theDistance >= 40)
+            {
+                isDrifting = true;
+            }
+            else
+            {
+                isDrifting = false;
+            }
+        }
+        
 
         if (avoiding && !aimingForObject)
         {
@@ -239,13 +269,5 @@ public class Bot_CarController: Player_CarController
 
         }
         //Debug.Log(avoiding);
-    }
-
-
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, currentNodePosition);
     }
 }

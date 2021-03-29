@@ -15,7 +15,7 @@ public class Player_CarController : MonoBehaviour
     [Header("Car Variables")]
     public float speedMultiplier = 10; public float maxSpeed = 20; public float verticalDelayTime = 0.2f; public float turnStrength = 7.5f; public float driftMultiplier = 1.25f; public float boostAmount;
 
-    float speedInput, driftInput;
+     internal float speedInput, driftInput;
     internal float currentSpeed;
 
     //groundcheck
@@ -30,6 +30,10 @@ public class Player_CarController : MonoBehaviour
 
     internal bool isBoosted;
     internal bool isOffTrack;
+
+    [Header("Wheels")]
+    public Transform leftFrontWheel;
+    public Transform rightFrontWheel;
 
     // Start is called before the first frame update
     void Start()
@@ -126,6 +130,9 @@ public class Player_CarController : MonoBehaviour
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Input.GetAxis("Horizontal") * (currentSpeed / 10) * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
         }
 
+        leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, turnStrength * 90 - 180, leftFrontWheel.localRotation.eulerAngles.z);
+        rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, turnStrength * 90, rightFrontWheel.localRotation.eulerAngles.z);
+
     }
 
 
@@ -153,12 +160,16 @@ public class Player_CarController : MonoBehaviour
 
     public void ApplyForce()
     {
+        //Debug.Log(isGrounded);
         if (isGrounded)
         {
             rb.drag = 3;
 
-            
-            if (Mathf.Abs(speedInput) > 0)
+            if (carCol.isBot)
+            {
+                rb.AddForce(transform.forward * speedInput * 100);
+            }
+            else if (Mathf.Abs(speedInput) > 0)
             {
                 //moves car
                 rb.AddForce(transform.forward * speedInput * 100);
@@ -166,6 +177,7 @@ public class Player_CarController : MonoBehaviour
 
                 
             }
+
 
             if (isBoosted)
             {
