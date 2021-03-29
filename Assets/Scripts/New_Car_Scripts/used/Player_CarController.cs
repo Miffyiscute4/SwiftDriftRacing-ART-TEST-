@@ -8,28 +8,33 @@ public class Player_CarController : MonoBehaviour
     [Header("Objects & Components")]
     public Rigidbody rb;
     public Transform groundRayPoint;
+    public CarCollision carCol;
+
 
     //car variables
     [Header("Car Variables")]
-    public float speedMultiplier = 10; public float maxSpeed = 20; public float verticalDelayTime = 0.2f; public float turnStrength = 7.5f; public float driftMultiplier = 1.25f;
+    public float speedMultiplier = 10; public float maxSpeed = 20; public float verticalDelayTime = 0.2f; public float turnStrength = 7.5f; public float driftMultiplier = 1.25f; public float boostAmount;
 
     float speedInput, driftInput;
     internal float currentSpeed;
 
     //groundcheck
     [Header("Ground Check")]
-    public LayerMask whatIsGround;
-    public float groundRayLength;
+    public LayerMask whatIsGround = 8;
+    public float groundRayLength = 3;
 
     internal bool isGrounded;
 
     //counters
     internal float stopWatch_VerticalBuildUp;
 
+    internal bool isBoosted;
+    internal bool isOffTrack;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        //rb = transform.parent.FindChild("CarSphere").GetComponent<Rigidbody>();
     }
 
 
@@ -61,8 +66,15 @@ public class Player_CarController : MonoBehaviour
     {
         stopWatch_VerticalBuildUp += Time.deltaTime;
 
-
-        speedInput = currentSpeed * speedMultiplier;
+        if (carCol.coinCount < carCol.maxCoinCount)
+        {
+            speedInput = (currentSpeed + carCol.coinCount) * speedMultiplier;
+        }
+        else
+        {
+            speedInput = (currentSpeed + carCol.maxCoinCount) * speedMultiplier;
+        }
+        
 
         //changes the speed value on input
         if (Input.GetAxisRaw("Vertical") == 1 && currentSpeed < maxSpeed && stopWatch_VerticalBuildUp >= verticalDelayTime)
@@ -145,13 +157,22 @@ public class Player_CarController : MonoBehaviour
         {
             rb.drag = 3;
 
+            
             if (Mathf.Abs(speedInput) > 0)
             {
                 //moves car
-                rb.AddForce(transform.forward * speedInput);
+                rb.AddForce(transform.forward * speedInput * 100);
 
-                rb.AddForce(-Vector3.up * 10);
+
+                
             }
+
+            if (isBoosted)
+            {
+                rb.AddForce(transform.forward * boostAmount * 10);
+            }
+
+            rb.AddForce(-Vector3.up * 10);
         }
         else
         {

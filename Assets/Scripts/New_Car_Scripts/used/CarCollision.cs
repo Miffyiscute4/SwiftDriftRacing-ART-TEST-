@@ -2,32 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Car_Player_Collision : MonoBehaviour
+public class CarCollision : MonoBehaviour
 {
-
-    public AudioSource coin1, coin2, coin1Drop, coin2Drop, powerUpBoxSound;
-    public GameManager gameManager;
-    public Car_Player carPlayer;
-    public GameObject coinObject, bigCoinObject, powerUpBoxObject;
-    public Transform coinInstantiatePoint;
-
-    private float lavaTimer = 0, PowerUpRegenTimer = 0, invincibleTimer = 0;
-    public int coinCount;
+    [Header("IsBot")]
+    public bool isBot;
 
 
+    [Header("Scripts")]
+    public Player_CarController carPlayer;
+    public Bot_CarController carBot;
+
+    [Header("Objects")]
+    public GameObject coinObject; public GameObject bigCoinObject; internal GameObject powerUpBoxObject;
+    public Transform coinInstantiatePoint, powerUpInstantiatePoint;
+
+    [Header("Audio")]
+    public AudioSource coin1; public AudioSource coin2, coin1Drop, coin2Drop, powerUpBoxSound;
+
+    [Header("Coins")]
+    public int coinCount; public int maxCoinCount;
+
+    //powerups
     string powerUpSlot1, powerUpSlot2;
-    int currentPowerUpSlot;
-    public Transform powerUpInstantiatePoint, carDirection;
+    internal int currentPowerUpSlot;
+    string[] powerUpType = {"Boost","Dart","InvincibilityOrb","Bomb","Magnet","Rocket"};
 
-    float powerUpBoxDelay, coinTimer;
+    //stopwatches
+    internal float powerUpBoxDelay, coinTimer;
+    internal float lavaTimer = 0, PowerUpRegenTimer = 0, invincibleTimer = 0;
 
-    public string[] powerUpType;
 
     [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject; public GameObject rocketObject;
 
     [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic; public bool isShootingRocket;
 
-
+    
 
     // Update is called once per frame
 
@@ -71,7 +80,7 @@ public class Car_Player_Collision : MonoBehaviour
 
 
 
-    void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Coin")
         {
@@ -101,17 +110,31 @@ public class Car_Player_Collision : MonoBehaviour
 
         if (other.gameObject.tag == "Ice")
         {
-            carPlayer.turnStrength *= 2;
+            if (isBot)
+            {
+                carBot.turnStrength *= 2;
+            }
+            else
+            {
+                carPlayer.turnStrength *= 2;
+            }    
         }
 
         if (other.gameObject.tag == "OffTrack")
         {
-            carPlayer.isOffTrack = true;
+            if (isBot)
+            {
+                carBot.isOffTrack = true;
+            }
+            else
+            {
+                carPlayer.isOffTrack = true;
+            }
         }
 
         if (other.gameObject.tag == "BoostPad")
         {
-            carPlayer.isBoosted = true;
+            isBoosted = true;
         }
 
         if (other.gameObject.tag == "PowerUpBox")
@@ -129,11 +152,11 @@ public class Car_Player_Collision : MonoBehaviour
                 switch (other.gameObject.name)
                 {
                     case "Dart":
-                        carPlayer.forwardAccelBuildUp = carPlayer.forwardAccelBuildUp / 2;
+                        carPlayer.currentSpeed = carPlayer.currentSpeed / 2;
                         break;
 
                     case "Explosion(Clone)":
-                        carPlayer.forwardAccelBuildUp = 0;
+                        carPlayer.currentSpeed = 0;
                         break;
 
                 }
@@ -149,7 +172,7 @@ public class Car_Player_Collision : MonoBehaviour
 
 
 
-    void OnTriggerStay(Collider other)
+    public void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Lava" && lavaTimer >= 2 && coinCount > 0)
         {
@@ -207,16 +230,30 @@ public class Car_Player_Collision : MonoBehaviour
 
     }
 
-    void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Ice")
         {
-            carPlayer.turnStrength /= 2;
+            if (isBot)
+            {
+                carBot.turnStrength /= 2;
+            }
+            else
+            {
+                carPlayer.turnStrength /= 2;
+            }
         }
 
         if (other.gameObject.tag == "OffTrack")
         {
-            carPlayer.isOffTrack = false;
+            if (isBot)
+            {
+                carBot.isOffTrack = false;
+            }
+            else
+            {
+                carPlayer.isOffTrack = false;
+            }
         }
 
     }
@@ -246,7 +283,7 @@ public class Car_Player_Collision : MonoBehaviour
         //Debug.Log(powerUpSlot1);
     }
 
-    void UsePowerUp()
+    public void UsePowerUp()
     {
 
         if (currentPowerUpSlot == 1)
@@ -256,42 +293,39 @@ public class Car_Player_Collision : MonoBehaviour
 
             switch (powerUpSlot1)
             {
-                case "boost":
+                case "Boost":
                     isBoosted = true;
-
-                    powerUpSlot1 = null;
                     break;
 
-                case "dart":
+                case "Dart":
                     isShootingDart = true;
-                    powerUpSlot1 = null;
                     break;
 
-                case "invincibilityOrb":
+                case "InvincibilityOrb":
 
                     isInvincible = true;
-
-                    powerUpSlot1 = null;
                     break;
 
                 case "Bomb":
 
                     isShootingBomb = true;
-
-                    powerUpSlot1 = null;
                     break;
 
                 case "Magnet":
 
                     isMagnetic = true;
+                    break;
 
-                    powerUpSlot1 = null;
+                case "Rocket":
+
+                    isShootingRocket = true;
                     break;
 
 
 
             }
-            //powerUpSlot1 = null;
+
+            powerUpSlot1 = null;
         }
         else
         {
@@ -299,7 +333,7 @@ public class Car_Player_Collision : MonoBehaviour
         }
     }
 
-    void SwapPowerUp()
+    public void SwapPowerUp()
     {
         if (currentPowerUpSlot == 1)
         {
@@ -313,13 +347,22 @@ public class Car_Player_Collision : MonoBehaviour
 
     public void BoolActions()
     {
+        //boost
         if (isBoosted)
         {
-            carPlayer.isBoosted = true;
+            if (isBot)
+            {
+                carBot.isBoosted = false;
+            }
+            else
+            {
+                carPlayer.isBoosted = false;
+            }
 
             isBoosted = false;
         }
 
+        //dart
         if (isShootingDart)
         {
             Instantiate(dartObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
@@ -327,6 +370,7 @@ public class Car_Player_Collision : MonoBehaviour
             isShootingDart = false;
         }
 
+        //invinicbility orb
         if (isInvincible)
         {
             invincibleTimer += Time.deltaTime;
@@ -340,6 +384,7 @@ public class Car_Player_Collision : MonoBehaviour
             
         }
 
+        //bomb
         if (isShootingBomb)
         {
             Instantiate(bombObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
@@ -347,6 +392,7 @@ public class Car_Player_Collision : MonoBehaviour
             isShootingBomb = false;
         }
 
+        //magnet
         if (isMagnetic)
         {
             invincibleTimer += Time.deltaTime;
@@ -361,6 +407,7 @@ public class Car_Player_Collision : MonoBehaviour
             
         }
 
+        //rocket
         if (isShootingRocket)
         {
             Instantiate(rocketObject, powerUpInstantiatePoint.transform.position, powerUpInstantiatePoint.transform.rotation);

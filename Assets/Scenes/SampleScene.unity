@@ -875,26 +875,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f12c37b0adfa64987c188c769a5a95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin1: {fileID: 909174501}
-  coin2: {fileID: 652361459}
-  coin1Drop: {fileID: 166535174}
-  coin2Drop: {fileID: 1179850461}
-  powerUpBoxSound: {fileID: 1452654687}
-  gameManager: {fileID: 1447549867}
-  carPlayer: {fileID: 355785144}
-  coinObject: {fileID: 7733070381150921504, guid: e55fed3e16d0c8b45b0b210f0e4f7d50,
+  isBot: 0
+  carPlayer: {fileID: 355785141}
+  carBot: {fileID: 0}
+  coinObject: {fileID: 4890334809041735153, guid: e55fed3e16d0c8b45b0b210f0e4f7d50,
     type: 3}
-  bigCoinObject: {fileID: 808520133216416857, guid: 51b29099576f0b14482a1b675e6b97d9,
+  bigCoinObject: {fileID: 937402262676238900, guid: 51b29099576f0b14482a1b675e6b97d9,
     type: 3}
-  powerUpBoxObject: {fileID: 0}
   coinInstantiatePoint: {fileID: 192400774}
-  coinCount: 0
   powerUpInstantiatePoint: {fileID: 1143893500}
-  carDirection: {fileID: 4133936751738974109, guid: 93c551780d6f79c4087baf277ef4524c,
-    type: 3}
-  powerUpType:
-  - boost
-  - dart
+  coin1: {fileID: 0}
+  coin2: {fileID: 0}
+  coin1Drop: {fileID: 0}
+  coin2Drop: {fileID: 0}
+  powerUpBoxSound: {fileID: 0}
+  coinCount: 0
+  maxCoinCount: 10
   dartObject: {fileID: 3052293523159680178, guid: 19ebe47ff6e472f499cb2df5279b5602,
     type: 3}
   bombObject: {fileID: 1470850371591197711, guid: 8d477f8bfd516c84e80c663d83b3310a,
@@ -1420,7 +1416,6 @@ GameObject:
   - component: {fileID: 286034582}
   - component: {fileID: 286034585}
   - component: {fileID: 286034584}
-  - component: {fileID: 286034583}
   m_Layer: 0
   m_Name: cube
   m_TagString: Untagged
@@ -1443,42 +1438,6 @@ Transform:
   m_Father: {fileID: 920400097}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 90.00001, z: 0}
---- !u!114 &286034583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 286034581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b206f741e588cf4b8bcd630fa02f0d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  path: {fileID: 659774424}
-  maxSteerAngle: 40
-  turnSpeed: 0
-  rb: {fileID: 609083551}
-  forwardAccelBuildUp: 0
-  maxForwardAccelBuildUp: 0
-  boostDelay: 0
-  sensorLength: 85
-  frontSideSensorPos: 0.8
-  frontSensorAngle: 30
-  dragOnGround: 3
-  gravityForce: 10
-  frontSensorPos: {x: 0, y: -0.5, z: 0}
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 256
-  groundRayLength: 3
-  groundRayPoint: {fileID: 893142484}
-  maxSpeed: 0
-  objectToAimFor: {fileID: 0}
-  distanceTillNextNode: 40
-  bot: {fileID: 609083556}
-  isOffTrack: 0
-  isBoosted: 0
 --- !u!23 &286034584
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1717,9 +1676,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 355785140}
-  - component: {fileID: 355785144}
   - component: {fileID: 355785143}
   - component: {fileID: 355785142}
+  - component: {fileID: 355785141}
   m_Layer: 0
   m_Name: cube
   m_TagString: Untagged
@@ -1742,6 +1701,31 @@ Transform:
   m_Father: {fileID: 1316945339}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &355785141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355785139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5281a23a5c6a3bb48bb8c2640329790a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 136505464}
+  groundRayPoint: {fileID: 1508675800}
+  carCol: {fileID: 136505470}
+  speedMultiplier: 10
+  maxSpeed: 20
+  verticalDelayTime: 0.2
+  turnStrength: 7.5
+  driftMultiplier: 1.25
+  boostAmount: 3
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 256
+  groundRayLength: 3
 --- !u!23 &355785142
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1789,39 +1773,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355785139}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &355785144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 355785139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530b1259730064e438615b4e42315601, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 136505464}
-  maxForwardAccel: 18
-  maxReverseAccel: 9
-  turnStrength: 15
-  gravityForce: 10
-  dragOnGround: 3
-  delayAmount: 0.5
-  maxSpeed: 15
-  forwardAccelBuildUp: 0
-  reverseAccelBuildUp: 0
-  isOffTrack: 0
-  isBoosted: 0
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 256
-  groundRayLength: 3
-  groundRayPoint: {fileID: 1508675800}
-  leftFrontWheel: {fileID: 3775746020085010797}
-  rightFrontWheel: {fileID: 997068502996638538}
-  maxWheelTurn: 25
-  playerCollision: {fileID: 136505470}
 --- !u!1001 &364667951
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2489,17 +2440,17 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 599166875}
-  - component: {fileID: 599166876}
-  - component: {fileID: 599166874}
   - component: {fileID: 599166873}
   - component: {fileID: 599166872}
+  - component: {fileID: 599166876}
+  - component: {fileID: 599166874}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &599166872
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2554,22 +2505,34 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 599166871}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5281a23a5c6a3bb48bb8c2640329790a, type: 3}
+  m_Script: {fileID: 11500000, guid: a8f12c37b0adfa64987c188c769a5a95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 1699165746}
-  groundRayPoint: {fileID: 599166875}
-  speedMultiplier: 10
-  maxSpeed: 20
-  verticalDelayTime: 0.2
-  turnStrength: 7.5
-  driftMultiplier: 1.25
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 256
-  groundRayLength: 5
+  isBot: 0
+  carPlayer: {fileID: 0}
+  carBot: {fileID: 0}
+  coinObject: {fileID: 0}
+  bigCoinObject: {fileID: 0}
+  coinInstantiatePoint: {fileID: 0}
+  powerUpInstantiatePoint: {fileID: 0}
+  coin1: {fileID: 0}
+  coin2: {fileID: 0}
+  coin1Drop: {fileID: 0}
+  coin2Drop: {fileID: 0}
+  powerUpBoxSound: {fileID: 0}
+  coinCount: 0
+  maxCoinCount: 0
+  dartObject: {fileID: 0}
+  bombObject: {fileID: 0}
+  rocketObject: {fileID: 0}
+  isBoosted: 0
+  isShootingDart: 0
+  isInvincible: 0
+  isShootingBomb: 0
+  isMagnetic: 0
+  isShootingRocket: 0
 --- !u!4 &599166875
 Transform:
   m_ObjectHideFlags: 0
@@ -2593,27 +2556,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 599166871}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d539359952c3cb54b82d874989a83e72, type: 3}
+  m_Script: {fileID: 11500000, guid: 530b1259730064e438615b4e42315601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 1699165746}
-  groundRayPoint: {fileID: 599166875}
-  speedMultiplier: 0
-  maxSpeed: 20
-  verticalDelayTime: 0.2
-  turnStrength: 7.5
-  driftMultiplier: 1.25
+  rb: {fileID: 0}
+  maxForwardAccel: 18
+  maxReverseAccel: 9
+  turnStrength: 30
+  gravityForce: 10
+  dragOnGround: 3
+  delayAmount: 0.3
+  maxSpeed: 0
+  forwardAccelBuildUp: 0
+  reverseAccelBuildUp: 0
+  isOffTrack: 0
+  isBoosted: 0
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
   groundRayLength: 5
-  pathToFollow: {fileID: 659774423}
-  distanceTillNextNode: 40
-  objectToAimFor: {fileID: 0}
-  frontSensorPos: {x: 0, y: 0.5, z: 0.5}
-  sensorLength: 30
-  frontSideSensorPos: 0.8
-  frontSensorAngle: 30
+  groundRayPoint: {fileID: 0}
+  leftFrontWheel: {fileID: 0}
+  rightFrontWheel: {fileID: 0}
+  maxWheelTurn: 25
 --- !u!1 &609083549
 GameObject:
   m_ObjectHideFlags: 0
@@ -2751,28 +2716,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abf087fd9ad9122478b7b8f12e1e4de0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpBoxSound: {fileID: 1452654687}
-  carBot: {fileID: 286034583}
+  isBot: 0
+  carPlayer: {fileID: 0}
+  carBot: {fileID: 0}
   coinObject: {fileID: 7733070381150921504, guid: e55fed3e16d0c8b45b0b210f0e4f7d50,
     type: 3}
   bigCoinObject: {fileID: 808520133216416857, guid: 51b29099576f0b14482a1b675e6b97d9,
     type: 3}
-  powerUpBoxObject: {fileID: 0}
   coinInstantiatePoint: {fileID: 0}
-  coinCount: 0
   powerUpInstantiatePoint: {fileID: 1309601209}
-  carDirection: {fileID: 0}
-  powerUpType:
-  - boost
-  - dart
+  coin1: {fileID: 0}
+  coin2: {fileID: 0}
+  coin1Drop: {fileID: 0}
+  coin2Drop: {fileID: 0}
+  powerUpBoxSound: {fileID: 1452654687}
+  coinCount: 0
+  maxCoinCount: 0
   dartObject: {fileID: 3052293523159680178, guid: 19ebe47ff6e472f499cb2df5279b5602,
     type: 3}
   bombObject: {fileID: 1470850371591197711, guid: 8d477f8bfd516c84e80c663d83b3310a,
     type: 3}
+  rocketObject: {fileID: 0}
   isBoosted: 0
   isShootingDart: 0
   isInvincible: 0
   isShootingBomb: 0
+  isMagnetic: 0
+  isShootingRocket: 0
 --- !u!1 &643612307
 GameObject:
   m_ObjectHideFlags: 0
@@ -4085,7 +4055,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &920400097
 Transform:
   m_ObjectHideFlags: 0
@@ -4215,8 +4185,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.021872766, y: 0.7097166, z: -0.022056624, w: 0.70380217}
-  m_LocalPosition: {x: 122.824486, y: -0.16000009, z: 331.48685}
+  m_LocalRotation: {x: 0.021875022, y: 0.70964384, z: -0.022054339, w: 0.7038755}
+  m_LocalPosition: {x: 115.8699, y: 0.16009116, z: 324.17657}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1854491257}
@@ -4593,8 +4563,8 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 599166875}
-  m_Follow: {fileID: 599166875}
+  m_LookAt: {fileID: 355785140}
+  m_Follow: {fileID: 355785140}
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 10
@@ -4617,8 +4587,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020550303}
-  m_LocalRotation: {x: 0.021872766, y: 0.7097166, z: -0.022056624, w: 0.70380217}
-  m_LocalPosition: {x: 122.824486, y: -0.16000009, z: 331.48685}
+  m_LocalRotation: {x: 0.021875022, y: 0.70964384, z: -0.022054339, w: 0.7038755}
+  m_LocalPosition: {x: 115.8699, y: 0.16009116, z: 324.17657}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1627441097}
@@ -5598,7 +5568,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinText: {fileID: 1399082378}
-  car: {fileID: 136505470}
 --- !u!4 &1447549868
 Transform:
   m_ObjectHideFlags: 0
@@ -6209,7 +6178,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1699165746
 Rigidbody:
   m_ObjectHideFlags: 0

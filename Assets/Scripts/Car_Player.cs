@@ -22,7 +22,7 @@ public class Car_Player : MonoBehaviour
     public Transform leftFrontWheel, rightFrontWheel;
     public float maxWheelTurn = 25;
 
-    public Car_Player_Collision playerCollision;
+    //public Car_Player_Collision playerCollision;
 
     //public GameManager gameManager;
 
@@ -111,7 +111,7 @@ public class Car_Player : MonoBehaviour
 
                 if (reverseAccelBuildUp <= 0)
                 {
-                    if (accelDelay >= delayAmount && forwardAccelBuildUp < maxForwardAccel + playerCollision.coinCount && forwardAccelBuildUp != maxForwardAccel + 10)
+                    if (accelDelay >= delayAmount && forwardAccelBuildUp < maxForwardAccel /* + playerCollision.coinCount*/ && forwardAccelBuildUp != maxForwardAccel + 10)
                     {
                         forwardAccelBuildUp++;
 
@@ -133,7 +133,7 @@ public class Car_Player : MonoBehaviour
 
                 if (forwardAccelBuildUp <= 0)
                 {
-                    if (accelDelay >= delayAmount && reverseAccelBuildUp < maxReverseAccel + playerCollision.coinCount)
+                    if (accelDelay >= delayAmount && reverseAccelBuildUp < maxReverseAccel/* + playerCollision.coinCount*/)
                     {
                         reverseAccelBuildUp++;
 

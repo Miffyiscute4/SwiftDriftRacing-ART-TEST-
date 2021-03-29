@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Car_Bot_Collision : CarCollision
+public class Bot_CarCollision : CarCollision
 {
+
+    // Start is called before the first frame update
     void Start()
     {
-        currentPowerUpSlot = 1;
+        
     }
 
+    // Update is called once per frame
     void Update()
     {
         lavaTimer += Time.deltaTime;
@@ -39,4 +42,5 @@ public class Car_Bot_Collision : CarCollision
 
         //Debug.Log(coinCount);
     }
+
 }
