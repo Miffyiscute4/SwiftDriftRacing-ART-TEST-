@@ -31,10 +31,18 @@ public class CarCollision : MonoBehaviour
     internal float powerUpBoxDelay, coinTimer;
     internal float lavaTimer = 0, PowerUpRegenTimer = 0, invincibleTimer = 0;
 
+    [Header("Collider")]
+    public SphereCollider sc;
+    public float originalTriggerRadius = 0.5f;
+    public float increasedTriggerRadius = 1.25f;
+
+
 
     [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject; public GameObject rocketObject;
 
     [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic; public bool isShootingRocket;
+
+    
 
     
 
@@ -397,8 +405,11 @@ public class CarCollision : MonoBehaviour
         {
             invincibleTimer += Time.deltaTime;
 
-            if (invincibleTimer >= 999999999999)
+            sc.radius = increasedTriggerRadius;
+
+            if (invincibleTimer >= 8)
             {
+                sc.radius = originalTriggerRadius;
                 invincibleTimer = 0;
 
                 isMagnetic = false;

@@ -13,7 +13,7 @@ public class Player_CarController : MonoBehaviour
 
     //car variables
     [Header("Car Variables")]
-    public float speedMultiplier = 10; public float maxSpeed = 20; public float verticalDelayTime = 0.2f; public float turnStrength = 7.5f; public float driftMultiplier = 1.25f; public float boostAmount;
+    public float speedMultiplier = 10; public float originalMaxSpeed = 20;internal float maxSpeed; public float verticalDelayTime = 0.2f; public float turnStrength = 7.5f; public float driftMultiplier = 1.25f; public float boostAmount;
 
      internal float speedInput, driftInput;
     internal float currentSpeed;
@@ -68,17 +68,30 @@ public class Player_CarController : MonoBehaviour
 
     void VerticalInput()
     {
+        maxSpeed = originalMaxSpeed + carCol.coinCount;
+
         stopWatch_VerticalBuildUp += Time.deltaTime;
 
-        if (carCol.coinCount < carCol.maxCoinCount)
+        speedInput = currentSpeed * speedMultiplier * Mathf.Abs(Input.GetAxisRaw("Vertical"));
+
+        if (carCol.coinCount > carCol.maxCoinCount)
         {
-            speedInput = (currentSpeed + carCol.coinCount) * speedMultiplier;
-        }
-        else
-        {
-            speedInput = (currentSpeed + carCol.maxCoinCount) * speedMultiplier;
+            
         }
         
+        if (maxSpeed > originalMaxSpeed + carCol.maxCoinCount)
+        {
+            maxSpeed = originalMaxSpeed + carCol.maxCoinCount;
+        }
+
+        if (currentSpeed > maxSpeed)
+        {
+            currentSpeed = maxSpeed;
+        }
+        else if (currentSpeed < -maxSpeed)
+        {
+            currentSpeed = -maxSpeed;
+        }
 
         //changes the speed value on input
         if (Input.GetAxisRaw("Vertical") == 1 && currentSpeed < maxSpeed && stopWatch_VerticalBuildUp >= verticalDelayTime)

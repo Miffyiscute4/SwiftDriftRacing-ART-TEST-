@@ -861,7 +861,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.6837656
+  m_Radius: 0.75
   m_Center: {x: 0, y: -0.021681946, z: 0}
 --- !u!114 &136505470
 MonoBehaviour:
@@ -875,7 +875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f12c37b0adfa64987c188c769a5a95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBot: 1
+  isBot: 0
   carPlayer: {fileID: 355785141}
   carBot: {fileID: 355785144}
   coinObject: {fileID: 4890334809041735153, guid: e55fed3e16d0c8b45b0b210f0e4f7d50,
@@ -891,6 +891,9 @@ MonoBehaviour:
   powerUpBoxSound: {fileID: 1452654687}
   coinCount: 0
   maxCoinCount: 10
+  sc: {fileID: 136505469}
+  originalTriggerRadius: 0.75
+  increasedTriggerRadius: 1.25
   dartObject: {fileID: 3052293523159680178, guid: 19ebe47ff6e472f499cb2df5279b5602,
     type: 3}
   bombObject: {fileID: 1470850371591197711, guid: 8d477f8bfd516c84e80c663d83b3310a,
@@ -1709,7 +1712,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355785139}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5281a23a5c6a3bb48bb8c2640329790a, type: 3}
   m_Name: 
@@ -1718,7 +1721,7 @@ MonoBehaviour:
   groundRayPoint: {fileID: 1508675800}
   carCol: {fileID: 136505470}
   speedMultiplier: 8
-  maxSpeed: 20
+  originalMaxSpeed: 20
   verticalDelayTime: 0.2
   turnStrength: 7.5
   driftMultiplier: 2
@@ -1783,7 +1786,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355785139}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d539359952c3cb54b82d874989a83e72, type: 3}
   m_Name: 
@@ -1792,10 +1795,10 @@ MonoBehaviour:
   groundRayPoint: {fileID: 1508675800}
   carCol: {fileID: 136505470}
   speedMultiplier: 8
-  maxSpeed: 20
+  originalMaxSpeed: 20
   verticalDelayTime: 0.2
-  turnStrength: 7.5
-  driftMultiplier: 2
+  turnStrength: 3
+  driftMultiplier: 1.25
   boostAmount: 3
   whatIsGround:
     serializedVersion: 2
@@ -2561,6 +2564,9 @@ MonoBehaviour:
   powerUpBoxSound: {fileID: 0}
   coinCount: 0
   maxCoinCount: 0
+  sc: {fileID: 0}
+  originalTriggerRadius: 0.5
+  increasedTriggerRadius: 1.25
   dartObject: {fileID: 0}
   bombObject: {fileID: 0}
   rocketObject: {fileID: 0}
@@ -2769,6 +2775,9 @@ MonoBehaviour:
   powerUpBoxSound: {fileID: 1452654687}
   coinCount: 0
   maxCoinCount: 0
+  sc: {fileID: 0}
+  originalTriggerRadius: 0.5
+  increasedTriggerRadius: 1.25
   dartObject: {fileID: 3052293523159680178, guid: 19ebe47ff6e472f499cb2df5279b5602,
     type: 3}
   bombObject: {fileID: 1470850371591197711, guid: 8d477f8bfd516c84e80c663d83b3310a,
