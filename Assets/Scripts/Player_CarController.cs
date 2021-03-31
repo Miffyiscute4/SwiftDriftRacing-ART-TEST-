@@ -120,6 +120,7 @@ public class Player_CarController : MonoBehaviour
             if (rb.velocity.magnitude < 5f)
             {
                 rb.velocity = new Vector3(0, 0, 0);
+                currentSpeed = 0;
             }
            
         }
@@ -136,15 +137,15 @@ public class Player_CarController : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.LeftShift))
         {
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, driftMultiplier * (currentSpeed / 10) * driftInput * (currentSpeed / 10) * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, driftMultiplier * driftInput * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
         }
         else if (Input.GetAxisRaw("Horizontal") != 0)
         {
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Input.GetAxis("Horizontal") * (currentSpeed / 10) * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Input.GetAxis("Horizontal") * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
         }
 
-        leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, turnStrength * 90 - 180, leftFrontWheel.localRotation.eulerAngles.z);
-        rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, turnStrength * 90, rightFrontWheel.localRotation.eulerAngles.z);
+        leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, Input.GetAxis("Horizontal") * turnStrength * currentSpeed - 180, leftFrontWheel.localRotation.eulerAngles.z);
+        rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, Input.GetAxis("Horizontal") * turnStrength * currentSpeed, rightFrontWheel.localRotation.eulerAngles.z);
 
     }
 
@@ -162,6 +163,8 @@ public class Player_CarController : MonoBehaviour
             Quaternion smoothtransition = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
 
             transform.rotation = Quaternion.Lerp(transform.rotation, smoothtransition, Time.deltaTime * 10);
+
+            
         }
         else
         {
@@ -182,7 +185,7 @@ public class Player_CarController : MonoBehaviour
             {
                 rb.AddForce(transform.forward * speedInput * 100);
             }
-            else if (Mathf.Abs(speedInput) > 0)
+            else// if (Mathf.Abs(speedInput) > 0)
             {
                 //moves car
                 rb.AddForce(transform.forward * speedInput * 100);

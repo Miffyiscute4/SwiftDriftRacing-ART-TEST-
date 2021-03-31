@@ -36,6 +36,12 @@ public class CarCollision : MonoBehaviour
     public float originalTriggerRadius = 0.5f;
     public float increasedTriggerRadius = 1.25f;
 
+    [Header("Checkpoints")]
+    public GameObject allCheckPointsObject;
+    Transform LastCheckPoint;
+    int LastCheckPointNumber;
+    Transform[] allCheckPoints;
+
 
 
     [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject; public GameObject rocketObject;
@@ -51,6 +57,12 @@ public class CarCollision : MonoBehaviour
     void Start()
     {
         currentPowerUpSlot = 1;
+
+        allCheckPoints = allCheckPointsObject.GetComponentsInChildren<Transform>();
+
+        LastCheckPointNumber = 0;
+
+        LastCheckPoint = allCheckPoints[LastCheckPointNumber];
     }
 
     void Update()
@@ -172,8 +184,42 @@ public class CarCollision : MonoBehaviour
                 
             }
 
+           
+
         }
 
+        if (other.gameObject.transform == allCheckPoints[LastCheckPointNumber + 1])
+        {
+            if (other.gameObject.tag == "CheckPoint")
+            {
+                //LastCheckPoint.position = other.gameObject.transform.position;
+                //LastCheckPoint.rotation = other.gameObject.transform.rotation;
+                if (LastCheckPointNumber < allCheckPoints.Length)
+                {
+                    LastCheckPointNumber++;
+                }
+                else
+                {
+                    LastCheckPointNumber = 0;
+                }
+
+                LastCheckPoint = allCheckPoints[LastCheckPointNumber];
+
+                Debug.Log("checkpoint" + LastCheckPointNumber);
+
+
+            }
+        }
+
+        
+
+        if (other.gameObject.tag == "DestroyZone")
+        {
+            transform.position = LastCheckPoint.position;
+            transform.rotation = LastCheckPoint.rotation;
+
+            Debug.Log("DestroyZone");
+        }
     }
 
 

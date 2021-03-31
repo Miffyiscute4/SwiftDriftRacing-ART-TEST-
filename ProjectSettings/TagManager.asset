@@ -16,6 +16,8 @@ TagManager:
   - Collectable
   - Bot
   - weapon
+  - CheckPoint
+  - DestroyZone
   layers:
   - Default
   - TransparentFX
