@@ -23,13 +23,14 @@ public class Player_CarController : MonoBehaviour
     public LayerMask whatIsGround = 8;
     public float groundRayLength = 3;
 
-    internal bool isGrounded;
+    internal bool isGrounded; 
 
     //counters
-    internal float stopWatch_VerticalBuildUp;
+    internal float stopWatch_VerticalBuildUp; internal float stopWatch_Boost; internal float stopWatch_Drift;
 
     internal bool isBoosted;
     internal bool isOffTrack;
+    internal bool readyToBoost;
 
     [Header("Wheels")]
     public Transform leftFrontWheel;
@@ -130,19 +131,45 @@ public class Player_CarController : MonoBehaviour
 
     void TurnInput()
     {
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        //when the key is pressed
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetAxisRaw("Vertical") != 0 && Input.GetAxisRaw("Horizontal") != 0)
         {
             driftInput = Input.GetAxisRaw("Horizontal");
-        }
-        else if (Input.GetKey(KeyCode.LeftShift))
+
+            stopWatch_Drift = 0;
+        }//when the key is held
+        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxisRaw("Vertical") != 0 && Input.GetAxisRaw("Horizontal") != 0)
         {
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, driftMultiplier * driftInput * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
+
+            stopWatch_Drift += Time.deltaTime;
+
+            if (stopWatch_Drift >= 2)
+            {
+                stopWatch_Drift = 0;
+
+                readyToBoost = true;
+            }
         }
         else if (Input.GetAxisRaw("Horizontal") != 0)
         {
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Input.GetAxis("Horizontal") * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
+
+            if (readyToBoost)
+            {
+                isBoosted = true;
+                readyToBoost = false;
+            }
         }
+        else
+        {
+            if (readyToBoost)
+            {
+                isBoosted = true;
+                readyToBoost = false;
+            }
+        }
+        
 
         leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, Input.GetAxis("Horizontal") * turnStrength * currentSpeed - 180, leftFrontWheel.localRotation.eulerAngles.z);
         rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, Input.GetAxis("Horizontal") * turnStrength * currentSpeed, rightFrontWheel.localRotation.eulerAngles.z);
@@ -176,7 +203,10 @@ public class Player_CarController : MonoBehaviour
 
     public void ApplyForce()
     {
-        //Debug.Log(isGrounded);
+        Debug.Log(isGrounded);
+
+
+
         if (isGrounded)
         {
             rb.drag = 3;
@@ -197,7 +227,17 @@ public class Player_CarController : MonoBehaviour
 
             if (isBoosted)
             {
-                rb.AddForce(transform.forward * boostAmount * 10);
+                stopWatch_Boost += Time.deltaTime;
+                rb.AddForce(transform.forward * boostAmount * 10000);
+
+                if (stopWatch_Boost >= 3)
+                {
+                    
+                    stopWatch_Boost = 0;
+
+                    carCol.isBoosted = false;
+                    isBoosted = false;
+                }
             }
 
             rb.AddForce(-Vector3.up * 10);

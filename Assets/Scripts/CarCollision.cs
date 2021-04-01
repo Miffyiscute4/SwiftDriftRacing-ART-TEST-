@@ -425,14 +425,13 @@ public class CarCollision : MonoBehaviour
         {
             if (isBot)
             {
-                carBot.isBoosted = false;
+                carBot.isBoosted = true;
             }
             else
             {
-                carPlayer.isBoosted = false;
+                carPlayer.isBoosted = true;
             }
 
-            isBoosted = false;
         }
 
         //dart
