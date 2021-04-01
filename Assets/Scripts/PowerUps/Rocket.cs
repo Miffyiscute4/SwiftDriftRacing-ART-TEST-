@@ -37,14 +37,22 @@ public class Rocket : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //transform.position = transform.forward;
-        transform.position = Vector3.MoveTowards(transform.position,  target.position, Time.deltaTime * 10 * speed);
-
-        destroyTimer += Time.deltaTime;
-        if (destroyTimer  > 5)
+        if (target != null)
         {
-            Destroy(gameObject);
+            //transform.position = transform.forward;
+            transform.position = Vector3.MoveTowards(transform.position, target.position, Time.deltaTime * 10 * speed);
+
+            destroyTimer += Time.deltaTime;
+            if (destroyTimer > 5)
+            {
+                Destroy(gameObject);
+            }
         }
+        else
+        {
+            Debug.LogError("There are no cars to aim for in the scene");
+        }
+        
     }
 
     Transform FindCar(Transform[] carTransforms)

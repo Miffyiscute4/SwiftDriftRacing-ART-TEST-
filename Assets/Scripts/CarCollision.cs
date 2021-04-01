@@ -25,7 +25,7 @@ public class CarCollision : MonoBehaviour
     //powerups
     string powerUpSlot1, powerUpSlot2;
     internal int currentPowerUpSlot;
-    string[] powerUpType = {"Boost","Dart","InvincibilityOrb","Bomb","Magnet","Rocket"};
+    string[] powerUpType = {"Boost","Dart","InvincibilityOrb","Bomb","Magnet","Rocket","IceSpikes"};
 
     //stopwatches
     internal float powerUpBoxDelay, coinTimer;
@@ -39,18 +39,18 @@ public class CarCollision : MonoBehaviour
     [Header("Checkpoints")]
     public GameObject allCheckPointsObject;
     Transform LastCheckPoint;
-    int LastCheckPointNumber;
+    public int LastCheckPointNumber;
     Transform[] allCheckPoints;
 
 
 
-    [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject; public GameObject rocketObject;
+    [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject; public GameObject rocketObject; public GameObject iceSpikesObject;
 
-    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic; public bool isShootingRocket;
+    [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic; public bool isShootingRocket; public bool isShootingIceSpikes;
 
-    
 
-    
+
+
 
     // Update is called once per frame
 
@@ -60,13 +60,16 @@ public class CarCollision : MonoBehaviour
 
         allCheckPoints = allCheckPointsObject.GetComponentsInChildren<Transform>();
 
-        LastCheckPointNumber = 0;
+        //last checkpoint = first checkpoint
+        LastCheckPointNumber = 1;
 
         LastCheckPoint = allCheckPoints[LastCheckPointNumber];
     }
 
     void Update()
     {
+        //Debug.Log(LastCheckPointNumber);
+
         lavaTimer += Time.deltaTime;
         PowerUpRegenTimer += Time.deltaTime;
 
@@ -100,7 +103,7 @@ public class CarCollision : MonoBehaviour
 
 
 
-    public void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Coin")
         {
@@ -171,12 +174,16 @@ public class CarCollision : MonoBehaviour
             {
                 switch (other.gameObject.name)
                 {
-                    case "Dart":
+                    case "Dart(Clone)":
                         carPlayer.currentSpeed = carPlayer.currentSpeed / 2;
                         break;
 
                     case "Explosion(Clone)":
                         carPlayer.currentSpeed = 0;
+                        break;
+
+                    case "IceSpikes(Clone)":
+                        //carPlayer.currentSpeed = 0;
                         break;
 
                 }
@@ -188,30 +195,36 @@ public class CarCollision : MonoBehaviour
 
         }
 
-        if (other.gameObject.transform == allCheckPoints[LastCheckPointNumber + 1])
+        if (other.gameObject.tag == "CheckPoint")
         {
-            if (other.gameObject.tag == "CheckPoint")
+            //if the collider is with the correct game object
+            if (other.gameObject.transform == allCheckPoints[LastCheckPointNumber + 1])
             {
                 //LastCheckPoint.position = other.gameObject.transform.position;
                 //LastCheckPoint.rotation = other.gameObject.transform.rotation;
                 if (LastCheckPointNumber < allCheckPoints.Length)
                 {
                     LastCheckPointNumber++;
+                    Debug.Log("checkpoint + 1");
                 }
-                else
+                else if (LastCheckPointNumber > allCheckPoints.Length)
                 {
                     LastCheckPointNumber = 0;
+                    Debug.Log("checkpoint number reset");
                 }
 
                 LastCheckPoint = allCheckPoints[LastCheckPointNumber];
 
-                Debug.Log("checkpoint" + LastCheckPointNumber);
-
 
             }
-        }
+            else if (other.gameObject.transform != allCheckPoints[LastCheckPointNumber + 1])
+            {
+                Debug.Log("not touching correct checkpoint");
+            }
 
-        
+
+            Debug.Log("message1");
+        }
 
         if (other.gameObject.tag == "DestroyZone")
         {
@@ -220,13 +233,14 @@ public class CarCollision : MonoBehaviour
 
             Debug.Log("DestroyZone");
         }
+
     }
 
 
 
 
 
-    public void OnTriggerStay(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Lava" && lavaTimer >= 2 && coinCount > 0)
         {
@@ -284,7 +298,7 @@ public class CarCollision : MonoBehaviour
 
     }
 
-    public void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Ice")
         {
@@ -373,6 +387,11 @@ public class CarCollision : MonoBehaviour
                 case "Rocket":
 
                     isShootingRocket = true;
+                    break;
+
+                case "IceSpikes":
+
+                    isShootingIceSpikes = true;
                     break;
 
 
@@ -472,5 +491,11 @@ public class CarCollision : MonoBehaviour
             isShootingRocket = false;
         }
 
+        if (isShootingIceSpikes)
+        {
+            Instantiate(iceSpikesObject, coinInstantiatePoint.transform.position, coinInstantiatePoint.transform.rotation);
+
+            isShootingIceSpikes = false;
+        }
     }
 }
