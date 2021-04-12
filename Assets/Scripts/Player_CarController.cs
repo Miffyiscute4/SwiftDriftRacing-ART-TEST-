@@ -144,7 +144,7 @@ public class Player_CarController : MonoBehaviour
 
             stopWatch_Drift += Time.deltaTime;
 
-            if (stopWatch_Drift >= 2)
+            if (stopWatch_Drift >= 99)
             {
                 stopWatch_Drift = 0;
 
@@ -240,13 +240,13 @@ public class Player_CarController : MonoBehaviour
                 }
             }
 
-            rb.AddForce(-Vector3.up * 10);
+            rb.AddForce(-transform.up * 500);
         }
         else
         {
             rb.drag = 0.1f;
 
-            rb.AddForce(-Vector3.up * 5000);
+            rb.AddForce(-transform.up * 5000);
         }
     }
 }
