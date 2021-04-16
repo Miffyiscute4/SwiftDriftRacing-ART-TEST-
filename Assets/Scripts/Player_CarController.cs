@@ -143,6 +143,8 @@ public class Player_CarController : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, driftMultiplier * driftInput * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
 
+            //transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y + (transform.right.y * driftInput * turnStrength), transform.rotation.z);
+
             stopWatch_Drift += Time.deltaTime;
 
             if (stopWatch_Drift >= 99)
