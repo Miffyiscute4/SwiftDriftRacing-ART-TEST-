@@ -1597,7 +1597,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &286034582
 Transform:
   m_ObjectHideFlags: 0
@@ -2068,6 +2068,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   groundRayLength: 2
+  snapSpeed: 10
   leftFrontWheel: {fileID: 3775746020085010797}
   rightFrontWheel: {fileID: 997068502996638538}
 --- !u!23 &355785142
@@ -2142,6 +2143,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   groundRayLength: 3
+  snapSpeed: 0
   leftFrontWheel: {fileID: 3775746020085010797}
   rightFrontWheel: {fileID: 997068502996638538}
   pathToFollow: {fileID: 659774423}
@@ -5451,7 +5453,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &920400097
 Transform:
   m_ObjectHideFlags: 0
@@ -8305,7 +8307,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BindingMode: 3
   m_FollowOffset: {x: 0, y: 1, z: -7.5}
-  m_XDamping: 1.5
+  m_XDamping: 1
   m_YDamping: 0
   m_ZDamping: 0.2
   m_AngularDampingMode: 0

@@ -22,6 +22,7 @@ public class Player_CarController : MonoBehaviour
     [Header("Ground Check")]
     public LayerMask whatIsGround = 8;
     public float groundRayLength = 3;
+    public float snapSpeed;
 
     internal bool isGrounded; 
 
@@ -187,15 +188,22 @@ public class Player_CarController : MonoBehaviour
         {
             isGrounded = true;
 
-            Quaternion smoothtransition = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
-
-            transform.rotation = Quaternion.Lerp(transform.rotation, smoothtransition, Time.deltaTime * 10);
 
             
         }
         else
         {
             isGrounded = false;
+        }
+
+        if (Physics.Raycast(groundRayPoint.position, -transform.up, out hit, 35, whatIsGround))
+        {
+
+            Quaternion smoothtransition = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, smoothtransition, Time.deltaTime * snapSpeed);
+
+
         }
     }
 
@@ -240,7 +248,7 @@ public class Player_CarController : MonoBehaviour
                 }
             }
 
-            rb.AddForce(-transform.up * 500);
+            rb.AddForce(-transform.up * 1500);
         }
         else
         {
