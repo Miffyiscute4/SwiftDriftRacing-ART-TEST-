@@ -14,6 +14,8 @@ public class Rocket : MonoBehaviour
 
     Transform target;
 
+    public GameObject explosion;
+
 
     // Start is called before the first frame update
     void Start()
@@ -41,10 +43,12 @@ public class Rocket : MonoBehaviour
         {
             //transform.position = transform.forward;
             transform.position = Vector3.MoveTowards(transform.position, target.position, Time.deltaTime * 10 * speed);
+            transform.LookAt(target.position);
 
             destroyTimer += Time.deltaTime;
             if (destroyTimer > 5)
             {
+                Instantiate(explosion, transform.position, transform.rotation);
                 Destroy(gameObject);
             }
         }

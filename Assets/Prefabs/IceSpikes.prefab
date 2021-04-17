@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -5253846674157493312}
   - component: {fileID: 6545250973808232457}
   - component: {fileID: 6545250973808232462}
+  - component: {fileID: -2934438108478745346}
   m_Layer: 0
   m_Name: IceSpikes
   m_TagString: Untagged
@@ -124,3 +125,16 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &-2934438108478745346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545250973808232467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71d8c06a1a72ff74596dad697e7a23bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxScale: 5
