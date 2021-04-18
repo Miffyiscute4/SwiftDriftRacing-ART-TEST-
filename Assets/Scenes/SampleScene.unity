@@ -2068,7 +2068,7 @@ MonoBehaviour:
   originalMaxSpeed: 20
   verticalDelayTime: 0.2
   turnStrength: 7.5
-  boostAmount: 3
+  boostAmount: 22.5
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256

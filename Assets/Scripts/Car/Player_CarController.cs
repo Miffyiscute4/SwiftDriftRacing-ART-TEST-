@@ -154,7 +154,7 @@ public class Player_CarController : MonoBehaviour
     void TurnInput()
     {
 
-        Debug.Log(currentSpeed);
+        Debug.Log("current speed: " + currentSpeed);
 
 
         //when the key is pressed
@@ -184,8 +184,10 @@ public class Player_CarController : MonoBehaviour
 
                 stopWatch_Drift += Time.deltaTime;
 
+                //Debug.Log("drift " + (int)stopWatch_Drift);
+                
                 //drift boost
-                if (stopWatch_Drift >= 80 / currentSpeed)
+                if (stopWatch_Drift >= 40 / currentSpeed)
                 {
                     stopWatch_Drift = 0;
 
@@ -337,7 +339,7 @@ public class Player_CarController : MonoBehaviour
             if (isBoosted)
             {
                 stopWatch_Boost += Time.deltaTime;
-                rb.AddForce(transform.forward * boostAmount * 6000);
+                rb.AddForce(transform.forward * boostAmount * 1000);
 
                 if (stopWatch_Boost >= 3)
                 {

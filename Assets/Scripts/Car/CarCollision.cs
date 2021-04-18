@@ -75,12 +75,12 @@ public class CarCollision : MonoBehaviour
 
         BoolActions();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             UsePowerUp();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             SwapPowerUp();
         }
