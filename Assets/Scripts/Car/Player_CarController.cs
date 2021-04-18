@@ -13,10 +13,11 @@ public class Player_CarController : MonoBehaviour
 
     //car variables
     [Header("Car Variables")]
-    public float speedMultiplier = 10; public float originalMaxSpeed = 20;internal float maxSpeed; public float verticalDelayTime = 0.2f; public float turnStrength = 7.5f; public float driftMultiplier = 1.25f; public float boostAmount;
+    public float speedMultiplier = 10; public float originalMaxSpeed = 20;internal float maxSpeed; public float verticalDelayTime = 0.2f; public float turnStrength = 7.5f; internal float driftMultiplier = 1f; public float boostAmount;
 
-     internal float speedInput, driftInput;
+    internal float speedInput, driftInput;
     internal float currentSpeed;
+    internal bool isDrifting;
 
     //groundcheck
     [Header("Ground Check")]
@@ -27,7 +28,7 @@ public class Player_CarController : MonoBehaviour
     internal bool isGrounded; 
 
     //counters
-    internal float stopWatch_VerticalBuildUp; internal float stopWatch_Boost; internal float stopWatch_Drift; internal float stopwatch_trails;
+    internal float stopWatch_VerticalBuildUp; internal float stopWatch_Boost; internal float stopWatch_Drift; internal float stopwatch_trails; internal float stopwatch_DriftMove; internal float stopwatch_StopDrift;
 
     internal bool isBoosted;
     internal bool isOffTrack;
@@ -84,13 +85,18 @@ public class Player_CarController : MonoBehaviour
 
         stopWatch_VerticalBuildUp += Time.deltaTime;
 
-        speedInput = currentSpeed * speedMultiplier * Mathf.Abs(Input.GetAxisRaw("Vertical"));
-
-        if (carCol.coinCount > carCol.maxCoinCount)
+        if (!isDrifting)
         {
-            
+            speedInput = currentSpeed * speedMultiplier * Mathf.Abs(Input.GetAxisRaw("Vertical"));
         }
+        else
+        {
+            speedInput = currentSpeed * speedMultiplier * 1;
+        }        
         
+
+
+
         if (maxSpeed > originalMaxSpeed + carCol.maxCoinCount)
         {
             maxSpeed = originalMaxSpeed + carCol.maxCoinCount;
@@ -105,37 +111,42 @@ public class Player_CarController : MonoBehaviour
             currentSpeed = -maxSpeed;
         }
 
-        //changes the speed value on input
-        if (Input.GetAxisRaw("Vertical") == 1 && currentSpeed < maxSpeed && stopWatch_VerticalBuildUp >= verticalDelayTime)
+
+        if (!isDrifting)
         {
-            currentSpeed++;
-            stopWatch_VerticalBuildUp = 0;
-        }
-        else if (Input.GetAxisRaw("Vertical") == -1 && currentSpeed > -maxSpeed / 2 && stopWatch_VerticalBuildUp >= verticalDelayTime)
-        {
-            currentSpeed--;
-            stopWatch_VerticalBuildUp = 0;
-        }
-        else if (Input.GetAxisRaw("Vertical") == 0)
-        {
-            //changes speed until it is equal to 0
-            if (currentSpeed < 0)
+            //changes the speed value on input
+            if (Input.GetAxisRaw("Vertical") == 1 && currentSpeed < maxSpeed && stopWatch_VerticalBuildUp >= verticalDelayTime)
             {
                 currentSpeed++;
+                stopWatch_VerticalBuildUp = 0;
             }
-            else if (currentSpeed > 0)
+            else if (Input.GetAxisRaw("Vertical") == -1 && currentSpeed > -maxSpeed && stopWatch_VerticalBuildUp >= verticalDelayTime)
             {
                 currentSpeed--;
+                stopWatch_VerticalBuildUp = 0;
             }
-            
-            //stops the rigidbody from moving once it moves too slowly
-            if (rb.velocity.magnitude < 5f)
+            else if (Input.GetAxisRaw("Vertical") == 0)
             {
-                rb.velocity = new Vector3(0, 0, 0);
-                currentSpeed = 0;
+                //changes speed until it is equal to 0
+                if (currentSpeed < 0)
+                {
+                    currentSpeed++;
+                }
+                else if (currentSpeed > 0)
+                {
+                    currentSpeed--;
+                }
+
+                //stops the rigidbody from moving once it moves too slowly
+                if (rb.velocity.magnitude < 5f)
+                {
+                    rb.velocity = new Vector3(0, 0, 0);
+                    currentSpeed = 0;
+                }
+
             }
-           
         }
+        
     }
 
 
@@ -143,39 +154,74 @@ public class Player_CarController : MonoBehaviour
     void TurnInput()
     {
 
-        
+        Debug.Log(currentSpeed);
 
 
         //when the key is pressed
-        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetAxisRaw("Vertical") != 0 && Input.GetAxisRaw("Horizontal") != 0)
+        if (Input.GetKeyDown(KeyCode.Space) && Input.GetAxisRaw("Horizontal") != 0 && currentSpeed > 10 && currentSpeed <= maxSpeed)
         {
             driftInput = Input.GetAxisRaw("Horizontal");
 
             stopWatch_Drift = 0;
-        }//when the key is held
-        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxisRaw("Vertical") != 0 && Input.GetAxisRaw("Horizontal") != 0)
-        {
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, driftMultiplier * driftInput * turnStrength * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
 
-            for (int i = 0; i < trails.Count; i++)
+            isDrifting = true;
+            currentSpeed = 10;
+            //driftMultiplier = 3;
+        }
+        
+        if (isDrifting)
+        {
+            //when the key is held
+            if (Input.GetKey(KeyCode.Space))
             {
-                trails[i].SetActive(true);
+                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, currentSpeed / 3 * driftInput * turnStrength * Time.deltaTime, 0f));
+
+                //trails
+                for (int i = 0; i < trails.Count; i++)
+                {
+                    trails[i].SetActive(true);
+                }
+
+                stopWatch_Drift += Time.deltaTime;
+
+                //drift boost
+                if (stopWatch_Drift >= 80 / currentSpeed)
+                {
+                    stopWatch_Drift = 0;
+
+                    readyToBoost = true;
+                }
+            }
+            else
+            {
+                stopwatch_StopDrift += Time.deltaTime;
+
+                if (stopwatch_StopDrift >= 0.5)
+                {
+                    stopwatch_StopDrift = 0;
+                    isDrifting = false;
+                }
+
+            }
+
+            stopwatch_DriftMove += Time.deltaTime;
+
+            if (stopwatch_DriftMove > 0.05)
+            {
+                stopwatch_DriftMove = 0;
+
+
+                if (Input.GetAxisRaw("Horizontal") == driftInput && currentSpeed < maxSpeed)
+                {
+                    currentSpeed += 1;
+                }
+                else if (Input.GetAxisRaw("Horizontal") == -driftInput && currentSpeed > 10)
+                {
+                    currentSpeed -= 1;
+                }
             }
             
 
-            //transform.rotation = Quaternion.Euler(0f,transform.rotation.eulerAngles.y + 1 * Time.deltaTime * turnStrength * driftInput * 10, transform.rotation.eulerAngles.z);
-
-            //transform.Rotate(transform.right * driftInput);
-
-
-            stopWatch_Drift += Time.deltaTime;
-
-            if (stopWatch_Drift >= 99)
-            {
-                stopWatch_Drift = 0;
-
-                readyToBoost = true;
-            }
         }
         else if (Input.GetAxisRaw("Horizontal") != 0)
         {
@@ -307,7 +353,7 @@ public class Player_CarController : MonoBehaviour
         }
         else
         {
-            rb.drag = 0.1f;
+            rb.drag = 0.05f;
 
             rb.AddForce(-transform.up * 5000);
         }

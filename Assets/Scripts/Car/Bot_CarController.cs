@@ -16,7 +16,6 @@ public class Bot_CarController: Player_CarController
     [Header("Aiming & Avoiding")]
     private bool avoiding = false; private bool aimingForObject = false;
     public GameObject objectToAimFor;
-    bool isDrifting;
 
     //sensor
     [Header("Sensor")]
