@@ -136,6 +136,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: bomb_explosion (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8790331552920578915, guid: ed865c62ef3cf8a4987233a6d4550593,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed865c62ef3cf8a4987233a6d4550593, type: 3}
 --- !u!4 &4598669506806510105 stripped

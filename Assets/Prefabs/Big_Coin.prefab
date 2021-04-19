@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 4103406383063552192}
   m_Layer: 0
   m_Name: Coin
-  m_TagString: Coin
+  m_TagString: Big_Coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -59,7 +59,7 @@ Transform:
   m_GameObject: {fileID: 4103406383063552207}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.72769547, y: 0, z: -4}
-  m_LocalScale: {x: 1, y: 2, z: 2}
+  m_LocalScale: {x: 2, y: 4, z: 4}
   m_Children: []
   m_Father: {fileID: 9047531826685408155}
   m_RootOrder: 0
@@ -90,7 +90,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7ef3afa236a15414d8405cfdfd133833, type: 2}
+  - {fileID: 2100000, guid: 93ff9e9a4678b104cb2b02b38603a550, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

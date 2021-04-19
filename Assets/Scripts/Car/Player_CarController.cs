@@ -44,14 +44,35 @@ public class Player_CarController : MonoBehaviour
     public Transform leftBackWheel;
     public Transform rightBackWheel;
 
-    [Header("Trails")]
+    [Header("Trails / Particles")]
 
-    public List<GameObject> trails;
+    public ParticleSystem driftTransitionParticle;
+    public ParticleSystem boostParticle;
+    public ParticleSystem smokeParticles;
+    public List <ParticleSystem> driftParticles;
+
+    public Transform driftPoint1;
+    public Transform driftPoint2;
+
+    public GameObject allParticles;
+
+
+    //public List<GameObject> trails;
+
 
     // Start is called before the first frame update
     void Start()
     {
         //rb = transform.parent.FindChild("CarSphere").GetComponent<Rigidbody>();
+
+        for (int i = 0; i < driftParticles.Count; i++)
+        {
+            driftParticles[i].Stop();
+        }
+
+        smokeParticles.Stop();
+
+
     }
 
 
@@ -114,6 +135,18 @@ public class Player_CarController : MonoBehaviour
 
         if (!isDrifting)
         {
+
+            if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
+            {
+                smokeParticles.Play();
+            }
+            else
+            {
+                smokeParticles.Stop();
+            }
+
+
+
             //changes the speed value on input
             if (Input.GetAxisRaw("Vertical") == 1 && currentSpeed < maxSpeed && stopWatch_VerticalBuildUp >= verticalDelayTime)
             {
@@ -164,8 +197,30 @@ public class Player_CarController : MonoBehaviour
 
             stopWatch_Drift = 0;
 
+            //location of the particle systems
+
+            if (driftInput == 1)
+            {
+                allParticles.transform.position = driftPoint1.position;
+                allParticles.transform.rotation = driftPoint1.rotation;
+            }   
+            else if (driftInput == -1)
+            {
+                allParticles.transform.position = driftPoint2.position;
+                allParticles.transform.rotation = driftPoint2.rotation;
+            }
+
+            
+
+            //-----------------------------------------------------------
+
             isDrifting = true;
             currentSpeed = 10;
+            if (!readyToBoost)
+            {
+                driftParticles[0].Play();
+            }
+            
             //driftMultiplier = 3;
         }
         
@@ -176,20 +231,25 @@ public class Player_CarController : MonoBehaviour
             {
                 transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, currentSpeed / 3 * driftInput * turnStrength * Time.deltaTime, 0f));
 
+                /*
                 //trails
                 for (int i = 0; i < trails.Count; i++)
                 {
                     trails[i].SetActive(true);
-                }
+                }*/
 
                 stopWatch_Drift += Time.deltaTime;
 
                 //Debug.Log("drift " + (int)stopWatch_Drift);
-                
+
                 //drift boost
-                if (stopWatch_Drift >= 40 / currentSpeed)
+                if (stopWatch_Drift >= 40 / currentSpeed && !readyToBoost)
                 {
                     stopWatch_Drift = 0;
+
+                    driftParticles[0].Stop();
+                    driftTransitionParticle.Play();
+                    driftParticles[1].Play();
 
                     readyToBoost = true;
                 }
@@ -202,6 +262,13 @@ public class Player_CarController : MonoBehaviour
                 {
                     stopwatch_StopDrift = 0;
                     isDrifting = false;
+
+                    for (int i = 0; i < driftParticles.Count; i++)
+                    {
+                        driftParticles[i].Stop();
+                    }
+
+
                 }
 
             }
@@ -236,7 +303,7 @@ public class Player_CarController : MonoBehaviour
             }
 
 
-            stopwatch_trails += Time.deltaTime;
+            /*stopwatch_trails += Time.deltaTime;
 
             if (trails[0].activeInHierarchy && stopwatch_trails >= 1)
             {
@@ -246,7 +313,7 @@ public class Player_CarController : MonoBehaviour
                 {
                     trails[i].SetActive(false);
                 }
-            }
+            }*/
         }
         else
         {
@@ -257,7 +324,7 @@ public class Player_CarController : MonoBehaviour
             }
 
 
-            stopwatch_trails += Time.deltaTime;
+            /*stopwatch_trails += Time.deltaTime;
 
             if (trails[0].activeInHierarchy && stopwatch_trails >= 1)
             {
@@ -267,7 +334,7 @@ public class Player_CarController : MonoBehaviour
                 {
                     trails[i].SetActive(false);
                 }
-            }
+            }*/
 
         }
         
@@ -324,12 +391,12 @@ public class Player_CarController : MonoBehaviour
 
             if (carCol.isBot)
             {
-                rb.AddForce(transform.forward * speedInput * 100);
+                rb.AddForce(transform.forward * speedInput * 10);
             }
             else// if (Mathf.Abs(speedInput) > 0)
             {
                 //moves car
-                rb.AddForce(transform.forward * speedInput * 100);
+                rb.AddForce(transform.forward * speedInput * 10);
 
 
                 
@@ -339,25 +406,30 @@ public class Player_CarController : MonoBehaviour
             if (isBoosted)
             {
                 stopWatch_Boost += Time.deltaTime;
-                rb.AddForce(transform.forward * boostAmount * 1000);
+                rb.AddForce(transform.forward * boostAmount * 50);
+
+                boostParticle.Play();
 
                 if (stopWatch_Boost >= 3)
                 {
                     
                     stopWatch_Boost = 0;
 
+                    boostParticle.Stop();
+
                     carCol.isBoosted = false;
                     isBoosted = false;
                 }
             }
 
-            rb.AddForce(-transform.up * 1500);
+            //force to apply when grounded
+            rb.AddForce(-transform.up * 250);
         }
         else
         {
             rb.drag = 0.05f;
 
-            rb.AddForce(-transform.up * 5000);
+            rb.AddForce(-transform.up * 500);
         }
     }
 }

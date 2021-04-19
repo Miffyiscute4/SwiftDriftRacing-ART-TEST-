@@ -42,6 +42,10 @@ public class CarCollision : MonoBehaviour
     public int LastCheckPointNumber;
     Transform[] allCheckPoints;
 
+    [Header("Checkpoints")]
+    public ParticleSystem coinParticle1;
+    public ParticleSystem coinParticle2;
+
 
 
     [Header("Powerup Objects")] public GameObject dartObject; public GameObject bombObject; public GameObject rocketObject; public GameObject iceSpikesObject;
@@ -115,6 +119,7 @@ public class CarCollision : MonoBehaviour
             {
                 Destroy(other.gameObject);
                 coin1.Play();
+                Instantiate(coinParticle1, other.transform.position, other.transform.rotation);
                 coinCount++;
             }
         }
@@ -126,6 +131,7 @@ public class CarCollision : MonoBehaviour
             {
                 Destroy(other.gameObject);
                 coin2.Play();
+                Instantiate(coinParticle2, other.transform.position, other.transform.rotation);
                 coinCount += 5;
             }
             
