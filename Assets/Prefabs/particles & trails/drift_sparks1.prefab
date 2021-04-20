@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8790331552920578915}
   - component: {fileID: 4525304986401130528}
   m_Layer: 0
-  m_Name: drift_sparks1
+  m_Name: drift_sparks2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ ParticleSystem:
   m_GameObject: {fileID: 6650648240500916170}
   serializedVersion: 6
   lengthInSec: 5
-  simulationSpeed: 8.5
+  simulationSpeed: 10
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -115,7 +115,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.5
+      scalar: 5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -4709,7 +4709,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 41d3f456774e9bb419acd025b3ead0f7, type: 2}
+  - {fileID: 2100000, guid: adf35cde250c21847ba0f2807646746e, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0

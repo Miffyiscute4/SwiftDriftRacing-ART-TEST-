@@ -963,7 +963,7 @@ Rigidbody:
   m_AngularDrag: 4
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 2
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!135 &136505465
@@ -2224,6 +2224,10 @@ MonoBehaviour:
   driftParticles:
   - {fileID: 324191463}
   - {fileID: 1108160349}
+  driftParticlesMaterials:
+  - {fileID: 2100000, guid: adf35cde250c21847ba0f2807646746e, type: 2}
+  - {fileID: 2100000, guid: fc4c9041d49ef1144b24d3d8e3decbba, type: 2}
+  - {fileID: 2100000, guid: 53f70d49feb644d46a6d40203069dd4b, type: 2}
   driftPoint1: {fileID: 1572025700}
   driftPoint2: {fileID: 2051808331}
   allParticles: {fileID: 1404725818}
@@ -2307,6 +2311,7 @@ MonoBehaviour:
   boostParticle: {fileID: 0}
   smokeParticles: {fileID: 0}
   driftParticles: []
+  driftParticlesMaterials: []
   driftPoint1: {fileID: 0}
   driftPoint2: {fileID: 0}
   allParticles: {fileID: 0}
@@ -6169,7 +6174,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: -0, y: 1.3877788e-17, z: -2.0729946e-16, w: 1}
+  m_LocalRotation: {x: -0, y: 1.3877788e-17, z: 0.000000002609877, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -6522,6 +6527,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1020550305}
   - component: {fileID: 1020550304}
+  - component: {fileID: 1020550306}
   m_Layer: 0
   m_Name: CM vcam1
   m_TagString: Untagged
@@ -6571,14 +6577,30 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020550303}
-  m_LocalRotation: {x: 0.06622726, y: 1.72845e-10, z: -0.0000000026041473, w: 0.9978046}
+  m_LocalRotation: {x: 0.06622726, y: -4.3671455e-18, z: 6.5797036e-17, w: 0.9978046}
   m_LocalPosition: {x: -220.45, y: -248.9, z: -58.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1627441097}
   m_Father: {fileID: 1854491257}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 7.2660003, y: -12.169001, z: 0}
+  m_LocalEulerAnglesHint: {x: 18.6, y: 0, z: 0}
+--- !u!54 &1020550306
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020550303}
+  serializedVersion: 2
+  m_Mass: 7
+  m_Drag: 3
+  m_AngularDrag: 4
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 1
 --- !u!4 &1023370938 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3292120728908397391, guid: 6edb3c780fc16a54dba7f20a2a75c4cb,
@@ -9594,7 +9616,7 @@ MonoBehaviour:
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_SoftZoneWidth: 0
-  m_SoftZoneHeight: 0.8
+  m_SoftZoneHeight: 0
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1

@@ -49,12 +49,16 @@ public class Player_CarController : MonoBehaviour
     public ParticleSystem driftTransitionParticle;
     public ParticleSystem boostParticle;
     public ParticleSystem smokeParticles;
+
     public List <ParticleSystem> driftParticles;
+    public List<Material> driftParticlesMaterials;
 
     public Transform driftPoint1;
     public Transform driftPoint2;
 
     public GameObject allParticles;
+
+    float driftBoostStage = 1;
 
 
     //public List<GameObject> trails;
@@ -216,10 +220,6 @@ public class Player_CarController : MonoBehaviour
 
             isDrifting = true;
             currentSpeed = 10;
-            if (!readyToBoost)
-            {
-                driftParticles[0].Play();
-            }
             
             //driftMultiplier = 3;
         }
@@ -243,16 +243,66 @@ public class Player_CarController : MonoBehaviour
                 //Debug.Log("drift " + (int)stopWatch_Drift);
 
                 //drift boost
-                if (stopWatch_Drift >= 40 / currentSpeed && !readyToBoost)
+                if (driftBoostStage == 0)
                 {
-                    stopWatch_Drift = 0;
+                    driftParticles[0].Play();
+                }
+
+                if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 0)
+                {
+                    driftBoostStage = 1;
+
+                    driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
+
+                    boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
+                    boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
 
                     driftParticles[0].Stop();
+
                     driftTransitionParticle.Play();
                     driftParticles[1].Play();
 
                     readyToBoost = true;
+
+                    
+
+                    stopWatch_Drift = 0;
+
+                    
                 }
+                else if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 1)
+                {
+                    driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
+
+                    boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
+                    boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
+
+                    driftTransitionParticle.Play();
+                    driftParticles[1].Play();
+
+                    driftBoostStage = 2;
+
+                    stopWatch_Drift = 0;
+
+
+
+
+                }
+                else if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 2)
+                {
+                    driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
+
+                    boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
+                    boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
+
+                    driftTransitionParticle.Play();
+                    driftParticles[1].Play();
+
+                    driftBoostStage = 3;
+
+                    stopWatch_Drift = 0;
+                }
+
             }
             else
             {
@@ -260,6 +310,12 @@ public class Player_CarController : MonoBehaviour
 
                 if (stopwatch_StopDrift >= 0.5)
                 {
+                    driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
+
+                    boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
+                    boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
+
+                    
                     stopwatch_StopDrift = 0;
                     isDrifting = false;
 
@@ -321,6 +377,10 @@ public class Player_CarController : MonoBehaviour
             {
                 isBoosted = true;
                 readyToBoost = false;
+            }
+            else if (!readyToBoost && !isBoosted)
+            {
+                driftBoostStage = 0;
             }
 
 
@@ -406,7 +466,7 @@ public class Player_CarController : MonoBehaviour
             if (isBoosted)
             {
                 stopWatch_Boost += Time.deltaTime;
-                rb.AddForce(transform.forward * boostAmount * 50);
+                rb.AddForce(transform.forward * boostAmount * 50 * driftBoostStage);
 
                 boostParticle.Play();
 
