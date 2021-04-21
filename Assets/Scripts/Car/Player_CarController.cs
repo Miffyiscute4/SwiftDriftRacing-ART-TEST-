@@ -58,7 +58,7 @@ public class Player_CarController : MonoBehaviour
 
     public GameObject allParticles;
 
-    float driftBoostStage = 1;
+    float driftBoostStage = 0;
 
 
     //public List<GameObject> trails;
@@ -214,9 +214,11 @@ public class Player_CarController : MonoBehaviour
                 allParticles.transform.rotation = driftPoint2.rotation;
             }
 
-            
+
 
             //-----------------------------------------------------------
+
+            driftParticles[0].Play();
 
             isDrifting = true;
             currentSpeed = 10;
@@ -226,6 +228,8 @@ public class Player_CarController : MonoBehaviour
         
         if (isDrifting)
         {
+            
+
             //when the key is held
             if (Input.GetKey(KeyCode.Space))
             {
@@ -243,19 +247,16 @@ public class Player_CarController : MonoBehaviour
                 //Debug.Log("drift " + (int)stopWatch_Drift);
 
                 //drift boost
-                if (driftBoostStage == 0)
-                {
-                    driftParticles[0].Play();
-                }
 
+                Debug.Log(driftBoostStage);
                 if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 0)
                 {
-                    driftBoostStage = 1;
+                    
 
                     driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
 
-                    boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
-                    boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
+                    //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
+                    //boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
 
                     driftParticles[0].Stop();
 
@@ -267,22 +268,23 @@ public class Player_CarController : MonoBehaviour
                     
 
                     stopWatch_Drift = 0;
+                    driftBoostStage = 1;
 
-                    
                 }
                 else if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 1)
                 {
                     driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
 
-                    boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
-                    boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
+                    //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
+                    //boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
 
                     driftTransitionParticle.Play();
                     driftParticles[1].Play();
 
+                    stopWatch_Drift = 0;
                     driftBoostStage = 2;
 
-                    stopWatch_Drift = 0;
+                    
 
 
 
@@ -292,15 +294,16 @@ public class Player_CarController : MonoBehaviour
                 {
                     driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
 
-                    boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
-                    boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
+                    //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
+                    //boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
 
                     driftTransitionParticle.Play();
                     driftParticles[1].Play();
 
+                    stopWatch_Drift = 0;
                     driftBoostStage = 3;
 
-                    stopWatch_Drift = 0;
+                    
                 }
 
             }
@@ -310,10 +313,6 @@ public class Player_CarController : MonoBehaviour
 
                 if (stopwatch_StopDrift >= 0.5)
                 {
-                    driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
-
-                    boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
-                    boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
 
                     
                     stopwatch_StopDrift = 0;
@@ -377,10 +376,6 @@ public class Player_CarController : MonoBehaviour
             {
                 isBoosted = true;
                 readyToBoost = false;
-            }
-            else if (!readyToBoost && !isBoosted)
-            {
-                driftBoostStage = 0;
             }
 
 
@@ -465,6 +460,9 @@ public class Player_CarController : MonoBehaviour
 
             if (isBoosted)
             {
+                boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[(int)driftBoostStage - 1];
+                boostParticle.gameObject.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[(int)driftBoostStage - 1];
+
                 stopWatch_Boost += Time.deltaTime;
                 rb.AddForce(transform.forward * boostAmount * 50 * driftBoostStage);
 
@@ -477,9 +475,14 @@ public class Player_CarController : MonoBehaviour
 
                     boostParticle.Stop();
 
+                    driftBoostStage = 0;
+
                     carCol.isBoosted = false;
                     isBoosted = false;
+
+                    
                 }
+
             }
 
             //force to apply when grounded
