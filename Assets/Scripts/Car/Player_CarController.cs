@@ -56,6 +56,7 @@ public class Player_CarController : MonoBehaviour
     public Transform driftPoint1;
     public Transform driftPoint2;
 
+
     public GameObject allParticles;
 
     float driftBoostStage = 0;
@@ -392,14 +393,22 @@ public class Player_CarController : MonoBehaviour
             }*/
 
         }
+
+        //leftBackWheel.rotation = Quaternion.Euler(leftBackWheel.rotation.eulerAngles.x + currentSpeed * 5, leftBackWheel.rotation.eulerAngles.y, leftBackWheel.rotation.eulerAngles.z);
+        //rightBackWheel.rotation = Quaternion.Euler(rightBackWheel.rotation.eulerAngles.x + currentSpeed * 5, rightBackWheel.rotation.eulerAngles.y, rightBackWheel.rotation.eulerAngles.z);
+
+        if (rightFrontWheel.rotation.eulerAngles.y < 90 && rightFrontWheel.rotation.y > -90 )
+        {
+            rightFrontWheel.transform.Rotate(new Vector3(currentSpeed * 100, Input.GetAxis("Horizontal") * 45 * 100, 0f) * Time.deltaTime);
+            leftFrontWheel.transform.Rotate(new Vector3(currentSpeed * 100, Input.GetAxis("Horizontal") * 45 * 100, 0f) * Time.deltaTime);
+        }    
         
 
-        leftFrontWheel.rotation = Quaternion.Euler(leftFrontWheel.rotation.eulerAngles.x - currentSpeed * 5, leftFrontWheel.rotation.y + 45 * Input.GetAxis("Horizontal"), leftFrontWheel.rotation.z);
-        rightFrontWheel.rotation = Quaternion.Euler(rightFrontWheel.rotation.eulerAngles.x - currentSpeed * 5, rightFrontWheel.rotation.y + 45 * Input.GetAxis("Horizontal"), rightFrontWheel.rotation.z);
+        if (rightFrontWheel.rotation.eulerAngles.y < 90 && rightFrontWheel.rotation.y > -90 )
+        
 
-        leftBackWheel.rotation = Quaternion.Euler(leftBackWheel.rotation.eulerAngles.x + currentSpeed * 5, leftBackWheel.rotation.eulerAngles.y, leftBackWheel.rotation.eulerAngles.z);
-        rightBackWheel.rotation = Quaternion.Euler(rightBackWheel.rotation.eulerAngles.x + currentSpeed * 5, rightBackWheel.rotation.eulerAngles.y, rightBackWheel.rotation.eulerAngles.z);
-
+        rightBackWheel.transform.Rotate(new Vector3(currentSpeed * 100, 0f,0f) * Time.deltaTime);
+        leftBackWheel.transform.Rotate(new Vector3(currentSpeed * 100, 0f, 0f) * Time.deltaTime);
     }
 
 

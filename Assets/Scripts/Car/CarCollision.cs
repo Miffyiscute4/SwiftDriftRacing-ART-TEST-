@@ -42,9 +42,10 @@ public class CarCollision : MonoBehaviour
     public int LastCheckPointNumber;
     Transform[] allCheckPoints;
 
-    [Header("Checkpoints")]
+    [Header("Particles")]
     public ParticleSystem coinParticle1;
     public ParticleSystem coinParticle2;
+    public ParticleSystem magneticParticle;
 
 
 
@@ -73,6 +74,7 @@ public class CarCollision : MonoBehaviour
     void Update()
     {
         //Debug.Log(LastCheckPointNumber);
+        //magneticParticle.Stop();
 
         lavaTimer += Time.deltaTime;
         PowerUpRegenTimer += Time.deltaTime;
@@ -475,11 +477,16 @@ public class CarCollision : MonoBehaviour
         {
             invincibleTimer += Time.deltaTime;
 
+            magneticParticle.Play();
+
             sc.radius = increasedTriggerRadius;
 
             if (invincibleTimer >= 8)
             {
                 sc.radius = originalTriggerRadius;
+
+                magneticParticle.Stop();
+
                 invincibleTimer = 0;
 
                 isMagnetic = false;
