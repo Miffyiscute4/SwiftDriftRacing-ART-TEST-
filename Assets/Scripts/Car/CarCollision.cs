@@ -26,6 +26,7 @@ public class CarCollision : MonoBehaviour
     string powerUpSlot1, powerUpSlot2;
     internal int currentPowerUpSlot;
     string[] powerUpType = {"Boost","Dart","InvincibilityOrb","Bomb","Magnet","Rocket","IceSpikes"};
+    string[] specialPowerUpType = { "Boost","InvincibilityOrb"};
 
     //stopwatches
     internal float powerUpBoxDelay, coinTimer;
@@ -53,6 +54,9 @@ public class CarCollision : MonoBehaviour
     public Material invincibleMaterial;
 
     public GameObject carBody;
+
+    [Header("UI")]
+    public Transform ui_Slot1;
 
 
 
@@ -113,6 +117,20 @@ public class CarCollision : MonoBehaviour
         }
 
         //Debug.Log(coinCount);
+
+
+        //turns the car model sideways depending on the input axis: horizontal
+
+        /*if (carBody.transform.rotation.eulerAngles.x > -25)
+        {
+            carBody.transform.rotation.eulerAngles += Quaternion.Euler(1, 0, 0);
+        }
+        else if (carBody.transform.rotation.eulerAngles.x < -25)
+        {
+            carBody.transform.rotation.eulerAngles += Quaternion.Euler(1, 0, 0);
+        }*/
+
+        
     }
 
 
@@ -186,6 +204,15 @@ public class CarCollision : MonoBehaviour
             powerUpBoxObject.SetActive(false);
         }
 
+        if (other.gameObject.tag == "PowerUpBox_Special")
+        {
+            AddPowerUp(specialPowerUpType[Random.Range(0, specialPowerUpType.Length)]);
+
+            powerUpBoxObject = other.gameObject;
+            powerUpBoxObject.SetActive(false);
+        }
+
+
         if (other.gameObject.tag == "weapon")
         {
             if (!isInvincible)
@@ -209,7 +236,10 @@ public class CarCollision : MonoBehaviour
                 
             }
 
-           
+            
+
+
+
 
         }
 
@@ -366,6 +396,42 @@ public class CarCollision : MonoBehaviour
         }
 
 
+
+
+
+
+
+        switch (powerUpSlot1)
+        {
+            case "Boost":
+
+                break;
+
+            case "Dart":
+
+                break;
+
+            case "InvincibilityOrb":
+
+                break;
+
+            case "Bomb":
+
+                break;
+
+            case "Magnet":
+                break;
+
+            case "Rocket":
+
+                break;
+
+            case "IceSpikes":
+
+                break;
+        }
+
+
         //Debug.Log(powerUpSlot1);
     }
 
@@ -456,6 +522,7 @@ public class CarCollision : MonoBehaviour
         if (isShootingDart)
         {
             Instantiate(dartObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
+
 
             isShootingDart = false;
         }
