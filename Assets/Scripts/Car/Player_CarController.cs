@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class Player_CarController : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Player_CarController : MonoBehaviour
     public Rigidbody rb;
     public Transform groundRayPoint;
     public CarCollision carCol;
+
+    public CinemachineVirtualCamera vc;
 
 
     //car variables
@@ -61,6 +64,8 @@ public class Player_CarController : MonoBehaviour
 
     float driftBoostStage = 0;
 
+    float screenX;
+
 
     //public List<GameObject> trails;
 
@@ -77,6 +82,7 @@ public class Player_CarController : MonoBehaviour
 
         smokeParticles.Stop();
 
+        
 
     }
 
@@ -89,6 +95,14 @@ public class Player_CarController : MonoBehaviour
         {
             VerticalInput();
             TurnInput();
+
+            if (Input.GetKeyDown(KeyCode.Q) || (Input.GetKeyUp(KeyCode.Q)))
+            {
+                vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= -1;
+            }
+
+            screenX = vc.GetCinemachineComponent<CinemachineComposer>().m_ScreenX;
+
         }
 
         //follows the car at all times
@@ -192,10 +206,22 @@ public class Player_CarController : MonoBehaviour
     void TurnInput()
     {
 
-        Debug.Log("current speed: " + currentSpeed);
+        if (!isDrifting)
+        {
+            if (screenX < 0.5)
+            {
+                vc.GetCinemachineComponent<CinemachineComposer>().m_ScreenX += 0.01f;
+            }
+            else if (screenX > 0.5)
+            {
+                vc.GetCinemachineComponent<CinemachineComposer>().m_ScreenX -= 0.01f;
+            }
+        }
+
+        //Debug.Log("current speed: " + currentSpeed);
 
         //when the key is pressed
-        if (Input.GetKeyDown(KeyCode.Space) && Input.GetAxisRaw("Horizontal") != 0 && currentSpeed > 10 && currentSpeed <= maxSpeed)
+        if (Input.GetKeyDown(KeyCode.Space) && Input.GetAxisRaw("Horizontal") != 0 && currentSpeed > 10 && currentSpeed <= maxSpeed && !isBoosted)
         {
             driftInput = Input.GetAxisRaw("Horizontal");
 
@@ -215,8 +241,11 @@ public class Player_CarController : MonoBehaviour
             }
 
 
+            //-----------------------------------------------------------]
+            
+           
+            
 
-            //-----------------------------------------------------------
             if (driftBoostStage == 0)
             {
                 driftParticles[0].Play();
@@ -230,6 +259,10 @@ public class Player_CarController : MonoBehaviour
             
             //driftMultiplier = 3;
         }
+        else
+        {
+            
+        }
         
         if (isDrifting)
         {
@@ -238,6 +271,20 @@ public class Player_CarController : MonoBehaviour
             //when the key is held
             if (Input.GetKey(KeyCode.Space))
             {
+
+                if (driftInput == 1 && screenX >= 0.325)
+                {
+                    vc.GetCinemachineComponent<CinemachineComposer>().m_ScreenX -= 0.01f;
+                }
+                else if (driftInput == -1 && screenX <= 0.625)
+                {
+                    vc.GetCinemachineComponent<CinemachineComposer>().m_ScreenX += 0.01f;
+                }
+
+
+                Debug.Log(screenX);
+
+
                 transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, currentSpeed / 3 * driftInput * turnStrength * Time.deltaTime, 0f));
 
                 /*
@@ -253,7 +300,7 @@ public class Player_CarController : MonoBehaviour
 
                 //drift boost
 
-                Debug.Log(driftBoostStage);
+                //Debug.Log(driftBoostStage);
                 if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 0)
                 {
                     
@@ -483,11 +530,21 @@ public class Player_CarController : MonoBehaviour
 
             if (isBoosted)
             {
-                boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[(int)driftBoostStage - 1];
-                boostParticle.gameObject.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[(int)driftBoostStage - 1];
+                if (driftBoostStage != 0)
+                {
+                    boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[(int)driftBoostStage - 1];
+                    boostParticle.gameObject.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[(int)driftBoostStage - 1];
+
+                    rb.AddForce(transform.forward * boostAmount * 50 * driftBoostStage);
+                }
+                else
+                {
+                    rb.AddForce(transform.forward * boostAmount * 50);
+                }
+                
 
                 stopWatch_Boost += Time.deltaTime;
-                rb.AddForce(transform.forward * boostAmount * 50 * driftBoostStage);
+                
 
                 boostParticle.Play();
 

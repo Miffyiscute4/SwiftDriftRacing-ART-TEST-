@@ -46,6 +46,14 @@ public class CarCollision : MonoBehaviour
     public ParticleSystem coinParticle1;
     public ParticleSystem coinParticle2;
     public ParticleSystem magneticParticle;
+    public ParticleSystem invincibleParticle;
+
+    [Header("Materials")]
+    public Material defaultMaterial;
+    public Material invincibleMaterial;
+
+    public GameObject carBody;
+
 
 
 
@@ -61,6 +69,8 @@ public class CarCollision : MonoBehaviour
 
     void Start()
     {
+        carBody.GetComponent<MeshRenderer>().material = defaultMaterial; 
+
         currentPowerUpSlot = 1;
 
         allCheckPoints = allCheckPointsObject.GetComponentsInChildren<Transform>();
@@ -455,9 +465,15 @@ public class CarCollision : MonoBehaviour
         {
             invincibleTimer += Time.deltaTime;
 
+            carBody.GetComponent<MeshRenderer>().material = invincibleMaterial;
+            invincibleParticle.Play();
+
             if (invincibleTimer >= 8)
             {
                 invincibleTimer = 0;
+
+                carBody.GetComponent<MeshRenderer>().material = defaultMaterial;
+                invincibleParticle.Stop();
 
                 isInvincible = false;
             }
@@ -493,10 +509,6 @@ public class CarCollision : MonoBehaviour
             }
 
             
-        }
-        else
-        {
-            magneticParticle.Stop();
         }
 
         //rocket
