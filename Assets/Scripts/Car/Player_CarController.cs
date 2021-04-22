@@ -194,7 +194,6 @@ public class Player_CarController : MonoBehaviour
 
         Debug.Log("current speed: " + currentSpeed);
 
-
         //when the key is pressed
         if (Input.GetKeyDown(KeyCode.Space) && Input.GetAxisRaw("Horizontal") != 0 && currentSpeed > 10 && currentSpeed <= maxSpeed)
         {
@@ -218,11 +217,16 @@ public class Player_CarController : MonoBehaviour
 
 
             //-----------------------------------------------------------
+            if (driftBoostStage == 0)
+            {
+                driftParticles[0].Play();
+                currentSpeed = 10;
+                isDrifting = true;
+            }
+            
 
-            driftParticles[0].Play();
 
-            isDrifting = true;
-            currentSpeed = 10;
+            
             
             //driftMultiplier = 3;
         }
@@ -397,18 +401,28 @@ public class Player_CarController : MonoBehaviour
         //leftBackWheel.rotation = Quaternion.Euler(leftBackWheel.rotation.eulerAngles.x + currentSpeed * 5, leftBackWheel.rotation.eulerAngles.y, leftBackWheel.rotation.eulerAngles.z);
         //rightBackWheel.rotation = Quaternion.Euler(rightBackWheel.rotation.eulerAngles.x + currentSpeed * 5, rightBackWheel.rotation.eulerAngles.y, rightBackWheel.rotation.eulerAngles.z);
 
-        if (rightFrontWheel.rotation.eulerAngles.y < 90 && rightFrontWheel.rotation.y > -90 )
+        //visual wheel turning
+        if (Input.GetAxisRaw("Vertical") != 0)
         {
-            rightFrontWheel.transform.Rotate(new Vector3(currentSpeed * 100, Input.GetAxis("Horizontal") * 45 * 100, 0f) * Time.deltaTime);
-            leftFrontWheel.transform.Rotate(new Vector3(currentSpeed * 100, Input.GetAxis("Horizontal") * 45 * 100, 0f) * Time.deltaTime);
-        }    
-        
+            //front wheel turn x
+            rightFrontWheel.transform.Rotate(new Vector3(currentSpeed * 100, 0f, 0f) * Time.deltaTime);
+            leftFrontWheel.transform.Rotate(new Vector3(currentSpeed * 100, 0f) * Time.deltaTime);
 
-        if (rightFrontWheel.rotation.eulerAngles.y < 90 && rightFrontWheel.rotation.y > -90 )
-        
 
-        rightBackWheel.transform.Rotate(new Vector3(currentSpeed * 100, 0f,0f) * Time.deltaTime);
-        leftBackWheel.transform.Rotate(new Vector3(currentSpeed * 100, 0f, 0f) * Time.deltaTime);
+            //back wheel turn x
+            rightBackWheel.transform.Rotate(new Vector3(currentSpeed * 100, 0f, 0f) * Time.deltaTime);
+            leftBackWheel.transform.Rotate(new Vector3(currentSpeed * 100, 0f, 0f) * Time.deltaTime);
+        }
+        else if (Input.GetAxisRaw("Horizontal") != 0)
+        {
+           
+
+            //front wheel turn y
+            leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, Input.GetAxis("Horizontal") * 30 - 180, leftFrontWheel.localRotation.eulerAngles.z);
+            rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, Input.GetAxis("Horizontal") * 30, rightBackWheel.localRotation.eulerAngles.z);
+
+            
+        }
     }
 
 

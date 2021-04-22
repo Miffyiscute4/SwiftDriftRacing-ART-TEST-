@@ -494,6 +494,10 @@ public class CarCollision : MonoBehaviour
 
             
         }
+        else
+        {
+            magneticParticle.Stop();
+        }
 
         //rocket
         if (isShootingRocket)
