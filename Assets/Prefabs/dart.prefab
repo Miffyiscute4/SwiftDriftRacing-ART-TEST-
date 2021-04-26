@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7369726767710442653}
   - component: {fileID: -6063956155238895073}
-  - component: {fileID: 1573256428240314244}
   - component: {fileID: -6581992486016864083}
   m_Layer: 0
   m_Name: dart
@@ -48,14 +47,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0.6}
---- !u!362 &1573256428240314244
-WorldAnchor:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3052293523159680178}
-  serializedVersion: 2
 --- !u!114 &-6581992486016864083
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -56,7 +56,7 @@ public class CarCollision : MonoBehaviour
     public GameObject carBody;
 
     [Header("UI")]
-    public Transform ui_Slot1;
+    public UI ui;
 
 
 
@@ -383,6 +383,7 @@ public class CarCollision : MonoBehaviour
         Debug.Log("slot 1: "+powerUpSlot1);
 
 
+
         if (powerUpSlot1 == null)
         {
             powerUpSlot1 = powerUp; //Debug.Log("1");
@@ -396,40 +397,15 @@ public class CarCollision : MonoBehaviour
         }
 
 
+        
 
 
 
-
-
-        switch (powerUpSlot1)
+        if (!isBot)
         {
-            case "Boost":
-
-                break;
-
-            case "Dart":
-
-                break;
-
-            case "InvincibilityOrb":
-
-                break;
-
-            case "Bomb":
-
-                break;
-
-            case "Magnet":
-                break;
-
-            case "Rocket":
-
-                break;
-
-            case "IceSpikes":
-
-                break;
+            ui.DisplayPowerUp(powerUpSlot1, 1);
         }
+        
 
 
         //Debug.Log(powerUpSlot1);
