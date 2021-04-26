@@ -11,6 +11,8 @@ public class UI : MonoBehaviour
     public GameObject boostObject;
     public GameObject dartObject, invincibleObject, bombObject, magnetObject, rocketObject, iceSpikesObject;
 
+    List<GameObject> currentlyDisplayedPowerUp = new List<GameObject> {null, null};
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,32 +32,67 @@ public class UI : MonoBehaviour
         switch (powerUpType)
         {
             case "Boost":
-                Instantiate(boostObject, point[powerUpSlot - 1].transform.position, point[powerUpSlot - 1].transform.rotation, point[powerUpSlot - 1].transform.parent);
+                currentlyDisplayedPowerUp[powerUpSlot] = Instantiate(boostObject, point[powerUpSlot].transform.position, point[powerUpSlot].transform.rotation, point[powerUpSlot].transform.parent);
                 break;
 
             case "Dart":
-                Instantiate(dartObject, point[powerUpSlot - 1].transform.position, point[powerUpSlot - 1].transform.rotation, point[powerUpSlot - 1].transform.parent);
+                currentlyDisplayedPowerUp[powerUpSlot] = Instantiate(dartObject, point[powerUpSlot].transform.position, point[powerUpSlot].transform.rotation, point[powerUpSlot].transform.parent);
                 break;
 
             case "InvincibilityOrb":
-                Instantiate(invincibleObject, point[powerUpSlot - 1].transform.position, point[powerUpSlot - 1].transform.rotation, point[powerUpSlot - 1].transform.parent);
+                currentlyDisplayedPowerUp[powerUpSlot] = Instantiate(invincibleObject, point[powerUpSlot].transform.position, point[powerUpSlot].transform.rotation, point[powerUpSlot].transform.parent);
                 break;
 
             case "Bomb":
-                Instantiate(bombObject, point[powerUpSlot - 1].transform.position, point[powerUpSlot - 1].transform.rotation, point[powerUpSlot - 1].transform.parent);
+                currentlyDisplayedPowerUp[powerUpSlot] = Instantiate(bombObject, point[powerUpSlot].transform.position, point[powerUpSlot].transform.rotation, point[powerUpSlot].transform.parent);
                 break;
 
             case "Magnet":
-                Instantiate(magnetObject, point[powerUpSlot - 1].transform.position, point[powerUpSlot - 1].transform.rotation, point[powerUpSlot - 1].transform.parent);
+                currentlyDisplayedPowerUp[powerUpSlot] = Instantiate(magnetObject, point[powerUpSlot].transform.position, point[powerUpSlot].transform.rotation, point[powerUpSlot].transform.parent);
                 break;
 
             case "Rocket":
-                Instantiate(rocketObject, point[powerUpSlot - 1].transform.position, point[powerUpSlot - 1].transform.rotation, point[powerUpSlot - 1].transform.parent);
+                currentlyDisplayedPowerUp[powerUpSlot] = Instantiate(rocketObject, point[powerUpSlot].transform.position, point[powerUpSlot].transform.rotation, point[powerUpSlot].transform.parent);
                 break;
 
             case "IceSpikes":
-                Instantiate(iceSpikesObject, point[powerUpSlot - 1].transform.position, point[powerUpSlot - 1].transform.rotation, point[powerUpSlot - 1].transform.parent);
+                currentlyDisplayedPowerUp[powerUpSlot] = Instantiate(iceSpikesObject, point[powerUpSlot].transform.position, point[powerUpSlot].transform.rotation, point[powerUpSlot].transform.parent);
                 break;
         }
+    }
+
+    public void DestroyPreviousObject(int powerUpSlot)
+    {
+        Destroy(currentlyDisplayedPowerUp[powerUpSlot]);
+    }
+
+    public void SwapPowerUps()
+    {/*
+        if (currentlyDisplayedPowerUp[0].transform.position == point[0].transform.position || currentlyDisplayedPowerUp[1].transform.position == point[1].transform.position)
+        {
+            if (currentlyDisplayedPowerUp[0] != null)
+            {
+                currentlyDisplayedPowerUp[0].transform.position = point[1].transform.position;
+            }
+
+            if (currentlyDisplayedPowerUp[1] != null)
+            {
+                currentlyDisplayedPowerUp[1].transform.position = point[0].transform.position;
+            }
+        }
+        else if (currentlyDisplayedPowerUp[0].transform.position == point[1].transform.position || currentlyDisplayedPowerUp[1].transform.position == point[0].transform.position)
+        {
+            if (currentlyDisplayedPowerUp[0] != null)
+            {
+                currentlyDisplayedPowerUp[0].transform.position = point[0].transform.position;
+            }
+
+            if (currentlyDisplayedPowerUp[1] != null)
+            {
+                currentlyDisplayedPowerUp[1].transform.position = point[1].transform.position;
+            }
+        }
+        */
+        
     }
 }

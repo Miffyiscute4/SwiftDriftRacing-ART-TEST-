@@ -23,7 +23,7 @@ public class CarCollision : MonoBehaviour
     public int coinCount; public int maxCoinCount;
 
     //powerups
-    string powerUpSlot1, powerUpSlot2;
+    List<string> powerUpSlot = new List<string> {"",""};
     internal int currentPowerUpSlot;
     string[] powerUpType = {"Boost","Dart","InvincibilityOrb","Bomb","Magnet","Rocket","IceSpikes"};
     string[] specialPowerUpType = { "Boost","InvincibilityOrb"};
@@ -83,12 +83,19 @@ public class CarCollision : MonoBehaviour
         LastCheckPointNumber = 1;
 
         LastCheckPoint = allCheckPoints[LastCheckPointNumber];
+
+        currentPowerUpSlot = 0;
+
+        powerUpSlot[0] = null;
+        powerUpSlot[1] = null;
     }
 
     void Update()
     {
         //Debug.Log(LastCheckPointNumber);
         //magneticParticle.Stop();
+
+        //Debug.Log(currentPowerUpSlot);
 
         lavaTimer += Time.deltaTime;
         PowerUpRegenTimer += Time.deltaTime;
@@ -103,6 +110,7 @@ public class CarCollision : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             SwapPowerUp();
+            Debug.Log("PRESSED");
         }
 
         if (powerUpBoxObject != null && !powerUpBoxObject.activeInHierarchy)
@@ -196,7 +204,7 @@ public class CarCollision : MonoBehaviour
             isBoosted = true;
         }
 
-        if (other.gameObject.tag == "PowerUpBox")
+        if (other.gameObject.tag == "PowerUpBox" && (powerUpSlot[0] == null || powerUpSlot[1] == null))
         {
             AddPowerUp(powerUpType[Random.Range(0, powerUpType.Length)]);
 
@@ -204,7 +212,7 @@ public class CarCollision : MonoBehaviour
             powerUpBoxObject.SetActive(false);
         }
 
-        if (other.gameObject.tag == "PowerUpBox_Special")
+        if (other.gameObject.tag == "PowerUpBox_Special" && (powerUpSlot[0] == null || powerUpSlot[1] == null))
         {
             AddPowerUp(specialPowerUpType[Random.Range(0, specialPowerUpType.Length)]);
 
@@ -235,10 +243,6 @@ public class CarCollision : MonoBehaviour
 
                 
             }
-
-            
-
-
 
 
         }
@@ -378,48 +382,37 @@ public class CarCollision : MonoBehaviour
 
     public void AddPowerUp(string powerUp)
     {
-        powerUpBoxSound.Play();
-
-        Debug.Log("slot 1: "+powerUpSlot1);
-
-
-
-        if (powerUpSlot1 == null)
-        {
-            powerUpSlot1 = powerUp; //Debug.Log("1");
-            Debug.Log("powerup slot 1: " + powerUpSlot1);
-        }
-        else
-        {
-            powerUpSlot2 = powerUp; //Debug.Log("2");
-
-            Debug.Log("powerup slot 2: " + powerUpSlot2);
-        }
-
 
         
+            powerUpBoxSound.Play();
 
 
 
-        if (!isBot)
-        {
-            ui.DisplayPowerUp(powerUpSlot1, 1);
-        }
-        
+
+            if (powerUpSlot[0] == null)
+            {
+                powerUpSlot[0] = powerUp; //Debug.Log("1");
+                ui.DisplayPowerUp(powerUpSlot[0], 0);
+            }
+            else if (powerUpSlot[0] != null && powerUpSlot[1] == null)
+            {
+                powerUpSlot[1] = powerUp; //Debug.Log("2");
+                ui.DisplayPowerUp(powerUpSlot[1], 1);
+            }
+
+            if (!isBot)
+            {
+            }
 
 
-        //Debug.Log(powerUpSlot1);
+        Debug.Log(powerUpSlot[0] + "___" + powerUpSlot[1]);
     }
 
     public void UsePowerUp()
     {
 
-        if (currentPowerUpSlot == 1)
-        {
-           
-            //Debug.Log(powerUpSlot1);
 
-            switch (powerUpSlot1)
+            switch (powerUpSlot[currentPowerUpSlot])
             {
                 case "Boost":
                     isBoosted = true;
@@ -458,24 +451,27 @@ public class CarCollision : MonoBehaviour
 
             }
 
-            powerUpSlot1 = null;
-        }
-        else
-        {
-            //powerUpSlot2 = null;
-        }
+             ui.DestroyPreviousObject(currentPowerUpSlot);
+
+            powerUpSlot[currentPowerUpSlot] = null;
     }
 
     public void SwapPowerUp()
     {
-        if (currentPowerUpSlot == 1)
+
+        ui.SwapPowerUps();
+
+        if (currentPowerUpSlot == 0)
         {
-            currentPowerUpSlot = 2;
+            currentPowerUpSlot = 1;
+            
         }
         else
         {
-            currentPowerUpSlot = 1;
+            currentPowerUpSlot = 0;
         }
+
+
     }
 
     public void BoolActions()
