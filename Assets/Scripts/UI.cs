@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class UI : MonoBehaviour
 
     List<GameObject> currentlyDisplayedPowerUp = new List<GameObject> {null, null};
 
+    public Text speedText;
+
+    public Player_CarController car;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +27,7 @@ public class UI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        speedText.text = "Speed: " + Mathf.Abs(car.currentSpeed); 
     }
 
     public void DisplayPowerUp(string powerUpType, int powerUpSlot)

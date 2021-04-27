@@ -67,6 +67,7 @@ public class Player_CarController : MonoBehaviour
     float screenX;
 
 
+
     //public List<GameObject> trails;
 
 
@@ -170,12 +171,21 @@ public class Player_CarController : MonoBehaviour
             if (Input.GetAxisRaw("Vertical") == 1 && currentSpeed < maxSpeed && stopWatch_VerticalBuildUp >= verticalDelayTime)
             {
                 currentSpeed++;
-                stopWatch_VerticalBuildUp = 0;
+
+                if (currentSpeed > 0)
+                {
+                    stopWatch_VerticalBuildUp = 0;
+                }
+                
             }
             else if (Input.GetAxisRaw("Vertical") == -1 && currentSpeed > -maxSpeed && stopWatch_VerticalBuildUp >= verticalDelayTime)
             {
                 currentSpeed--;
-                stopWatch_VerticalBuildUp = 0;
+
+                if (currentSpeed < 0)
+                {
+                    stopWatch_VerticalBuildUp = 0;
+                }
             }
             else if (Input.GetAxisRaw("Vertical") == 0)
             {
@@ -282,7 +292,7 @@ public class Player_CarController : MonoBehaviour
                 }
 
 
-                Debug.Log(screenX);
+                //Debug.Log(screenX);
 
 
                 transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, currentSpeed / 3 * driftInput * turnStrength * Time.deltaTime, 0f));
