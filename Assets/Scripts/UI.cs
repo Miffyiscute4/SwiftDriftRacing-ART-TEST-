@@ -63,6 +63,12 @@ public class UI : MonoBehaviour
             case "IceSpikes":
                 currentlyDisplayedPowerUp[powerUpSlot] = Instantiate(iceSpikesObject, point[powerUpSlot].transform.position, point[powerUpSlot].transform.rotation, point[powerUpSlot].transform.parent);
                 break;
+
+        }    
+            
+        if (powerUpSlot == 1)
+        {
+            currentlyDisplayedPowerUp[powerUpSlot].transform.localScale /= 2;
         }
     }
 

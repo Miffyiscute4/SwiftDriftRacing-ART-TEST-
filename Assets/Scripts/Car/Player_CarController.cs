@@ -97,7 +97,11 @@ public class Player_CarController : MonoBehaviour
             VerticalInput();
             TurnInput();
 
-            if (Input.GetKeyDown(KeyCode.Q) || (Input.GetKeyUp(KeyCode.Q)))
+            if (Input.GetKey(KeyCode.Q) && Input.GetKeyDown(KeyCode.Q))
+            {
+                vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= -1;
+            }
+            else if (Input.GetKeyUp(KeyCode.Q))
             {
                 vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= -1;
             }
@@ -168,27 +172,53 @@ public class Player_CarController : MonoBehaviour
 
 
             //changes the speed value on input
-            if (Input.GetAxisRaw("Vertical") == 1 && currentSpeed < maxSpeed && stopWatch_VerticalBuildUp >= verticalDelayTime)
+            if (Input.GetAxisRaw("Vertical") == 1 && currentSpeed < maxSpeed)
             {
-                currentSpeed++;
-
-                if (currentSpeed > 0)
-                {
-                    stopWatch_VerticalBuildUp = 0;
-                }
                 
-            }
-            else if (Input.GetAxisRaw("Vertical") == -1 && currentSpeed > -maxSpeed && stopWatch_VerticalBuildUp >= verticalDelayTime)
-            {
-                currentSpeed--;
 
-                if (currentSpeed < 0)
+                if (stopWatch_VerticalBuildUp >= verticalDelayTime)
                 {
-                    stopWatch_VerticalBuildUp = 0;
+                    currentSpeed++;
                 }
+
+                if (vc.m_Lens.FieldOfView < 40)
+                {
+                    vc.m_Lens.FieldOfView += 1f;
+                }
+
+
+                
+
+            }
+            else if (Input.GetAxisRaw("Vertical") == -1 && currentSpeed > -maxSpeed)
+            {
+                
+
+                if (stopWatch_VerticalBuildUp >= verticalDelayTime)
+                {
+                    currentSpeed--;
+
+                    if (currentSpeed < 0)
+                    {
+                        stopWatch_VerticalBuildUp = 0;
+                    }
+
+                } 
+                
+                if (vc.m_Lens.FieldOfView > 35)
+                {
+                    vc.m_Lens.FieldOfView -= 1f;
+                }
+
+                
             }
             else if (Input.GetAxisRaw("Vertical") == 0)
             {
+                if (vc.m_Lens.FieldOfView > 35)
+                {
+                    vc.m_Lens.FieldOfView -= 1f;
+                }
+
                 //changes speed until it is equal to 0
                 if (currentSpeed < 0)
                 {
@@ -311,7 +341,7 @@ public class Player_CarController : MonoBehaviour
                 //drift boost
 
                 //Debug.Log(driftBoostStage);
-                if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 0)
+                if (stopWatch_Drift >= 30 / currentSpeed && driftBoostStage == 0)
                 {
                     
 
@@ -373,7 +403,7 @@ public class Player_CarController : MonoBehaviour
             {
                 stopwatch_StopDrift += Time.deltaTime;
 
-                if (stopwatch_StopDrift >= 0.5)
+                if (stopwatch_StopDrift >= 0.75)
                 {
 
                     
