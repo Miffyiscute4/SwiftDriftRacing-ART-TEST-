@@ -103,7 +103,7 @@ public class Player_CarController : MonoBehaviour
             }
             else if (Input.GetKeyUp(KeyCode.Q))
             {
-                vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= -1;
+                vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.x), Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y), -Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z));
             }
 
             screenX = vc.GetCinemachineComponent<CinemachineComposer>().m_ScreenX;
@@ -183,7 +183,7 @@ public class Player_CarController : MonoBehaviour
 
                 if (vc.m_Lens.FieldOfView < 40)
                 {
-                    vc.m_Lens.FieldOfView += 1f;
+                    vc.m_Lens.FieldOfView += 0.15f;
                 }
 
 
@@ -207,7 +207,7 @@ public class Player_CarController : MonoBehaviour
                 
                 if (vc.m_Lens.FieldOfView > 35)
                 {
-                    vc.m_Lens.FieldOfView -= 1f;
+                    vc.m_Lens.FieldOfView -= 0.15f;
                 }
 
                 
@@ -403,7 +403,7 @@ public class Player_CarController : MonoBehaviour
             {
                 stopwatch_StopDrift += Time.deltaTime;
 
-                if (stopwatch_StopDrift >= 0.75)
+                if (stopwatch_StopDrift >= 1)
                 {
 
                     

@@ -39,8 +39,8 @@ public class CarCollision : MonoBehaviour
 
     [Header("Checkpoints")]
     public GameObject allCheckPointsObject;
-    Transform LastCheckPoint;
-    public int LastCheckPointNumber;
+    Transform lastCheckPoint;
+    public int lastCheckPointNumber = 0;
     Transform[] allCheckPoints;
 
     [Header("Particles")]
@@ -57,6 +57,12 @@ public class CarCollision : MonoBehaviour
 
     [Header("UI")]
     public UI ui;
+
+
+
+    public Animator checkPointText;
+
+    [HideInInspector] public int lapCount;
 
 
 
@@ -80,9 +86,9 @@ public class CarCollision : MonoBehaviour
         allCheckPoints = allCheckPointsObject.GetComponentsInChildren<Transform>();
 
         //last checkpoint = first checkpoint
-        LastCheckPointNumber = 1;
+        lastCheckPointNumber = 1;
 
-        LastCheckPoint = allCheckPoints[LastCheckPointNumber];
+        lastCheckPoint = allCheckPoints[lastCheckPointNumber];
 
         currentPowerUpSlot = 0;
 
@@ -92,7 +98,7 @@ public class CarCollision : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log(LastCheckPointNumber);
+        Debug.Log(allCheckPoints[1].name);
         //magneticParticle.Stop();
 
         //Debug.Log(currentPowerUpSlot);
@@ -123,6 +129,8 @@ public class CarCollision : MonoBehaviour
                 powerUpBoxDelay = 0;
             }
         }
+
+        //Debug.Log(lastCheckPointNumber);
 
         //Debug.Log(coinCount);
 
@@ -249,42 +257,75 @@ public class CarCollision : MonoBehaviour
 
         if (other.gameObject.tag == "CheckPoint")
         {
+            if (other.gameObject.transform == allCheckPoints[1])
+            {
+                Debug.Log("start");
+
+                //checkPointText.Play("CheckPoint_UI");
+
+                checkPointText.SetBool("isTouchingInitialCheckPoint", true);
+
+                /*if(checkPointText.GetCurrentAnimatorStateInfo(0).IsName("CheckPoint_UI_Idle"))
+                {
+
+                }*/
+
+                lapCount++;
+
+                StartCoroutine("StopAnimation");
+
+                
+            }
+
+            if (lastCheckPointNumber + 1 > allCheckPoints.Length)
+            {
+                lastCheckPointNumber = 1;
+                lastCheckPoint = allCheckPoints[lastCheckPointNumber];
+                Debug.Log("checkpoint number reset");
+            }
+
             //if the collider is with the correct game object
-            if (other.gameObject.transform == allCheckPoints[LastCheckPointNumber + 1])
+            if (other.gameObject.transform == allCheckPoints[lastCheckPointNumber ])
             {
                 //LastCheckPoint.position = other.gameObject.transform.position;
                 //LastCheckPoint.rotation = other.gameObject.transform.rotation;
-                if (LastCheckPointNumber < allCheckPoints.Length)
+                if (lastCheckPointNumber < allCheckPoints.Length)
                 {
-                    LastCheckPointNumber++;
+                    lastCheckPointNumber++;
                     Debug.Log("checkpoint + 1");
-                }
-                else if (LastCheckPointNumber > allCheckPoints.Length)
-                {
-                    LastCheckPointNumber = 0;
-                    Debug.Log("checkpoint number reset");
+                    lastCheckPoint = allCheckPoints[lastCheckPointNumber];
                 }
 
-                LastCheckPoint = allCheckPoints[LastCheckPointNumber];
+                
 
 
             }
-            else if (other.gameObject.transform != allCheckPoints[LastCheckPointNumber + 1])
+            else if (other.gameObject.transform != allCheckPoints[lastCheckPointNumber + 1])
             {
                 Debug.Log("not touching correct checkpoint");
             }
 
 
-            Debug.Log("message1");
         }
 
         if (other.gameObject.tag == "DestroyZone")
         {
-            transform.position = LastCheckPoint.position;
-            transform.rotation = LastCheckPoint.rotation;
+            transform.position = lastCheckPoint.position;
 
+            carPlayer.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
+
+            transform.rotation = lastCheckPoint.rotation;
+
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+            //carPlayer.isBoosted = false;
+            //carPlayer.readyToBoost = false;
+            //isBoosted = false;
+            
             Debug.Log("DestroyZone");
         }
+
+        Debug.Log("checkpoint reached");
 
     }
 
@@ -564,5 +605,13 @@ public class CarCollision : MonoBehaviour
 
             isShootingIceSpikes = false;
         }
+    }
+
+    IEnumerator StopAnimation()
+    {
+        yield return new WaitForSeconds(3);
+        checkPointText.SetBool("isTouchingInitialCheckPoint", false);
+
+        Debug.Log("animation stopped");
     }
 }

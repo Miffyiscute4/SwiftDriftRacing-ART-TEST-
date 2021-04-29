@@ -14,10 +14,13 @@ public class UI : MonoBehaviour
 
     List<GameObject> currentlyDisplayedPowerUp = new List<GameObject> {null, null};
 
-    public Text speedText;
+    [Header("Other Objects")]
+    public Text speedText; public Text lapText;
 
     public Player_CarController car;
+    public CarCollision carcol;
 
+    public GameObject gainPowerUpParticle;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +30,9 @@ public class UI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        speedText.text = "Speed: " + Mathf.Abs(car.currentSpeed); 
+        speedText.text = "Speed: " + Mathf.Abs(car.currentSpeed);
+
+        lapText.text = "Lap " + carcol.lapCount;
     }
 
     public void DisplayPowerUp(string powerUpType, int powerUpSlot)
@@ -64,8 +69,10 @@ public class UI : MonoBehaviour
                 currentlyDisplayedPowerUp[powerUpSlot] = Instantiate(iceSpikesObject, point[powerUpSlot].transform.position, point[powerUpSlot].transform.rotation, point[powerUpSlot].transform.parent);
                 break;
 
-        }    
-            
+        }
+
+        Instantiate(gainPowerUpParticle, point[powerUpSlot].transform.position, point[powerUpSlot].transform.rotation, point[powerUpSlot].transform.parent);
+
         if (powerUpSlot == 1)
         {
             currentlyDisplayedPowerUp[powerUpSlot].transform.localScale /= 2;
