@@ -66,6 +66,10 @@ public class Player_CarController : MonoBehaviour
 
     float screenX;
 
+    [Header("Audio")]
+    public AudioSource sound_Accelerate;
+    public AudioSource sound_Drift, sound_driftBoostStage, sound_Boost;
+
 
 
     //public List<GameObject> trails;
@@ -174,7 +178,11 @@ public class Player_CarController : MonoBehaviour
             //changes the speed value on input
             if (Input.GetAxisRaw("Vertical") == 1 && currentSpeed < maxSpeed)
             {
-                
+
+                if (!sound_Accelerate.isPlaying && !sound_Drift.isPlaying)
+                {
+                    sound_Accelerate.Play();
+                }
 
                 if (stopWatch_VerticalBuildUp >= verticalDelayTime)
                 {
@@ -192,7 +200,11 @@ public class Player_CarController : MonoBehaviour
             }
             else if (Input.GetAxisRaw("Vertical") == -1 && currentSpeed > -maxSpeed)
             {
-                
+
+                if (!sound_Accelerate.isPlaying && !sound_Drift.isPlaying)
+                {
+                    sound_Accelerate.Play();
+                }
 
                 if (stopWatch_VerticalBuildUp >= verticalDelayTime)
                 {
@@ -214,6 +226,8 @@ public class Player_CarController : MonoBehaviour
             }
             else if (Input.GetAxisRaw("Vertical") == 0)
             {
+                sound_Accelerate.Stop();
+
                 if (vc.m_Lens.FieldOfView > 35)
                 {
                     vc.m_Lens.FieldOfView -= 1f;
@@ -312,6 +326,12 @@ public class Player_CarController : MonoBehaviour
             if (Input.GetKey(KeyCode.Space))
             {
 
+                if (!sound_Drift.isPlaying)
+                {
+                    sound_Drift.Play();
+                }
+
+
                 if (driftInput == 1 && screenX >= 0.325)
                 {
                     vc.GetCinemachineComponent<CinemachineComposer>().m_ScreenX -= 0.01f;
@@ -343,7 +363,7 @@ public class Player_CarController : MonoBehaviour
                 //Debug.Log(driftBoostStage);
                 if (stopWatch_Drift >= 30 / currentSpeed && driftBoostStage == 0)
                 {
-                    
+                    sound_driftBoostStage.Play();
 
                     driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
 
@@ -365,6 +385,9 @@ public class Player_CarController : MonoBehaviour
                 }
                 else if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 1)
                 {
+
+                    sound_driftBoostStage.Play();
+
                     driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
 
                     //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
@@ -384,6 +407,9 @@ public class Player_CarController : MonoBehaviour
                 }
                 else if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 2)
                 {
+
+                    sound_driftBoostStage.Play();
+
                     driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
 
                     //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
@@ -401,6 +427,8 @@ public class Player_CarController : MonoBehaviour
             }
             else
             {
+                sound_Drift.Stop();
+
                 stopwatch_StopDrift += Time.deltaTime;
 
                 if (stopwatch_StopDrift >= 1)
@@ -442,6 +470,9 @@ public class Player_CarController : MonoBehaviour
         else if (Input.GetAxisRaw("Horizontal") != 0)
         {
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Input.GetAxis("Horizontal") * turnStrength * Time.deltaTime * Input.GetAxis("Vertical") * 2.5f, 0f));
+
+            
+            
 
             if (readyToBoost)
             {
@@ -584,7 +615,16 @@ public class Player_CarController : MonoBehaviour
                 
 
                 stopWatch_Boost += Time.deltaTime;
-                
+
+                if (!sound_Boost.isPlaying)
+                {
+                    sound_Boost.Play();
+                }
+
+                if (sound_Accelerate.isPlaying)
+                {
+                    sound_Accelerate.Stop();
+                }
 
                 boostParticle.Play();
 
@@ -610,6 +650,8 @@ public class Player_CarController : MonoBehaviour
         }
         else
         {
+            sound_Boost.Stop();
+
             rb.drag = 0.05f;
 
             rb.AddForce(-transform.up * 500);
