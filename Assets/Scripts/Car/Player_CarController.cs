@@ -275,8 +275,12 @@ public class Player_CarController : MonoBehaviour
         //Debug.Log("current speed: " + currentSpeed);
 
         //when the key is pressed
-        if (Input.GetKeyDown(KeyCode.Space) && Input.GetAxisRaw("Horizontal") != 0 && currentSpeed > 10 && currentSpeed <= maxSpeed && !isBoosted)
+        if (Input.GetKeyDown(KeyCode.Space) && Input.GetAxisRaw("Horizontal") != 0 && currentSpeed > 10 && currentSpeed <= maxSpeed)
         {
+
+
+
+
             driftInput = Input.GetAxisRaw("Horizontal");
 
             stopWatch_Drift = 0;
@@ -325,6 +329,8 @@ public class Player_CarController : MonoBehaviour
             //when the key is held
             if (Input.GetKey(KeyCode.Space))
             {
+                
+                
 
                 if (!sound_Drift.isPlaying)
                 {
@@ -621,19 +627,18 @@ public class Player_CarController : MonoBehaviour
                     sound_Boost.Play();
                 }
 
-                if (sound_Accelerate.isPlaying)
-                {
-                    sound_Accelerate.Stop();
-                }
+               
 
                 boostParticle.Play();
 
-                if (stopWatch_Boost >= 3)
+                if (stopWatch_Boost >= 3 || Input.GetKeyDown(KeyCode.Space))
                 {
                     
                     stopWatch_Boost = 0;
 
                     boostParticle.Stop();
+                    
+                    sound_Boost.Stop();
 
                     driftBoostStage = 0;
 
@@ -650,11 +655,11 @@ public class Player_CarController : MonoBehaviour
         }
         else
         {
-            sound_Boost.Stop();
+            
 
             rb.drag = 0.05f;
 
-            rb.AddForce(-transform.up * 500);
+            rb.AddForce(-transform.up * 5000);
         }
     }
 }
