@@ -351,7 +351,9 @@ public class Player_CarController : MonoBehaviour
                 //Debug.Log(screenX);
 
 
-                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, currentSpeed / 3 * driftInput * turnStrength * Time.deltaTime, 0f));
+                //transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, currentSpeed / 3 * driftInput * turnStrength * Time.deltaTime, 0f));
+
+                transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * currentSpeed / 3, 0));
 
                 /*
                 //trails
@@ -475,8 +477,11 @@ public class Player_CarController : MonoBehaviour
         }
         else if (Input.GetAxisRaw("Horizontal") != 0)
         {
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Input.GetAxis("Horizontal") * turnStrength * Time.deltaTime * Input.GetAxis("Vertical") * 2.5f, 0f));
-
+            //transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Input.GetAxis("Horizontal") * turnStrength * Time.deltaTime * Input.GetAxis("Vertical") * 2.5f, 0f));
+            if (Input.GetAxisRaw("Vertical") != 0)
+            {
+                transform.Rotate(new Vector3(0, Input.GetAxisRaw("Horizontal") * Time.deltaTime * turnStrength * 2.5f, 0));
+            }    
             
             
 
@@ -659,7 +664,7 @@ public class Player_CarController : MonoBehaviour
 
             rb.drag = 0.05f;
 
-            rb.AddForce(-transform.up * 5000);
+            rb.AddForce(-transform.up * 2000);
         }
     }
 }
