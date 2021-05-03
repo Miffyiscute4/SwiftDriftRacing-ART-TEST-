@@ -28,6 +28,11 @@ public class CarCollision : MonoBehaviour
     string[] powerUpType = {"Boost","Dart","InvincibilityOrb","Bomb","Magnet","Rocket","IceSpikes"};
     string[] specialPowerUpType = { "Boost","InvincibilityOrb"};
 
+    [Header("Audio")]
+
+    //boost sound is already in the car controllers
+    public AudioSource sound_Dart; public AudioSource sound_Invincible, sound_Bomb, sound_Magnet, sound_Rocket, sound_Block, sound_CheckPoint, sound_Hit; 
+
     //stopwatches
     internal float powerUpBoxDelay, coinTimer;
     internal float lavaTimer = 0, PowerUpRegenTimer = 0, invincibleTimer = 0;
@@ -98,7 +103,7 @@ public class CarCollision : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(allCheckPoints[1].name);
+        //Debug.Log(allCheckPoints[1].name);
         //magneticParticle.Stop();
 
         //Debug.Log(currentPowerUpSlot);
@@ -231,6 +236,8 @@ public class CarCollision : MonoBehaviour
 
         if (other.gameObject.tag == "weapon")
         {
+            sound_Hit.Play();
+
             if (!isInvincible)
             {
                 switch (other.gameObject.name)
@@ -263,6 +270,8 @@ public class CarCollision : MonoBehaviour
 
                 //checkPointText.Play("CheckPoint_UI");
 
+                sound_CheckPoint.Play();
+
                 checkPointText.SetBool("isTouchingInitialCheckPoint", true);
 
                 /*if(checkPointText.GetCurrentAnimatorStateInfo(0).IsName("CheckPoint_UI_Idle"))
@@ -274,6 +283,7 @@ public class CarCollision : MonoBehaviour
 
                 StartCoroutine("StopAnimation");
 
+                
                 
             }
 
@@ -293,7 +303,7 @@ public class CarCollision : MonoBehaviour
                 {
                     lastCheckPointNumber++;
                     Debug.Log("checkpoint + 1");
-                    lastCheckPoint = allCheckPoints[lastCheckPointNumber];
+                    lastCheckPoint = allCheckPoints[lastCheckPointNumber -1];
                 }
 
                 
@@ -318,6 +328,7 @@ public class CarCollision : MonoBehaviour
 
             GetComponent<Rigidbody>().velocity = Vector3.zero;
 
+            //carPlayer.isDrifting = false;
             //carPlayer.isBoosted = false;
             //carPlayer.readyToBoost = false;
             //isBoosted = false;
@@ -529,6 +540,11 @@ public class CarCollision : MonoBehaviour
                 carPlayer.isBoosted = true;
             }
 
+            /*if (!sound_Boost.isPlaying)
+            {
+                sound_Boost.Play();
+            }*/
+
         }
 
         //dart
@@ -536,6 +552,10 @@ public class CarCollision : MonoBehaviour
         {
             Instantiate(dartObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
 
+            if (!sound_Dart.isPlaying)
+            {
+                sound_Dart.Play();
+            }
 
             isShootingDart = false;
         }
@@ -557,13 +577,27 @@ public class CarCollision : MonoBehaviour
 
                 isInvincible = false;
             }
-            
+
+            if (!sound_Invincible.isPlaying)
+            {
+                sound_Invincible.Play();
+            }
+
+        }
+        else
+        {
+            sound_Invincible.Stop();
         }
 
         //bomb
         if (isShootingBomb)
         {
             Instantiate(bombObject, powerUpInstantiatePoint.position, powerUpInstantiatePoint.rotation);
+
+            if (!sound_Bomb.isPlaying)
+            {
+                sound_Bomb.Play();
+            }
 
             isShootingBomb = false;
         }
@@ -576,6 +610,11 @@ public class CarCollision : MonoBehaviour
             magneticParticle.Play();
 
             sc.radius = increasedTriggerRadius;
+
+            if (!sound_Magnet.isPlaying)
+            {
+                sound_Magnet.Play();
+            }
 
             if (invincibleTimer >= 8)
             {
@@ -596,12 +635,23 @@ public class CarCollision : MonoBehaviour
         {
             Instantiate(rocketObject, powerUpInstantiatePoint.transform.position, powerUpInstantiatePoint.transform.rotation);
 
+            if (!sound_Rocket.isPlaying)
+            {
+                sound_Rocket.Play();
+            }
+
             isShootingRocket = false;
         }
 
         if (isShootingIceSpikes)
         {
             Instantiate(iceSpikesObject, coinInstantiatePoint.transform.position, coinInstantiatePoint.transform.rotation);
+            
+            if (!sound_Block.isPlaying)
+            {
+                sound_Block.Play();
+            }
+            
 
             isShootingIceSpikes = false;
         }
