@@ -310,9 +310,17 @@ public class CarCollision : MonoBehaviour
 
 
             }
-            else if (other.gameObject.transform != allCheckPoints[lastCheckPointNumber + 1])
+            else if (other.gameObject.transform != allCheckPoints[lastCheckPointNumber])
             {
                 Debug.Log("not touching correct checkpoint");
+
+                transform.position = lastCheckPoint.position;
+
+                carPlayer.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
+
+                transform.rotation = lastCheckPoint.rotation;
+
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
             }
 
 

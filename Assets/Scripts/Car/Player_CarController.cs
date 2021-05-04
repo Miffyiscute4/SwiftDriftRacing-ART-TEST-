@@ -369,7 +369,7 @@ public class Player_CarController : MonoBehaviour
                 //drift boost
 
                 //Debug.Log(driftBoostStage);
-                if (stopWatch_Drift >= 15 / currentSpeed && driftBoostStage == 0)
+                if (stopWatch_Drift >= 25 / currentSpeed && driftBoostStage == 0)
                 {
                     sound_driftBoostStage.Play();
 
@@ -391,7 +391,7 @@ public class Player_CarController : MonoBehaviour
                     driftBoostStage = 1;
 
                 }
-                else if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 1)
+                else if (stopWatch_Drift >= 25 / currentSpeed && driftBoostStage == 1)
                 {
 
                     sound_driftBoostStage.Play();
@@ -413,7 +413,7 @@ public class Player_CarController : MonoBehaviour
 
 
                 }
-                else if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 2)
+                else if (stopWatch_Drift >= 25 / currentSpeed && driftBoostStage == 2)
                 {
 
                     sound_driftBoostStage.Play();
@@ -463,7 +463,7 @@ public class Player_CarController : MonoBehaviour
                 stopwatch_DriftMove = 0;
 
 
-                if (Input.GetAxisRaw("Horizontal") == driftInput && currentSpeed < 10 /*maxSpeed*/)
+                if (Input.GetAxisRaw("Horizontal") == driftInput && currentSpeed < maxSpeed)
                 {
                     currentSpeed += 0.5f;
                 }

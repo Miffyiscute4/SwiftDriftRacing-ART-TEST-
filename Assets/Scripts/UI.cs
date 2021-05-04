@@ -21,10 +21,14 @@ public class UI : MonoBehaviour
     public CarCollision carcol;
 
     public GameObject gainPowerUpParticle;
+
+    Transform transformStore1;
+    Transform transformStore2;
     // Start is called before the first frame update
     void Start()
     {
-        
+        transformStore1 = point[1].transform;
+        transformStore2 = point[0].transform;
     }
 
     // Update is called once per frame
@@ -76,7 +80,25 @@ public class UI : MonoBehaviour
         if (powerUpSlot == 1)
         {
             currentlyDisplayedPowerUp[powerUpSlot].transform.localScale /= 2;
+
+            if (currentlyDisplayedPowerUp[1].transform.position == point[0].transform.position)
+            {
+                currentlyDisplayedPowerUp[1].transform.position = point[0].transform.position;
+            }
         }
+        else if (powerUpSlot == 0)
+        {
+            if (currentlyDisplayedPowerUp[0].transform.position == point[1].transform.position)
+            {
+                currentlyDisplayedPowerUp[0].transform.position = point[1].transform.position;
+            }
+        }
+
+        
+       
+        
+
+
     }
 
     public void DestroyPreviousObject(int powerUpSlot)
@@ -111,6 +133,57 @@ public class UI : MonoBehaviour
             }
         }
         */
+
+        /*
+        if (transformStore1 = point[1].transform)
+        {
+            transformStore1 = point[0].transform;
+            transformStore2 = point[1].transform;
+        }
+        else if (transformStore1 = point[0].transform)
+        {
+            transformStore1 = point[1].transform;
+            transformStore2 = point[0].transform;
+        }
+        
+
+        point[0].transform.position = transformStore2.position;
+        currentlyDisplayedPowerUp[0].transform.position = transformStore2.position;
+
+        point[1].transform.position = transformStore1.position;
+        currentlyDisplayedPowerUp[1].transform.position = transformStore1.position;
+        */
+        if (currentlyDisplayedPowerUp[0] != null)
+        {
+            if (currentlyDisplayedPowerUp[0].transform.position == point[0].transform.position)
+            {
+                currentlyDisplayedPowerUp[0].transform.position = point[1].transform.position;
+                currentlyDisplayedPowerUp[0].transform.localScale /= 2;
+            }
+            else if (currentlyDisplayedPowerUp[0].transform.position == point[1].transform.position)
+            {
+                currentlyDisplayedPowerUp[0].transform.position = point[0].transform.position;
+                currentlyDisplayedPowerUp[0].transform.localScale *= 2;
+            }
+        }
+
+
+        if (currentlyDisplayedPowerUp[1] != null)
+        {
+            if (currentlyDisplayedPowerUp[1].transform.position == point[1].transform.position)
+            {
+
+                currentlyDisplayedPowerUp[1].transform.position = point[0].transform.position;
+                currentlyDisplayedPowerUp[1].transform.localScale *= 2;
+            }
+            else if (currentlyDisplayedPowerUp[1].transform.position == point[0].transform.position)
+            {
+
+                currentlyDisplayedPowerUp[1].transform.position = point[1].transform.position;
+                currentlyDisplayedPowerUp[1].transform.localScale /= 2;
+            }
+        }
+
 
     }
 }
