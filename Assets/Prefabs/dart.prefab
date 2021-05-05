@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7369726767710442653}
   - component: {fileID: -6063956155238895073}
   - component: {fileID: -6581992486016864083}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: dart
   m_TagString: weapon
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7307432884845636206}
   - component: {fileID: 3732692361386451385}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,6 +263,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: powerup_dart
+      objectReference: {fileID: 0}
+    - target: {fileID: 6610232950676704499, guid: 4b10e901ab3da824a83500e970a43d78,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b10e901ab3da824a83500e970a43d78, type: 3}

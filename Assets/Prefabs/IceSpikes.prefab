@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6545250973808232457}
   - component: {fileID: 6545250973808232462}
   - component: {fileID: -2934438108478745346}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: IceSpikes
   m_TagString: weapon
   m_Icon: {fileID: 0}

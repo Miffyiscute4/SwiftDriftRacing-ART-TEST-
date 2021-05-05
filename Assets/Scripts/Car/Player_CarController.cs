@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class Player_CarController : MonoBehaviour
 {
@@ -69,6 +70,9 @@ public class Player_CarController : MonoBehaviour
     [Header("Audio")]
     public AudioSource sound_Accelerate;
     public AudioSource sound_Drift, sound_driftBoostStage, sound_Boost;
+
+    [Header("post processing")]
+    public PostProcessLayer postProcessingLayer1;
 
 
 
@@ -275,7 +279,7 @@ public class Player_CarController : MonoBehaviour
         //Debug.Log("current speed: " + currentSpeed);
 
         //when the key is pressed
-        if (Input.GetKeyDown(KeyCode.Space) && Input.GetAxisRaw("Horizontal") != 0 && currentSpeed > 10 && currentSpeed <= maxSpeed)
+        if (Input.GetKeyDown(KeyCode.Space) && Input.GetAxisRaw("Horizontal") != 0 && currentSpeed > 5 && currentSpeed <= maxSpeed)
         {
 
 
@@ -612,6 +616,8 @@ public class Player_CarController : MonoBehaviour
 
             if (isBoosted)
             {
+                postProcessingLayer1.enabled = true;
+
                 if (driftBoostStage != 0)
                 {
                     boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[(int)driftBoostStage - 1];
@@ -653,6 +659,10 @@ public class Player_CarController : MonoBehaviour
                     
                 }
 
+            }
+            else
+            {
+                postProcessingLayer1.enabled = false;
             }
 
             //force to apply when grounded

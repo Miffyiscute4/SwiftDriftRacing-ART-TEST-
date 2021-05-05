@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7407658931228144334}
   - component: {fileID: 1712449612859846057}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Rocket
   m_TagString: weapon
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4708790692348624457}
   - component: {fileID: 6316577748012264712}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,6 +267,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: powerup_rocket
+      objectReference: {fileID: 0}
+    - target: {fileID: 5901596771018633275, guid: c1bc8aed944226e4aa7bc608ba76020f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1bc8aed944226e4aa7bc608ba76020f, type: 3}

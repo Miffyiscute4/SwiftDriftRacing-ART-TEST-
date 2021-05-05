@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 624434834705375417}
   - component: {fileID: 8790331552920578915}
   - component: {fileID: 4525304986401130528}
-  m_Layer: 0
-  m_Name: drift_sparks2
+  m_Layer: 10
+  m_Name: drift_sparks1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1070595572304958114}
   - component: {fileID: 1070595572304958113}
   - component: {fileID: 1070595572304958112}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Big_Coin
   m_TagString: Coin
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8350816274960585393}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

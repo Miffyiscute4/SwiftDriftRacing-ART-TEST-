@@ -4774,7 +4774,7 @@ GameObject:
   - component: {fileID: 5822211599731045885}
   - component: {fileID: 5822211599731045379}
   - component: {fileID: 5822211599731045378}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: boost1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
