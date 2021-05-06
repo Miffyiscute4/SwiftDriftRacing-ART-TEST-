@@ -21,6 +21,8 @@ public class Bot_CarController: Player_CarController
     [Header("Sensor")]
     public Vector3 frontSensorPos = new Vector3(0, 0.2f, 0.5f);
     public float sensorLength = 5f, frontSideSensorPos, frontSensorAngle = 30;
+    float stopwatch_Distance, stopwatch_TimeBeforeBoost, stopwatch_StopBoost;
+
 
     // Start is called before the first frame update
     void Start()
@@ -40,10 +42,42 @@ public class Bot_CarController: Player_CarController
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(isBoosted);
         if (isGrounded)
         {
             Vertical();
             Turn();
+
+            if (isDrifting)
+            {
+                stopwatch_TimeBeforeBoost += Time.deltaTime;
+
+                if (stopwatch_TimeBeforeBoost >= 3 && !avoiding)
+                {
+                    isBoosted = true;
+                    isDrifting = false;
+                    stopwatch_TimeBeforeBoost = 0;
+                }
+            }
+            else
+            {
+                stopwatch_TimeBeforeBoost = 0;
+            }
+
+            if (isBoosted)
+            {
+                stopwatch_StopBoost += Time.deltaTime;
+
+                if (stopwatch_StopBoost >= 3)
+                {
+                    isBoosted = false;
+
+                    boostParticle.Stop();
+
+                    stopwatch_StopBoost = 0;
+                }
+            }
+
         }
 
         //follows the car at all times
@@ -85,7 +119,7 @@ public class Bot_CarController: Player_CarController
     {
         stopWatch_VerticalBuildUp += Time.deltaTime;
 
-        if (stopWatch_VerticalBuildUp >= verticalDelayTime && currentSpeed < maxSpeed)
+        if (stopWatch_VerticalBuildUp >= verticalDelayTime && currentSpeed < originalMaxSpeed)
         {
             currentSpeed++;
             stopWatch_VerticalBuildUp = 0;
@@ -156,7 +190,7 @@ public class Bot_CarController: Player_CarController
         //sensorStartPos = transform.position;
 
         float avoidMultiplier = 0f;
-        avoiding = false;
+        
 
 
 
@@ -248,24 +282,44 @@ public class Bot_CarController: Player_CarController
         if (hit.collider != null)
         {
             float theDistance = Vector3.Distance(transform.position, hit.collider.gameObject.transform.position);
-            Debug.Log(theDistance);
-            if (theDistance >= 40)
+            //Debug.Log(theDistance);
+            if (theDistance <= 40)
             {
                 isDrifting = true;
+
+                isBoosted = false;
+                boostParticle.Stop();
+
             }
             else
             {
                 isDrifting = false;
             }
+
+            avoiding = true;
+        }
+        else
+        {
+            avoiding = false;
         }
         
 
-        if (avoiding && !aimingForObject)
+        if (avoiding)
         {
             sensorStartPos = transform.position;
             transform.Rotate(transform.rotation.x, avoidMultiplier * (turnStrength / 10), transform.rotation.z);
 
+            stopwatch_Distance += Time.deltaTime;
 
+            if (stopwatch_Distance >= 2.5f && currentSpeed > 3)
+            {
+                currentSpeed--;
+            }
+            
+        }
+        else if (!avoiding)
+        {
+            stopwatch_Distance = 0;
         }
         //Debug.Log(avoiding);
     }

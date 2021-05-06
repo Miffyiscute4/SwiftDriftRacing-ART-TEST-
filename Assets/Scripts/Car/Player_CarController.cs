@@ -11,6 +11,7 @@ public class Player_CarController : MonoBehaviour
     public Rigidbody rb;
     public Transform groundRayPoint;
     public CarCollision carCol;
+    //public GameObject carFrame;
 
     public CinemachineVirtualCamera vc;
 
@@ -22,6 +23,7 @@ public class Player_CarController : MonoBehaviour
     internal float speedInput, driftInput;
     internal float currentSpeed;
     internal bool isDrifting;
+    internal float driftStrength;
 
     //groundcheck
     [Header("Ground Check")]
@@ -282,7 +284,7 @@ public class Player_CarController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && Input.GetAxisRaw("Horizontal") != 0 && currentSpeed > 5 && currentSpeed <= maxSpeed)
         {
 
-
+            driftStrength = 30;
 
 
             driftInput = Input.GetAxisRaw("Horizontal");
@@ -311,7 +313,7 @@ public class Player_CarController : MonoBehaviour
             if (driftBoostStage == 0)
             {
                 driftParticles[0].Play();
-                currentSpeed = 10;
+                //currentSpeed = 10;
                 isDrifting = true;
             }
             
@@ -357,7 +359,7 @@ public class Player_CarController : MonoBehaviour
 
                 //transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, currentSpeed / 3 * driftInput * turnStrength * Time.deltaTime, 0f));
 
-                transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * currentSpeed / 3, 0));
+                transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * driftStrength / 7.5f, 0));
 
                 /*
                 //trails
@@ -467,13 +469,15 @@ public class Player_CarController : MonoBehaviour
                 stopwatch_DriftMove = 0;
 
 
-                if (Input.GetAxisRaw("Horizontal") == driftInput && currentSpeed < maxSpeed)
+                if (Input.GetAxisRaw("Horizontal") == driftInput && driftStrength < 35)
                 {
-                    currentSpeed += 0.5f;
+                    //currentSpeed += 0.5f;
+                    driftStrength += 5;
                 }
-                else if (Input.GetAxisRaw("Horizontal") == -driftInput && currentSpeed > 10)
+                else if (Input.GetAxisRaw("Horizontal") == -driftInput && driftStrength > 20)
                 {
-                    currentSpeed -= 0.5f;
+                    //currentSpeed -= 0.5f;
+                    driftStrength -= 5;
                 }
             }
             
@@ -662,7 +666,11 @@ public class Player_CarController : MonoBehaviour
             }
             else
             {
-                postProcessingLayer1.enabled = false;
+                if (!carCol.isBot)
+                {
+                    postProcessingLayer1.enabled = false;
+                }
+                
             }
 
             //force to apply when grounded
