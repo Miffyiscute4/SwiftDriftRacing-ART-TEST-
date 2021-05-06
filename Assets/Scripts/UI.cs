@@ -24,6 +24,9 @@ public class UI : MonoBehaviour
 
     Transform transformStore1;
     Transform transformStore2;
+
+    public RawImage UI_CurrentlyEquipped, UI_Circle1, UI_Circle2;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -183,6 +186,17 @@ public class UI : MonoBehaviour
                 currentlyDisplayedPowerUp[1].transform.localScale /= 2;
             }
         }
+
+        /*if (UI_CurrentlyEquipped.transform.position == UI_Circle1.transform.position)
+        {
+            UI_CurrentlyEquipped.transform.position = UI_Circle2.transform.position;
+            UI_CurrentlyEquipped.transform.localScale = new Vector3(1.8f, 1.8f, 1.8f);
+        }
+        else if (UI_CurrentlyEquipped.transform.position == UI_Circle2.transform.position)
+        {
+            UI_CurrentlyEquipped.transform.position = UI_Circle1.transform.position;
+            UI_CurrentlyEquipped.transform.localScale = new Vector3(3,3,3);
+        }*/
 
 
     }

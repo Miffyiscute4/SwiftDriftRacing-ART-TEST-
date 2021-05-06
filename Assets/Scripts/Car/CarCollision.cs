@@ -264,7 +264,7 @@ public class CarCollision : MonoBehaviour
 
         if (other.gameObject.tag == "CheckPoint")
         {
-            if (other.gameObject.transform == allCheckPoints[1])
+            if (other.gameObject.transform == allCheckPoints[1] && other.gameObject.transform == allCheckPoints[lastCheckPointNumber])
             {
                 Debug.Log("start");
 
@@ -321,6 +321,7 @@ public class CarCollision : MonoBehaviour
                 transform.rotation = lastCheckPoint.rotation;
 
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
+
             }
 
 
