@@ -27,6 +27,9 @@ public class UI : MonoBehaviour
 
     public RawImage UI_CurrentlyEquipped, UI_Circle1, UI_Circle2;
 
+    public Text coinText;
+    public CarCollision colPlayer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +43,8 @@ public class UI : MonoBehaviour
         //speedText.text = "Speed: " + Mathf.Abs(car.currentSpeed);
 
         lapText.text = "Lap " + carcol.lapCount;
+
+        coinText.text = "Coins: " + colPlayer.coinCount;
     }
 
     public void DisplayPowerUp(string powerUpType, int powerUpSlot)
