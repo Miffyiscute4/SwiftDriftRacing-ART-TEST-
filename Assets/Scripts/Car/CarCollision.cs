@@ -37,6 +37,8 @@ public class CarCollision : MonoBehaviour
     internal float powerUpBoxDelay, coinTimer;
     internal float lavaTimer = 0, PowerUpRegenTimer = 0, invincibleTimer = 0;
 
+    float stopwatch_Random, randomDelayTime;
+
     [Header("Collider")]
     public SphereCollider sc;
     public float originalTriggerRadius = 0.5f;
@@ -76,7 +78,7 @@ public class CarCollision : MonoBehaviour
 
     [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic; public bool isShootingRocket; public bool isShootingIceSpikes;
 
-
+    
 
 
 
@@ -99,6 +101,9 @@ public class CarCollision : MonoBehaviour
 
         powerUpSlot[0] = null;
         powerUpSlot[1] = null;
+
+
+        randomDelayTime = Random.Range(1, 5);
     }
 
     void Update()
@@ -113,7 +118,7 @@ public class CarCollision : MonoBehaviour
 
         BoolActions();
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) || isBot)
         {
             UsePowerUp();
         }
@@ -243,11 +248,28 @@ public class CarCollision : MonoBehaviour
                 switch (other.gameObject.name)
                 {
                     case "Dart(Clone)":
-                        carPlayer.currentSpeed = carPlayer.currentSpeed / 2;
+
+                        if (isBot)
+                        {
+                            carBot.currentSpeed /= 2;
+                        }
+                        else
+                        {
+                            carPlayer.currentSpeed /= 2;
+                        }
+
                         break;
 
                     case "Explosion(Clone)":
-                        carPlayer.currentSpeed = 0;
+                        if (isBot)
+                        {
+                            carBot.currentSpeed = 0;
+                        }   
+                        else
+                        {
+                            carPlayer.currentSpeed = 0;
+                        }    
+                        
                         break;
 
                     case "IceSpikes(Clone)":
@@ -453,12 +475,21 @@ public class CarCollision : MonoBehaviour
             if (powerUpSlot[0] == null)
             {
                 powerUpSlot[0] = powerUp; //Debug.Log("1");
-                ui.DisplayPowerUp(powerUpSlot[0], 0);
+                
+                if (!isBot)
+                {
+                    ui.DisplayPowerUp(powerUpSlot[0], 0);
+                }
+                
             }
             else if (powerUpSlot[0] != null && powerUpSlot[1] == null)
             {
                 powerUpSlot[1] = powerUp; //Debug.Log("2");
-                ui.DisplayPowerUp(powerUpSlot[1], 1);
+                
+                if (!isBot)
+                {
+                    ui.DisplayPowerUp(powerUpSlot[1], 1);
+                }
             }
 
             if (!isBot)
@@ -471,8 +502,63 @@ public class CarCollision : MonoBehaviour
 
     public void UsePowerUp()
     {
+        Debug.Log(stopwatch_Random);
+        if (isBot)
+        {
+            //int randomDelayTime = Random.Range(1, 5);
+
+            /*stopwatch_Random += Time.deltaTime;
+
+            if (stopwatch_Random >= randomDelayTime)
+            {*/
+                switch (powerUpSlot[currentPowerUpSlot])
+                {
+                    case "Boost":
+                        isBoosted = true;
+                        break;
+
+                    case "Dart":
+                        isShootingDart = true;
+                        break;
+
+                    case "InvincibilityOrb":
+
+                        isInvincible = true;
+                        break;
+
+                    case "Bomb":
+
+                        isShootingBomb = true;
+                        break;
+
+                    case "Magnet":
+
+                        isMagnetic = true;
+                        break;
+
+                    case "Rocket":
+
+                        isShootingRocket = true;
+                        break;
+
+                    case "IceSpikes":
+
+                        isShootingIceSpikes = true;
+                        break;
 
 
+
+               // }
+
+                /*
+                stopwatch_Random = 0;
+
+                randomDelayTime = Random.Range(1, 5);
+                */
+            }
+        }
+        if (!isBot)
+        {
             switch (powerUpSlot[currentPowerUpSlot])
             {
                 case "Boost":
@@ -511,8 +597,14 @@ public class CarCollision : MonoBehaviour
 
 
             }
+        }
 
-             ui.DestroyPreviousObject(currentPowerUpSlot);
+            
+        if (!isBot)
+        {
+            ui.DestroyPreviousObject(currentPowerUpSlot);
+        }
+             
 
             powerUpSlot[currentPowerUpSlot] = null;
     }

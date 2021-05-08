@@ -35,7 +35,7 @@ public class Player_CarController : MonoBehaviour
     internal bool isGrounded; 
 
     //counters
-    internal float stopWatch_VerticalBuildUp; internal float stopWatch_Boost; internal float stopWatch_Drift; internal float stopwatch_trails; internal float stopwatch_DriftMove; internal float stopwatch_StopDrift;
+    internal float stopWatch_VerticalBuildUp; internal float stopWatch_Boost; internal float stopWatch_Drift; internal float stopwatch_trails; internal float stopwatch_DriftMove; internal float stopwatch_StopDrift; internal float stopwatch_CancelBoost;
 
     internal bool isBoosted;
     internal bool isOffTrack;
@@ -377,7 +377,7 @@ public class Player_CarController : MonoBehaviour
 
                     //carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.rotation, Quaternion.Euler(0, 45, 0), Time.deltaTime * 3);
 
-                    carModel.transform.localRotation = Quaternion.Euler(0, driftInput * (driftStrength * 1.25f), 0);
+                    carModel.transform.localRotation = Quaternion.Euler(0, driftInput * (driftStrength * 1.25f), Time.deltaTime);
 
                     //Quaternion q = Quaternion.Euler(0,  driftInput * (driftStrength * 1.25f), 0);
                     //carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.rotation, q, Time.deltaTime);
@@ -435,7 +435,7 @@ public class Player_CarController : MonoBehaviour
                     driftBoostStage = 1;
 
                 }
-                else if (stopWatch_Drift >= 25 / currentSpeed && driftBoostStage == 1)
+                else if (stopWatch_Drift >= 35 / currentSpeed && driftBoostStage == 1)
                 {
 
                     sound_driftBoostStage.Play();
@@ -457,7 +457,7 @@ public class Player_CarController : MonoBehaviour
 
 
                 }
-                else if (stopWatch_Drift >= 25 / currentSpeed && driftBoostStage == 2)
+                else if (stopWatch_Drift >= 50 / currentSpeed && driftBoostStage == 2)
                 {
 
                     sound_driftBoostStage.Play();
@@ -526,7 +526,16 @@ public class Player_CarController : MonoBehaviour
             //transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, Input.GetAxis("Horizontal") * turnStrength * Time.deltaTime * Input.GetAxis("Vertical") * 2.5f, 0f));
             if (Input.GetAxisRaw("Vertical") != 0)
             {
-                transform.Rotate(new Vector3(0, Input.GetAxisRaw("Horizontal") * Time.deltaTime * turnStrength * 2.5f, 0));
+
+                if (currentSpeed > 0)
+                {
+                    transform.Rotate(new Vector3(0, Input.GetAxisRaw("Horizontal") * Time.deltaTime * turnStrength * 2.5f, 0));
+                }
+                else if (currentSpeed < 0)
+                {
+                    transform.Rotate(new Vector3(0, -Input.GetAxisRaw("Horizontal") * Time.deltaTime * turnStrength * 2.5f, 0));
+                }
+                
             }    
             
             

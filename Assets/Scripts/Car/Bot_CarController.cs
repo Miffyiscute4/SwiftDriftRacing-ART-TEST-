@@ -78,6 +78,18 @@ public class Bot_CarController: Player_CarController
                 }
             }
 
+            if (Vector3.Distance(transform.position, currentNodePosition) < 60 && currentSpeed > 5)
+            {
+                stopwatch_Distance += Time.deltaTime;
+
+                if (stopwatch_Distance > 1)
+                {
+                    stopwatch_Distance = 0;
+                    currentSpeed--;
+                }    
+
+            }    
+
         }
 
         //follows the car at all times
@@ -285,7 +297,9 @@ public class Bot_CarController: Player_CarController
             //Debug.Log(theDistance);
             if (theDistance <= 40)
             {
-                isDrifting = true;
+                //isDrifting = true;
+
+                //currentSpeed--;
 
                 isBoosted = false;
                 boostParticle.Stop();
@@ -307,14 +321,14 @@ public class Bot_CarController: Player_CarController
         if (avoiding)
         {
             sensorStartPos = transform.position;
-            transform.Rotate(transform.rotation.x, avoidMultiplier * (turnStrength / 10), transform.rotation.z);
+            transform.Rotate(transform.rotation.x, avoidMultiplier * (turnStrength / 2), transform.rotation.z);
 
             stopwatch_Distance += Time.deltaTime;
 
-            if (stopwatch_Distance >= 2.5f && currentSpeed > 3)
+            /*if (stopwatch_Distance >= 2.5f && currentSpeed > 3)
             {
                 currentSpeed--;
-            }
+            }*/
             
         }
         else if (!avoiding)
