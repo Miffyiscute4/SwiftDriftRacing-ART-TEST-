@@ -2903,6 +2903,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1343764702}
   m_CullTransparentMesh: 0
+--- !u!1 &1346044044 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4672596587145258051, guid: d5112eeddb54a6b4da9e6dde3e7e6478,
+    type: 3}
+  m_PrefabInstance: {fileID: 4674353287970159379}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1353428134
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15260,6 +15266,7 @@ MonoBehaviour:
   rb: {fileID: 1165077437335330533}
   groundRayPoint: {fileID: 1165077438707770949}
   carCol: {fileID: 1165077437335330531}
+  carModel: {fileID: 0}
   vc: {fileID: 1020550304}
   speedMultiplier: 8
   originalMaxSpeed: 20
@@ -15397,6 +15404,7 @@ MonoBehaviour:
   rb: {fileID: 1165077437335330533}
   groundRayPoint: {fileID: 1165077438707770949}
   carCol: {fileID: 1165077437335330531}
+  carModel: {fileID: 0}
   vc: {fileID: 0}
   speedMultiplier: 8
   originalMaxSpeed: 20
@@ -16250,7 +16258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!33 &1173591991369717495
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -17109,6 +17117,11 @@ PrefabInstance:
       propertyPath: postProcessingLayer1
       value: 
       objectReference: {fileID: 963194230}
+    - target: {fileID: 4674353287650550438, guid: d5112eeddb54a6b4da9e6dde3e7e6478,
+        type: 3}
+      propertyPath: carModel
+      value: 
+      objectReference: {fileID: 1346044044}
     - target: {fileID: 4674353287650550443, guid: d5112eeddb54a6b4da9e6dde3e7e6478,
         type: 3}
       propertyPath: pathToFollow

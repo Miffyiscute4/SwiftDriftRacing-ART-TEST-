@@ -12,6 +12,7 @@ public class Player_CarController : MonoBehaviour
     public Transform groundRayPoint;
     public CarCollision carCol;
     //public GameObject carFrame;
+    public GameObject carModel;
 
     public CinemachineVirtualCamera vc;
 
@@ -328,6 +329,13 @@ public class Player_CarController : MonoBehaviour
             
         }
         
+        if (!Input.GetKey(KeyCode.Space))
+        {
+            //smoothly returns back to original rotation once the space key is no longer pressed
+            carModel.transform.rotation = Quaternion.Lerp(carModel.transform.rotation, transform.rotation, Time.deltaTime * 3);
+        }
+
+
         if (isDrifting)
         {
             
@@ -360,6 +368,36 @@ public class Player_CarController : MonoBehaviour
                 //transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, currentSpeed / 3 * driftInput * turnStrength * Time.deltaTime, 0f));
 
                 transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * driftStrength / 7.5f, 0));
+
+
+                //rotate the car model to exadurate rotation
+                if (carModel.transform.localRotation.eulerAngles.y < 45 || carModel.transform.localRotation.eulerAngles.y > 315)
+                {
+                    //carModel.transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * driftStrength / 7.5f, 0));
+
+                    //carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.rotation, Quaternion.Euler(0, 45, 0), Time.deltaTime * 3);
+
+                    carModel.transform.localRotation = Quaternion.Euler(0, driftInput * (driftStrength * 1.25f), 0);
+
+                    //Quaternion q = Quaternion.Euler(0,  driftInput * (driftStrength * 1.25f), 0);
+                    //carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.rotation, q, Time.deltaTime);
+                }
+
+
+
+                
+
+
+                /*else if (carModel.transform.localRotation.eulerAngles.y > 45)
+                {
+                    carModel.transform.rotation = Quaternion.Euler(carModel.transform.rotation.eulerAngles.x, 45, carModel.transform.rotation.eulerAngles.z);
+                }
+                else if (carModel.transform.localRotation.eulerAngles.y < 315)
+                {
+                    carModel.transform.rotation = Quaternion.Euler(carModel.transform.rotation.eulerAngles.x, 315, carModel.transform.rotation.eulerAngles.z);
+                }*/
+
+                Debug.Log(carModel.transform.localRotation.eulerAngles.y);
 
                 /*
                 //trails

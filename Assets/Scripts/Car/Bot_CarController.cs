@@ -42,7 +42,7 @@ public class Bot_CarController: Player_CarController
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(isBoosted);
+        //Debug.Log(isBoosted);
         if (isGrounded)
         {
             Vertical();
