@@ -118,7 +118,7 @@ public class CarCollision : MonoBehaviour
 
         BoolActions();
 
-        if (Input.GetKeyDown(KeyCode.E) || isBot)
+        if (Input.GetKeyDown(KeyCode.E) && !isBot || isBot && powerUpSlot[currentPowerUpSlot] != null)
         {
             UsePowerUp();
         }
@@ -507,10 +507,10 @@ public class CarCollision : MonoBehaviour
         {
             //int randomDelayTime = Random.Range(1, 5);
 
-            /*stopwatch_Random += Time.deltaTime;
+            stopwatch_Random += Time.deltaTime;
 
             if (stopwatch_Random >= randomDelayTime)
-            {*/
+            {
                 switch (powerUpSlot[currentPowerUpSlot])
                 {
                     case "Boost":
@@ -548,13 +548,15 @@ public class CarCollision : MonoBehaviour
 
 
 
-               // }
+                }
 
-                /*
+                
                 stopwatch_Random = 0;
 
                 randomDelayTime = Random.Range(1, 5);
-                */
+                
+
+                powerUpSlot[currentPowerUpSlot] = null;
             }
         }
         if (!isBot)
@@ -597,6 +599,8 @@ public class CarCollision : MonoBehaviour
 
 
             }
+
+            powerUpSlot[currentPowerUpSlot] = null;
         }
 
             
@@ -606,7 +610,7 @@ public class CarCollision : MonoBehaviour
         }
              
 
-            powerUpSlot[currentPowerUpSlot] = null;
+            
     }
 
     public void SwapPowerUp()
