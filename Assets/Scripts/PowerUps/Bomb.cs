@@ -26,12 +26,12 @@ public class Bomb : MonoBehaviour
 
         if (stopwatch_direction <= 0.3f)
         {
-            rb.AddForce(transform.forward * 1000);
+            rb.AddForce(-transform.forward * 1250);
             rb.AddForce(transform.up * 1000);
         }
         else
         {
-            rb.AddForce(transform.forward * 1000);
+            rb.AddForce(-transform.forward * 1250);
             rb.AddForce(-transform.up * 1000);
         }
 

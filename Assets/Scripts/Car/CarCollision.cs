@@ -93,7 +93,7 @@ public class CarCollision : MonoBehaviour
         allCheckPoints = allCheckPointsObject.GetComponentsInChildren<Transform>();
 
         //last checkpoint = first checkpoint
-        lastCheckPointNumber = 1;
+        lastCheckPointNumber = 0;
 
         lastCheckPoint = allCheckPoints[lastCheckPointNumber];
 
@@ -291,19 +291,22 @@ public class CarCollision : MonoBehaviour
                 Debug.Log("start");
 
                 //checkPointText.Play("CheckPoint_UI");
-
-                sound_CheckPoint.Play();
-
-                checkPointText.SetBool("isTouchingInitialCheckPoint", true);
-
-                /*if(checkPointText.GetCurrentAnimatorStateInfo(0).IsName("CheckPoint_UI_Idle"))
+                if (!isBot)
                 {
+                    sound_CheckPoint.Play();
 
-                }*/
+                    checkPointText.SetBool("isTouchingInitialCheckPoint", true);
 
-                lapCount++;
+                    /*if(checkPointText.GetCurrentAnimatorStateInfo(0).IsName("CheckPoint_UI_Idle"))
+                    {
 
-                StartCoroutine("StopAnimation");
+                    }*/
+
+                    lapCount++;
+
+                    StartCoroutine("StopAnimation");
+                }
+                
 
                 
                 
@@ -311,13 +314,13 @@ public class CarCollision : MonoBehaviour
 
             if (lastCheckPointNumber + 1 > allCheckPoints.Length)
             {
-                lastCheckPointNumber = 1;
+                lastCheckPointNumber = 0;
                 lastCheckPoint = allCheckPoints[lastCheckPointNumber];
                 Debug.Log("checkpoint number reset");
             }
 
             //if the collider is with the correct game object
-            if (other.gameObject.transform == allCheckPoints[lastCheckPointNumber ])
+            if (other.gameObject.transform == allCheckPoints[lastCheckPointNumber])
             {
                 //LastCheckPoint.position = other.gameObject.transform.position;
                 //LastCheckPoint.rotation = other.gameObject.transform.rotation;
@@ -337,8 +340,15 @@ public class CarCollision : MonoBehaviour
                 Debug.Log("not touching correct checkpoint");
 
                 transform.position = lastCheckPoint.position;
-
-                carPlayer.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
+                if (isBot)
+                {
+                    carBot.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
+                }
+                else
+                {
+                    carPlayer.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
+                }
+                
 
                 transform.rotation = lastCheckPoint.rotation;
 
@@ -353,7 +363,15 @@ public class CarCollision : MonoBehaviour
         {
             transform.position = lastCheckPoint.position;
 
-            carPlayer.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
+            if (isBot)
+            {
+                carBot.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
+            }
+            else
+            {
+                carPlayer.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
+            }
+            
 
             transform.rotation = lastCheckPoint.rotation;
 
