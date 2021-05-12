@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Free_Car_Texture_Atlas
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 128c5f1edaefa4c4fb3f9f7a4615edb2, type: 3}
   m_ShaderKeywords: _EMISSION _SEGMENTED_ON _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
@@ -124,7 +124,7 @@ Material:
     - _Glossiness: 0.3
     - _GlossyReflections: 1
     - _LightingEnabled: 0
-    - _Lumin: 0.75
+    - _Lumin: 1
     - _MaxLight: 1
     - _Metallic: 0.075
     - _MinLight: 1
@@ -132,6 +132,7 @@ Material:
     - _Occlusion: 7.5
     - _OcclusionStrength: 1
     - _Offset: 0
+    - _OtlWidth: 5
     - _Parallax: 0.02
     - _Segmented: 1
     - _Shininess: 0.078125
@@ -146,7 +147,7 @@ Material:
     - _SpecularHighlights: 1
     - _SquashAmount: 1
     - _SrcBlend: 1
-    - _Steps: 2
+    - _Steps: 15
     - _StpSmooth: 0
     - _UVSec: 0
     - _ZWrite: 1
@@ -157,6 +158,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _OtlColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShnColor: {r: 1, g: 1, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}

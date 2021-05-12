@@ -366,8 +366,15 @@ public class Player_CarController : MonoBehaviour
 
 
                 //transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, currentSpeed / 3 * driftInput * turnStrength * Time.deltaTime, 0f));
+                if (carCol.coinCount != 0)
+                {
+                    transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * driftStrength / 7.5f * carCol.coinCount / 7.5f, 0));
+                }   
+                else
+                {
+                    transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * driftStrength / 7.5f, 0));
+                }
 
-                transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * driftStrength / 7.5f, 0));
 
 
                 //rotate the car model to exadurate rotation
@@ -435,7 +442,7 @@ public class Player_CarController : MonoBehaviour
                     driftBoostStage = 1;
 
                 }
-                else if (stopWatch_Drift >= 35 / currentSpeed && driftBoostStage == 1)
+                else if (stopWatch_Drift >= 40 / currentSpeed && driftBoostStage == 1)
                 {
 
                     sound_driftBoostStage.Play();
@@ -457,7 +464,7 @@ public class Player_CarController : MonoBehaviour
 
 
                 }
-                else if (stopWatch_Drift >= 50 / currentSpeed && driftBoostStage == 2)
+                else if (stopWatch_Drift >= 65 / currentSpeed && driftBoostStage == 2)
                 {
 
                     sound_driftBoostStage.Play();
