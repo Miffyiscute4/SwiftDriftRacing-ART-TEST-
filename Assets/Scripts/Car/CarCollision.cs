@@ -219,7 +219,12 @@ public class CarCollision : MonoBehaviour
 
         if (other.gameObject.tag == "BoostPad")
         {
-            isBoosted = true;
+            if (!carPlayer.isBoosted || carPlayer.driftBoostStage < 2)
+            {
+                isBoosted = true;
+                carPlayer.driftBoostStage = 2;
+            }
+            
         }
 
         if (other.gameObject.tag == "PowerUpBox" && (powerUpSlot[0] == null || powerUpSlot[1] == null))
@@ -340,17 +345,17 @@ public class CarCollision : MonoBehaviour
                 Debug.Log("not touching correct checkpoint");
 
                 transform.position = lastCheckPoint.position;
-                if (isBot)
+                /*if (isBot)
                 {
                     carBot.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
                 }
                 else
                 {
                     carPlayer.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
-                }
+                }*/
                 
 
-                transform.rotation = lastCheckPoint.rotation;
+                //transform.rotation = lastCheckPoint.rotation;
 
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
 
@@ -371,9 +376,19 @@ public class CarCollision : MonoBehaviour
             {
                 carPlayer.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
             }
-            
 
-            transform.rotation = lastCheckPoint.rotation;
+            if (isBot)
+            {
+                carBot.transform.rotation = lastCheckPoint.rotation;
+            }
+            else
+            {
+                //carPlayer.gameObject.transform.rotation = lastCheckPoint.rotation;
+
+                carPlayer.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x -270, lastCheckPoint.rotation.eulerAngles.y, lastCheckPoint.rotation.eulerAngles.z);
+
+            }
+
 
             GetComponent<Rigidbody>().velocity = Vector3.zero;
 
