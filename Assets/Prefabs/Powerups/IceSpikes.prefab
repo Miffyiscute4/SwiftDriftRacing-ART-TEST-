@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 6545250973808232461}
   - component: {fileID: -5253846674157493312}
   - component: {fileID: 6545250973808232457}
-  - component: {fileID: 6545250973808232462}
+  - component: {fileID: 557654661890775639}
   - component: {fileID: -2934438108478745346}
+  - component: {fileID: 5327754129245727982}
   m_Layer: 10
   m_Name: IceSpikes
   m_TagString: weapon
@@ -109,7 +110,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5, y: 1.5, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &6545250973808232462
+--- !u!54 &557654661890775639
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,14 +118,14 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6545250973808232467}
   serializedVersion: 2
-  m_Mass: 999
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!114 &-2934438108478745346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,3 +139,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxScale: 5
+--- !u!114 &5327754129245727982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545250973808232467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4343659167e3f94fb2a782771bc26a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 557654661890775639}
+  speed: 25

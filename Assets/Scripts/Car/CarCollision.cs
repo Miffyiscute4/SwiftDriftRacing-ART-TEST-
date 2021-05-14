@@ -291,7 +291,7 @@ public class CarCollision : MonoBehaviour
 
         if (other.gameObject.tag == "CheckPoint")
         {
-            if (other.gameObject.transform == allCheckPoints[1] && other.gameObject.transform == allCheckPoints[lastCheckPointNumber])
+            /*if (other.gameObject.transform == allCheckPoints[0] && other.gameObject.transform == allCheckPoints[lastCheckPointNumber])
             {
                 Debug.Log("start");
 
@@ -302,10 +302,10 @@ public class CarCollision : MonoBehaviour
 
                     checkPointText.SetBool("isTouchingInitialCheckPoint", true);
 
-                    /*if(checkPointText.GetCurrentAnimatorStateInfo(0).IsName("CheckPoint_UI_Idle"))
+                    if(checkPointText.GetCurrentAnimatorStateInfo(0).IsName("CheckPoint_UI_Idle"))
                     {
 
-                    }*/
+                    }
 
                     lapCount++;
 
@@ -313,11 +313,11 @@ public class CarCollision : MonoBehaviour
                 }
                 
 
-                
+                 
                 
             }
 
-            if (lastCheckPointNumber + 1 > allCheckPoints.Length)
+            if (lastCheckPointNumber == allCheckPoints.Length + 1)
             {
                 lastCheckPointNumber = 0;
                 lastCheckPoint = allCheckPoints[lastCheckPointNumber];
@@ -352,12 +352,12 @@ public class CarCollision : MonoBehaviour
                 else
                 {
                     carPlayer.gameObject.transform.rotation = Quaternion.Euler(lastCheckPoint.rotation.eulerAngles.x, lastCheckPoint.rotation.eulerAngles.y + 270, lastCheckPoint.rotation.eulerAngles.z);
-                }*/
+                }
                 
 
-                //transform.rotation = lastCheckPoint.rotation;
+                //carPlayer.transform.rotation = lastCheckPoint.rotation;
 
-                GetComponent<Rigidbody>().velocity = Vector3.zero;
+                ///GetComponent<Rigidbody>().velocity = Vector3.zero;
 
             }
 
@@ -398,9 +398,40 @@ public class CarCollision : MonoBehaviour
             //isBoosted = false;
             
             Debug.Log("DestroyZone");
+         */
+
+
+
+            if (allCheckPoints[0] == lastCheckPoint && other.gameObject.transform == allCheckPoints[0])
+            {
+                //play animation
+            }
+
+            lastCheckPoint = other.gameObject.transform;
+
+            /*if (other.gameObject.transform == allCheckPoints[lastCheckPointNumber + 1] && other.gameObject.transform != allCheckPoints[allCheckPoints.Length])
+            {
+                lastCheckPoint = other.gameObject.transform;
+
+            }
+            else if (other.gameObject.transform != allCheckPoints[lastCheckPointNumber + 1] && other.gameObject.transform != allCheckPoints[lastCheckPointNumber])
+            {
+                transform.position = allCheckPoints[lastCheckPointNumber].position;
+                carPlayer.transform.rotation = allCheckPoints[lastCheckPointNumber].rotation;
+            }
+            else if (other.gameObject.transform == allCheckPoints[allCheckPoints.Length])
+            {
+                lastCheckPointNumber = 0;
+            }*/
+
+            Debug.Log(lastCheckPointNumber);
         }
 
-        Debug.Log("checkpoint reached");
+        if (other.gameObject.tag == "DestroyZone")
+        {
+            transform.position = lastCheckPoint.position;
+            carPlayer.transform.rotation = lastCheckPoint.rotation;
+        }
 
     }
 
