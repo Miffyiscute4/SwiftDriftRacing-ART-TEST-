@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 69439215588789556}
   m_Layer: 8
   m_Name: Track_Ramp_Up_Long
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,6 +62,7 @@ MeshRenderer:
   - {fileID: 2100000, guid: 555b2dfbbaf440a4e9b252f68835c425, type: 2}
   - {fileID: 2100000, guid: 0a069d340fbee4f90a1d3175ad5988b1, type: 2}
   - {fileID: 2100000, guid: 9da9091761e9f064fbfcbc55b99cda5e, type: 2}
+  - {fileID: 2100000, guid: 29c017e8f81d85d4fb5abc97ca41c626, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

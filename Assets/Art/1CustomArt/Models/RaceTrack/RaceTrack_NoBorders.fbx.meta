@@ -1,30 +1,9 @@
 fileFormatVersion: 2
-guid: c3128f46914fef143a9a830c95132804
+guid: 95b58810f385d0c48b6d2f529c778d91
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: back
-    second: {fileID: 2100000, guid: 555b2dfbbaf440a4e9b252f68835c425, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: curb
-    second: {fileID: 2100000, guid: 0a069d340fbee4f90a1d3175ad5988b1, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: road
-    second: {fileID: 2100000, guid: 9da9091761e9f064fbfcbc55b99cda5e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: wall
-    second: {fileID: -3784215875166173206, guid: df6431d37ff6e2346b7da17e224741c5,
-      type: 3}
+  externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0

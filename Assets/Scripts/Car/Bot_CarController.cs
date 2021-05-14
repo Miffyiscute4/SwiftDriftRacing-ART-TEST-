@@ -21,7 +21,10 @@ public class Bot_CarController: Player_CarController
     [Header("Sensor")]
     public Vector3 frontSensorPos = new Vector3(0, 0.2f, 0.5f);
     public float sensorLength = 5f, frontSideSensorPos, frontSensorAngle = 30;
-    float stopwatch_Distance, stopwatch_TimeBeforeBoost, stopwatch_StopBoost;
+    float stopwatch_Distance, stopwatch_TimeBeforeBoost, stopwatch_StopBoost, stopwatch_raycastCount;
+
+    float avoidMultiplier;
+    int raycastCount;
 
 
     // Start is called before the first frame update
@@ -139,7 +142,7 @@ public class Bot_CarController: Player_CarController
 
         if (!isDrifting)
         {
-            turnStrength = currentSpeed / 2;
+            turnStrength = currentSpeed / 4;
         }
         else
         {
@@ -201,8 +204,8 @@ public class Bot_CarController: Player_CarController
 
         //sensorStartPos = transform.position;
 
-        float avoidMultiplier = 0f;
-        
+
+        avoidMultiplier = 0;
 
 
 
@@ -273,14 +276,28 @@ public class Bot_CarController: Player_CarController
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
 
-            if (hit.normal.x > 0)
+            //if (raycastCount < 1)
+            //{
+                if (hit.normal.x > 0)
+                {
+                    avoidMultiplier = -1;
+                  //   raycastCount++;
+                }
+                else
+                {
+                    avoidMultiplier = 1;
+                 //   raycastCount++;
+                }
+            //}
+
+            /*if (currentSpeed > 1)
             {
-                avoidMultiplier = -1;
-            }
-            else
-            {
-                avoidMultiplier = 1;
-            }
+                currentSpeed--;
+            }*/
+
+            currentSpeed--;
+            
+            
 
             if (hit.collider.CompareTag("Collectable"))
             {
@@ -290,9 +307,29 @@ public class Bot_CarController: Player_CarController
        
 
         }
+        else if (currentSpeed < 1)
+        {
+            currentSpeed = 1;
+        }
 
         if (hit.collider != null)
         {
+            
+
+            /*stopwatch_raycastCount += Time.deltaTime;
+
+            if (raycastCount != 0 && stopwatch_raycastCount < 2)
+            {
+                raycastCount = 0;
+
+                avoidMultiplier = 0;
+            }
+            else if (raycastCount == 0)
+            {
+                avoidMultiplier = 0;
+            }*/
+            
+
             float theDistance = Vector3.Distance(transform.position, hit.collider.gameObject.transform.position);
             //Debug.Log(theDistance);
             if (theDistance <= 40)
@@ -321,7 +358,7 @@ public class Bot_CarController: Player_CarController
         if (avoiding)
         {
             sensorStartPos = transform.position;
-            transform.Rotate(transform.rotation.x, avoidMultiplier * (turnStrength / 2), transform.rotation.z);
+            transform.Rotate(transform.rotation.x, (avoidMultiplier * 2) * (turnStrength/* /2 */), transform.rotation.z);
 
             stopwatch_Distance += Time.deltaTime;
 
@@ -334,6 +371,8 @@ public class Bot_CarController: Player_CarController
         else if (!avoiding)
         {
             stopwatch_Distance = 0;
+
+            //stopwatch_raycastCount = 0;
         }
         //Debug.Log(avoiding);
     }
