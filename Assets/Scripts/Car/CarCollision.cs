@@ -402,9 +402,20 @@ public class CarCollision : MonoBehaviour
 
 
 
-            if (allCheckPoints[0] == lastCheckPoint && other.gameObject.transform == allCheckPoints[0])
+            if (other.gameObject.transform == allCheckPoints[1] && !isBot)
             {
-                //play animation
+                sound_CheckPoint.Play();
+
+                checkPointText.SetBool("isTouchingInitialCheckPoint", true);
+
+                if (checkPointText.GetCurrentAnimatorStateInfo(0).IsName("CheckPoint_UI_Idle"))
+                {
+
+                }
+
+                lapCount++;
+
+                StartCoroutine("StopAnimation");
             }
 
             lastCheckPoint = other.gameObject.transform;
