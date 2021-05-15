@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3282786661025340516}
   - component: {fileID: 3992620879678078239}
   - component: {fileID: 1421245605571007542}
-  m_Layer: 10
+  m_Layer: 2
   m_Name: PowerUpBox
   m_TagString: PowerUpBox
   m_Icon: {fileID: 0}
@@ -219,7 +219,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7777176849354383463}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PowerUpBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}

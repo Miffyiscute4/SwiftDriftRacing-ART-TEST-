@@ -105,7 +105,7 @@ public class Bot_CarController: Player_CarController
         GroundCheck();
         ApplyForce();
         CheckWayPoint();
-        Sensors();
+        //Sensors();
     }
 
     void OnDrawGizmos()
@@ -142,11 +142,11 @@ public class Bot_CarController: Player_CarController
 
         if (!isDrifting)
         {
-            turnStrength = currentSpeed / 4;
+            //turnStrength = currentSpeed / 4;
         }
         else
         {
-            turnStrength = currentSpeed;
+            //turnStrength = currentSpeed;
         }
 
         
@@ -167,11 +167,24 @@ public class Bot_CarController: Player_CarController
     {
         if (!avoiding)
         {
+            //makes the car turn to the target node
             Vector3 difference = new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z) - transform.position;
 
             Quaternion lookRotation = Quaternion.LookRotation(difference);
 
-            transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * turnStrength);
+
+            
+
+            /*
+            Vector3 difference = new Vector3(nodes[currentNode].position.x, transform.position.y, nodes[currentNode].position.z) - transform.position;
+
+            Quaternion lookRotation = Quaternion.LookRotation(difference);
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(lookRotation.x, 0f, lookRotation.z), Time.deltaTime);
+            */
+            
+
         }
 
         else if (!avoiding && aimingForObject && objectToAimFor != null)
@@ -204,6 +217,7 @@ public class Bot_CarController: Player_CarController
 
         //sensorStartPos = transform.position;
 
+        int rayCount = 0;
 
         avoidMultiplier = 0;
 
@@ -215,7 +229,7 @@ public class Bot_CarController: Player_CarController
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
-            avoidMultiplier -= 1f;
+            avoidMultiplier -= 10f;
 
             if (hit.collider.CompareTag("Collectable"))
             {
@@ -225,7 +239,7 @@ public class Bot_CarController: Player_CarController
 
         }
         //FRONT RIGHT ANGLE SENSOR
-        else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp"))// && !hit.collider.gameObject == rb)
+        else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp") && !avoiding)// && !hit.collider.gameObject == rb)
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
@@ -237,15 +251,16 @@ public class Bot_CarController: Player_CarController
                 aimingForObject = true;
             }
 
+            rayCount++;
         }
 
-        //FRONT RIGHT SENSOR
+        //FRONT LEFT SENSOR
         sensorStartPos -= transform.right * frontSideSensorPos * 2;
         if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp")) //&& !hit.collider.gameObject == rb)
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
-            avoidMultiplier += 1f;
+            avoidMultiplier += 0.1f;
 
 
             if (hit.collider.CompareTag("Collectable"))
@@ -255,7 +270,7 @@ public class Bot_CarController: Player_CarController
             }
 
         }//FRONT LEFT ANGLE SENSOR
-        else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp")) //&& !hit.collider.gameObject == rb)
+        else if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-frontSensorAngle, transform.up) * transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp") && !avoiding) //&& !hit.collider.gameObject == rb)
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
             avoiding = true;
@@ -267,14 +282,14 @@ public class Bot_CarController: Player_CarController
                 aimingForObject = true;
             }
 
-
+            rayCount++;
         }
 
         //FRONT CENTER SENSOR
-        if (avoidMultiplier == 0 && Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && !hit.collider.CompareTag("Ramp"))// && !hit.collider.gameObject == rb)
+        if (avoidMultiplier == 0 && Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength * 2) && !hit.collider.CompareTag("Ramp"))// && !hit.collider.gameObject == rb)
         {
             Debug.DrawLine(sensorStartPos, hit.point, Color.blue);
-            avoiding = true;
+            //avoiding = true;
 
             //if (raycastCount < 1)
             //{
@@ -295,7 +310,8 @@ public class Bot_CarController: Player_CarController
                 currentSpeed--;
             }*/
 
-            currentSpeed--;
+            raycastCount++;
+            
             
             
 
@@ -314,7 +330,12 @@ public class Bot_CarController: Player_CarController
 
         if (hit.collider != null)
         {
-            
+
+
+            //if (rayCount == 3)
+            //{
+              //  currentSpeed--;
+            //}
 
             /*stopwatch_raycastCount += Time.deltaTime;
 
@@ -328,7 +349,7 @@ public class Bot_CarController: Player_CarController
             {
                 avoidMultiplier = 0;
             }*/
-            
+
 
             float theDistance = Vector3.Distance(transform.position, hit.collider.gameObject.transform.position);
             //Debug.Log(theDistance);
@@ -347,7 +368,7 @@ public class Bot_CarController: Player_CarController
                 isDrifting = false;
             }
 
-            avoiding = true;
+            //avoiding = true;
         }
         else
         {
@@ -357,8 +378,10 @@ public class Bot_CarController: Player_CarController
 
         if (avoiding)
         {
-            sensorStartPos = transform.position;
-            transform.Rotate(transform.rotation.x, (avoidMultiplier * 2) * (turnStrength/* /2 */), transform.rotation.z);
+            //sensorStartPos = transform.position;
+            transform.Rotate(0f, avoidMultiplier * turnStrength, 0f);
+
+            
 
             stopwatch_Distance += Time.deltaTime;
 

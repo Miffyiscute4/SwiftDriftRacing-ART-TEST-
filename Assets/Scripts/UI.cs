@@ -27,8 +27,12 @@ public class UI : MonoBehaviour
 
     public RawImage UI_CurrentlyEquipped, UI_Circle1, UI_Circle2;
 
-    public Text coinText;
+    public Text coinText, timerText;
     public CarCollision colPlayer;
+
+    float stopwatch_Sec, restartTime;
+        
+    int stopwatch_Min;
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +49,29 @@ public class UI : MonoBehaviour
         lapText.text = "Lap " + carcol.lapCount;
 
         coinText.text = "Coins: " + colPlayer.coinCount;
+
+        stopwatch_Sec += Time.deltaTime;
+
+        if (stopwatch_Sec >= 60)
+        {
+            stopwatch_Min++;
+            stopwatch_Sec = 0;
+        }
+
+        if (stopwatch_Sec < 10)
+        {
+            timerText.text = "Time: " + stopwatch_Min + ":" + "0" + (int)stopwatch_Sec;
+        }
+        else
+        {
+            timerText.text = "Time: " + stopwatch_Min + ":" + (int)stopwatch_Sec;
+        }
+
+        if (stopwatch_Min >= restartTime)
+        {
+            GameOver();
+        }
+        
     }
 
     public void DisplayPowerUp(string powerUpType, int powerUpSlot)
@@ -203,6 +230,11 @@ public class UI : MonoBehaviour
             UI_CurrentlyEquipped.transform.localScale = new Vector3(3,3,3);
         }*/
 
+
+    }
+
+    void GameOver()
+    {
 
     }
 }
