@@ -27,12 +27,14 @@ public class UI : MonoBehaviour
 
     public RawImage UI_CurrentlyEquipped, UI_Circle1, UI_Circle2;
 
-    public Text coinText, timerText;
+    public Text coinText, timerText, countDownText;
     public CarCollision colPlayer;
 
-    float stopwatch_Sec, restartTime;
+    float stopwatch_Sec, restartTime, stopwatch_RaceCountDown, stopwatch_RaceCountDownGo;
         
-    int stopwatch_Min;
+    int stopwatch_Min, countDownNum = 3, InitialcountDownNum, InitialcountDownNumGo;
+
+    public AudioSource sound_CountDown, sound_CountDownGo;
 
     // Start is called before the first frame update
     void Start()
@@ -71,6 +73,7 @@ public class UI : MonoBehaviour
         {
             GameOver();
         }
+
         
     }
 
@@ -129,8 +132,6 @@ public class UI : MonoBehaviour
             }
         }
 
-        
-       
         
 
 
@@ -236,5 +237,62 @@ public class UI : MonoBehaviour
     void GameOver()
     {
 
+    }
+
+    public void RaceCountDown()
+    {
+        if (InitialcountDownNum < 1)
+        {
+            countDownText.text = countDownNum + "";
+            sound_CountDown.Play();
+
+            InitialcountDownNum++;
+        }
+        stopwatch_RaceCountDown += Time.deltaTime;
+
+        if (stopwatch_RaceCountDown >= 1)
+        {
+            /*if (countDownNum < 1)
+            {
+                countDownText.text = "Go!";
+                sound_CountDownGo.Play();
+
+                if (stopwatch_RaceCountDown >= 2)
+                {
+                    stopwatch_RaceCountDown = 0;
+                }
+                
+            }*/
+
+            if (countDownNum > 1)
+            {
+                countDownNum--;
+                stopwatch_RaceCountDown = 0;
+
+                countDownText.text = countDownNum + "";
+
+                sound_CountDown.Play();
+            }
+
+        }
+    }
+
+    public void RaceCountDownGo()
+    {
+        stopwatch_RaceCountDownGo += Time.deltaTime;
+        if (InitialcountDownNumGo < 1)
+        {
+            countDownText.text = "Go!";
+            sound_CountDownGo.Play();
+
+            InitialcountDownNumGo++;
+        }
+        
+
+        if (stopwatch_RaceCountDownGo >= 1)
+        {
+            stopwatch_RaceCountDown = 0;
+            car.isStarting = false;
+        }
     }
 }

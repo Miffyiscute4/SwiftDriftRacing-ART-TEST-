@@ -35,7 +35,7 @@ public class Player_CarController : MonoBehaviour
     internal bool isGrounded; 
 
     //counters
-    internal float stopWatch_VerticalBuildUp; internal float stopWatch_Boost; internal float stopWatch_Drift; internal float stopwatch_trails; internal float stopwatch_DriftMove; internal float stopwatch_StopDrift; internal float stopwatch_CancelBoost;
+    internal float stopWatch_VerticalBuildUp; internal float stopWatch_Boost; internal float stopWatch_Drift; internal float stopwatch_trails; internal float stopwatch_DriftMove; internal float stopwatch_StopDrift; internal float stopwatch_CancelBoost, stopwatch_StartDelay;
 
     internal bool isBoosted;
     internal bool isOffTrack;
@@ -77,6 +77,13 @@ public class Player_CarController : MonoBehaviour
     [Header("post processing")]
     public PostProcessLayer postProcessingLayer1;
 
+    [Header("other")]
+    public float startDelay;
+
+    [HideInInspector] public bool isStarting;
+
+    public Animator cameraAnim;
+    public UI ui;
 
 
     //public List<GameObject> trails;
@@ -94,8 +101,9 @@ public class Player_CarController : MonoBehaviour
 
         smokeParticles.Stop();
 
-        
-
+        vc.enabled = false;
+        ui.countDownText.enabled = false;
+        isStarting = true;
     }
 
 
@@ -103,26 +111,65 @@ public class Player_CarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isGrounded)
+     
+        
+
+        if (stopwatch_StartDelay >= startDelay)
         {
-            VerticalInput();
-            TurnInput();
-
-            if (Input.GetKey(KeyCode.Q) && Input.GetKeyDown(KeyCode.Q))
+            if (isStarting)
             {
-                vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= -1;
+                ui.RaceCountDownGo();
             }
-            else if (Input.GetKeyUp(KeyCode.Q))
+            else
             {
-                vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.x), Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y), -Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z));
+                ui.countDownText.enabled = false;
             }
 
-            screenX = vc.GetCinemachineComponent<CinemachineComposer>().m_ScreenX;
+
+
+            if (isGrounded)
+            {
+                VerticalInput();
+                TurnInput();
+
+                if (Input.GetKey(KeyCode.Q) && Input.GetKeyDown(KeyCode.Q))
+                {
+                    vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= -1;
+                }
+                else if (Input.GetKeyUp(KeyCode.Q))
+                {
+                    vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.x), Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y), -Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z));
+                }
+
+                screenX = vc.GetCinemachineComponent<CinemachineComposer>().m_ScreenX;
+
+            }
+
+            //follows the car at all times
+            transform.position = rb.transform.position;
+        }
+        else
+        {
+
+            if (!cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview"))
+            {
+                stopwatch_StartDelay += Time.deltaTime;
+
+                cameraAnim.enabled = false;
+                vc.enabled = true;
+
+                if (stopwatch_StartDelay >= 2)
+                {
+                    ui.countDownText.enabled = true;
+                    ui.RaceCountDown();
+                }
+                
+            }
+            
+
 
         }
-
-        //follows the car at all times
-        transform.position = rb.transform.position;
+        
 
     }
 
