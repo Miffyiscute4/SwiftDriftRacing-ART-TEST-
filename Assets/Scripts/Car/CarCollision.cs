@@ -35,7 +35,7 @@ public class CarCollision : MonoBehaviour
 
     //stopwatches
     internal float powerUpBoxDelay, coinTimer;
-    internal float lavaTimer = 0, PowerUpRegenTimer = 0, invincibleTimer = 0;
+    internal float lavaTimer = 0, PowerUpRegenTimer = 0, invincibleTimer = 0, stopwatch_hideObject;
 
     float stopwatch_Random, randomDelayTime;
 
@@ -108,6 +108,12 @@ public class CarCollision : MonoBehaviour
 
     void Update()
     {
+
+        /*if (coinCount > maxCoinCount)
+        {
+            coinCount = maxCoinCount;
+        }*/
+
         //Debug.Log(allCheckPoints[1].name);
         //magneticParticle.Stop();
 
@@ -173,10 +179,14 @@ public class CarCollision : MonoBehaviour
             }
             else if (!isMagnetic)
             {
-                Destroy(other.gameObject);
                 coin1.Play();
                 Instantiate(coinParticle1, other.transform.position, other.transform.rotation);
-                coinCount++;
+                
+                if (coinCount < maxCoinCount)
+                {
+                    coinCount++;
+                }
+
             }
         }
 
@@ -185,10 +195,18 @@ public class CarCollision : MonoBehaviour
            
             if (!isMagnetic)
             {
-                Destroy(other.gameObject);
                 coin2.Play();
                 Instantiate(coinParticle2, other.transform.position, other.transform.rotation);
-                coinCount += 5;
+                
+                if (coinCount + 3 >= maxCoinCount)
+                {
+                    coinCount = 10;
+                }
+                else
+                {
+                    coinCount += 3;
+                }
+                
             }
             
         }
@@ -219,11 +237,14 @@ public class CarCollision : MonoBehaviour
 
         if (other.gameObject.tag == "BoostPad")
         {
-            if (!carPlayer.isBoosted || carPlayer.driftBoostStage < 2)
-            {
-                isBoosted = true;
-                carPlayer.driftBoostStage = 2;
-            }
+            carPlayer.StopBoost();
+
+            //coinCount += 2;
+
+            isBoosted = true;
+            carPlayer.driftBoostStage = 2;
+
+        
             
         }
 
@@ -400,7 +421,7 @@ public class CarCollision : MonoBehaviour
             Debug.Log("DestroyZone");
          */
 
-
+            /*
 
             if (other.gameObject.transform == allCheckPoints[1] && !isBot)
             {
@@ -420,6 +441,8 @@ public class CarCollision : MonoBehaviour
 
             lastCheckPoint = other.gameObject.transform;
 
+            */
+
             /*if (other.gameObject.transform == allCheckPoints[lastCheckPointNumber + 1] && other.gameObject.transform != allCheckPoints[allCheckPoints.Length])
             {
                 lastCheckPoint = other.gameObject.transform;
@@ -435,14 +458,9 @@ public class CarCollision : MonoBehaviour
                 lastCheckPointNumber = 0;
             }*/
 
-            Debug.Log(lastCheckPointNumber);
+            //Debug.Log(lastCheckPointNumber);
         }
 
-        if (other.gameObject.tag == "DestroyZone")
-        {
-            transform.position = lastCheckPoint.position;
-            carPlayer.transform.rotation = lastCheckPoint.rotation;
-        }
 
     }
 
@@ -843,5 +861,29 @@ public class CarCollision : MonoBehaviour
         checkPointText.SetBool("isTouchingInitialCheckPoint", false);
 
         Debug.Log("animation stopped");
+    }
+
+
+    //hides object for a certain amount of time
+    /*void TemporarilyHide(GameObject objectToHide, float timeAmountToHide)
+    {
+        objectToHide.SetActive(false);
+
+        stopwatch_hideObject += Time.deltaTime;
+
+        if (stopwatch_hideObject >= timeAmountToHide)
+        {
+            objectToHide.SetActive(true);
+            stopwatch_hideObject = 0;
+        }
+    }*/
+
+    public void PlayAnimation()
+    {
+        sound_CheckPoint.Play();
+
+        checkPointText.SetBool("isTouchingInitialCheckPoint", true);
+
+        StartCoroutine("StopAnimation");
     }
 }

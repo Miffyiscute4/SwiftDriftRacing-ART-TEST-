@@ -35,7 +35,7 @@ public class Player_CarController : MonoBehaviour
     internal bool isGrounded; 
 
     //counters
-    internal float stopWatch_VerticalBuildUp; internal float stopWatch_Boost; internal float stopWatch_Drift; internal float stopwatch_trails; internal float stopwatch_DriftMove; internal float stopwatch_StopDrift; internal float stopwatch_CancelBoost, stopwatch_StartDelay;
+    internal float stopWatch_VerticalBuildUp; internal float stopWatch_Boost; internal float stopWatch_Drift; internal float stopwatch_trails; internal float stopwatch_DriftMove; internal float stopwatch_StopDrift; internal float stopwatch_CancelBoost, stopwatch_StartDelay, stopwatch_Respawn;
 
     internal bool isBoosted;
     internal bool isOffTrack;
@@ -85,6 +85,7 @@ public class Player_CarController : MonoBehaviour
     public Animator cameraAnim;
     public UI ui;
 
+    CheckpointPlace checkPoint;
 
     //public List<GameObject> trails;
 
@@ -103,7 +104,12 @@ public class Player_CarController : MonoBehaviour
 
         vc.enabled = false;
         ui.countDownText.enabled = false;
+        ui.coinText.enabled = false;
+        ui.timerText.enabled = false;
+
         isStarting = true;
+
+        checkPoint = carCol.GetComponent<CheckpointPlace>();
     }
 
 
@@ -123,6 +129,10 @@ public class Player_CarController : MonoBehaviour
             else
             {
                 ui.countDownText.enabled = false;
+
+                ui.coinText.enabled = true;
+                ui.timerText.enabled = true;
+
                 ui.startTimer = true;
             }
 
@@ -130,6 +140,11 @@ public class Player_CarController : MonoBehaviour
 
             if (isGrounded)
             {
+                if (stopwatch_Respawn != 0)
+                {
+                    stopwatch_Respawn = 0;
+                }
+
                 VerticalInput();
                 TurnInput();
 
@@ -144,6 +159,16 @@ public class Player_CarController : MonoBehaviour
 
                 screenX = vc.GetCinemachineComponent<CinemachineComposer>().m_ScreenX;
 
+            }
+            else
+            {
+                stopwatch_Respawn += Time.deltaTime;
+
+                if (stopwatch_Respawn >= 5)
+                {
+                    checkPoint.RespawnPlayer();
+                    stopwatch_Respawn = 0;
+                }
             }
 
             //follows the car at all times
@@ -361,6 +386,7 @@ public class Player_CarController : MonoBehaviour
 
             if (driftBoostStage == 0)
             {
+                if (carCol.coinCount >= 1)
                 driftParticles[0].Play();
                 //currentSpeed = 10;
                 isDrifting = true;
@@ -382,12 +408,17 @@ public class Player_CarController : MonoBehaviour
             //smoothly returns back to original rotation once the space key is no longer pressed
             carModel.transform.rotation = Quaternion.Lerp(carModel.transform.rotation, transform.rotation, Time.deltaTime * 3);
 
-            if (carModel.transform.localRotation.eulerAngles.y < 45 || carModel.transform.localRotation.eulerAngles.y > 315)
+
+            if (carModel.transform.localRotation.eulerAngles.y < 45 || carModel.transform.localRotation.eulerAngles.y > 315 && Input.GetAxisRaw("Vertical") != 0)
             {
                 carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.localRotation, Quaternion.Euler(0, Input.GetAxisRaw("Horizontal") * (turnStrength * 1.25f) * 3, 0), Time.deltaTime);
             }
 
-            transform.Rotate(new Vector3(0, Input.GetAxisRaw("Horizontal") * Time.deltaTime * turnStrength, 0));
+            if (Input.GetAxisRaw("Vertical") != 0)
+            {
+                transform.Rotate(new Vector3(0, Input.GetAxisRaw("Horizontal") * Time.deltaTime * turnStrength * (carCol.coinCount / 20 + 1), 0));
+            }
+            
         }
 
 
@@ -430,7 +461,7 @@ public class Player_CarController : MonoBehaviour
                     transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * driftStrength / 7.5f, 0));
                 }*/
 
-                transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * driftStrength / 7.5f, 0));
+                transform.Rotate(new Vector3(0, driftInput * Time.deltaTime * turnStrength * driftStrength / 7.5f * (carCol.coinCount / 20 + 1), 0));
 
 
 
@@ -469,76 +500,81 @@ public class Player_CarController : MonoBehaviour
                 {
                     trails[i].SetActive(true);
                 }*/
-
-                stopWatch_Drift += Time.deltaTime;
-
-                //Debug.Log("drift " + (int)stopWatch_Drift);
-
-                //drift boost
-
-                //Debug.Log(driftBoostStage);
-                if (stopWatch_Drift >= 45 / currentSpeed && driftBoostStage == 0)
+                if (carCol.coinCount >= 1)
                 {
-                    sound_driftBoostStage.Play();
+                    stopWatch_Drift += Time.deltaTime;
 
-                    driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
+                    //Debug.Log("drift " + (int)stopWatch_Drift);
 
-                    //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
-                    //boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
+                    //drift boost
 
-                    driftParticles[0].Stop();
+                    //Debug.Log(driftBoostStage);
+                    if (stopWatch_Drift >= 45 / (currentSpeed * (carCol.coinCount / 20 + 1)) && driftBoostStage == 0)
+                    {
+                        sound_driftBoostStage.Play();
 
-                    driftTransitionParticle.Play();
-                    driftParticles[1].Play();
+                        driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
 
-                    readyToBoost = true;
+                        //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
+                        //boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[0];
 
-                    
+                        driftParticles[0].Stop();
 
-                    stopWatch_Drift = 0;
-                    driftBoostStage = 1;
+                        driftTransitionParticle.Play();
+                        driftParticles[1].Play();
 
+                        readyToBoost = true;
+
+
+
+                        stopWatch_Drift = 0;
+                        driftBoostStage = 1;
+
+                        carCol.coinCount--;
+
+                    }
+                    else if (stopWatch_Drift >= 50 / (currentSpeed * (carCol.coinCount / 20 + 1)) && driftBoostStage == 1)
+                    {
+
+                        sound_driftBoostStage.Play();
+
+                        driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
+
+                        //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
+                        //boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
+
+                        driftTransitionParticle.Play();
+                        driftParticles[1].Play();
+
+                        stopWatch_Drift = 0;
+                        driftBoostStage = 2;
+
+
+
+                        carCol.coinCount --;
+
+
+                    }
+                    else if (stopWatch_Drift >= 75 / (currentSpeed * (carCol.coinCount / 20 + 1)) && driftBoostStage == 2)
+                    {
+
+                        sound_driftBoostStage.Play();
+
+                        driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
+
+                        //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
+                        //boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
+
+                        driftTransitionParticle.Play();
+                        driftParticles[1].Play();
+
+                        stopWatch_Drift = 0;
+                        driftBoostStage = 3;
+
+                        carCol.coinCount--;
+                    }
                 }
-                else if (stopWatch_Drift >= 50 / currentSpeed && driftBoostStage == 1)
-                {
-
-                    sound_driftBoostStage.Play();
-
-                    driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
-
-                    //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
-                    //boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[1];
-
-                    driftTransitionParticle.Play();
-                    driftParticles[1].Play();
-
-                    stopWatch_Drift = 0;
-                    driftBoostStage = 2;
-
-                    
-
-
-
-
-                }
-                else if (stopWatch_Drift >= 75 / currentSpeed && driftBoostStage == 2)
-                {
-
-                    sound_driftBoostStage.Play();
-
-                    driftParticles[1].GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
-
-                    //boostParticle.GetComponent<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
-                    //boostParticle.GetComponentInChildren<ParticleSystemRenderer>().material = driftParticlesMaterials[2];
-
-                    driftTransitionParticle.Play();
-                    driftParticles[1].Play();
-
-                    stopWatch_Drift = 0;
-                    driftBoostStage = 3;
-
-                    
-                }
+                
 
             }
             else
@@ -661,15 +697,19 @@ public class Player_CarController : MonoBehaviour
             rightBackWheel.transform.Rotate(new Vector3(currentSpeed * 100, 0f, 0f) * Time.deltaTime);
             leftBackWheel.transform.Rotate(new Vector3(currentSpeed * 100, 0f, 0f) * Time.deltaTime);
         }
-        else if (Input.GetAxisRaw("Horizontal") != 0)
+
+        //Debug.Log(leftFrontWheel.localRotation.y + "___" + rightFrontWheel.localRotation.y);
+
+        if (Input.GetAxisRaw("Horizontal") != 0 && Input.GetAxisRaw("Vertical") != 0 /*&& isDrifting && leftFrontWheel.localRotation.y >= 0 && rightFrontWheel.localRotation.y >= 0*/)
         {
            
 
             //front wheel turn y
-            leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, Input.GetAxis("Horizontal") * 30 - 180, leftFrontWheel.localRotation.eulerAngles.z);
-            rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, Input.GetAxis("Horizontal") * 30, rightBackWheel.localRotation.eulerAngles.z);
+            leftFrontWheel.localRotation = Quaternion.Lerp(leftFrontWheel.localRotation, Quaternion.Euler(0, Input.GetAxis("Horizontal") * (driftStrength + 35), 0), Time.deltaTime * 5);
+            rightFrontWheel.localRotation = Quaternion.Lerp(rightFrontWheel.localRotation, Quaternion.Euler(0, Input.GetAxis("Horizontal") * (driftStrength + 35), 0), Time.deltaTime * 5);
 
-            
+
+
         }
     }
 
@@ -741,7 +781,7 @@ public class Player_CarController : MonoBehaviour
                     rb.AddForce(transform.forward * boostAmount * 50 * driftBoostStage);
                 }
                 else
-                {
+                {   
                     rb.AddForce(transform.forward * boostAmount * 50);
                 }
                 
@@ -759,19 +799,7 @@ public class Player_CarController : MonoBehaviour
 
                 if (stopWatch_Boost >= 3 || Input.GetKeyDown(KeyCode.Space))
                 {
-                    
-                    stopWatch_Boost = 0;
-
-                    boostParticle.Stop();
-                    
-                    sound_Boost.Stop();
-
-                    driftBoostStage = 0;
-
-                    carCol.isBoosted = false;
-                    isBoosted = false;
-
-                    
+                    StopBoost(); 
                 }
 
             }
@@ -793,7 +821,21 @@ public class Player_CarController : MonoBehaviour
 
             rb.drag = 0.05f;
 
-            rb.AddForce(-transform.up * 2000);
+            rb.AddForce(-transform.up * 1000);
         }
+    }
+
+    public void StopBoost()
+    {
+        stopWatch_Boost = 0;
+
+        boostParticle.Stop();
+
+        sound_Boost.Stop();
+
+        driftBoostStage = 0;
+
+        carCol.isBoosted = false;
+        isBoosted = false;
     }
 }
