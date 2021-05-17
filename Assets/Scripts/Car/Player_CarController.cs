@@ -123,6 +123,7 @@ public class Player_CarController : MonoBehaviour
             else
             {
                 ui.countDownText.enabled = false;
+                ui.startTimer = true;
             }
 
 
@@ -380,6 +381,13 @@ public class Player_CarController : MonoBehaviour
         {
             //smoothly returns back to original rotation once the space key is no longer pressed
             carModel.transform.rotation = Quaternion.Lerp(carModel.transform.rotation, transform.rotation, Time.deltaTime * 3);
+
+            if (carModel.transform.localRotation.eulerAngles.y < 45 || carModel.transform.localRotation.eulerAngles.y > 315)
+            {
+                carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.localRotation, Quaternion.Euler(0, Input.GetAxisRaw("Horizontal") * (turnStrength * 1.25f) * 3, 0), Time.deltaTime);
+            }
+
+            transform.Rotate(new Vector3(0, Input.GetAxisRaw("Horizontal") * Time.deltaTime * turnStrength, 0));
         }
 
 
@@ -433,7 +441,7 @@ public class Player_CarController : MonoBehaviour
 
                     //carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.rotation, Quaternion.Euler(0, 45, 0), Time.deltaTime * 3);
 
-                    carModel.transform.localRotation = Quaternion.Euler(0, driftInput * (driftStrength * 1.25f), Time.deltaTime);
+                    carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.localRotation, Quaternion.Euler(0, driftInput * (driftStrength * 1.25f), 0), Time.deltaTime * 5);
 
                     //Quaternion q = Quaternion.Euler(0,  driftInput * (driftStrength * 1.25f), 0);
                     //carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.rotation, q, Time.deltaTime);
@@ -469,7 +477,7 @@ public class Player_CarController : MonoBehaviour
                 //drift boost
 
                 //Debug.Log(driftBoostStage);
-                if (stopWatch_Drift >= 35 / currentSpeed && driftBoostStage == 0)
+                if (stopWatch_Drift >= 45 / currentSpeed && driftBoostStage == 0)
                 {
                     sound_driftBoostStage.Play();
 
@@ -491,7 +499,7 @@ public class Player_CarController : MonoBehaviour
                     driftBoostStage = 1;
 
                 }
-                else if (stopWatch_Drift >= 45 / currentSpeed && driftBoostStage == 1)
+                else if (stopWatch_Drift >= 50 / currentSpeed && driftBoostStage == 1)
                 {
 
                     sound_driftBoostStage.Play();

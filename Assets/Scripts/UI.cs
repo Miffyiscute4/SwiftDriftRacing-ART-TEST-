@@ -36,6 +36,7 @@ public class UI : MonoBehaviour
 
     public AudioSource sound_CountDown, sound_CountDownGo;
 
+    [HideInInspector] public bool startTimer;
     // Start is called before the first frame update
     void Start()
     {
@@ -52,27 +53,31 @@ public class UI : MonoBehaviour
 
         coinText.text = "Coins: " + colPlayer.coinCount;
 
-        stopwatch_Sec += Time.deltaTime;
+        if (startTimer)
+        {
+            stopwatch_Sec += Time.deltaTime;
 
-        if (stopwatch_Sec >= 60)
-        {
-            stopwatch_Min++;
-            stopwatch_Sec = 0;
-        }
+            if (stopwatch_Sec >= 60)
+            {
+                stopwatch_Min++;
+                stopwatch_Sec = 0;
+            }
 
-        if (stopwatch_Sec < 10)
-        {
-            timerText.text = "Time: " + stopwatch_Min + ":" + "0" + (int)stopwatch_Sec;
-        }
-        else
-        {
-            timerText.text = "Time: " + stopwatch_Min + ":" + (int)stopwatch_Sec;
-        }
+            if (stopwatch_Sec < 10)
+            {
+                timerText.text = stopwatch_Min + ":" + "0" + (int)stopwatch_Sec;
+            }
+            else
+            {
+                timerText.text = stopwatch_Min + ":" + (int)stopwatch_Sec;
+            }
 
-        if (stopwatch_Min >= restartTime)
-        {
-            GameOver();
+            if (stopwatch_Min >= restartTime)
+            {
+                GameOver();
+            }
         }
+        
 
         
     }
