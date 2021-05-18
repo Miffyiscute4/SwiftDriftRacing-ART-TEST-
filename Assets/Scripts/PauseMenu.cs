@@ -10,11 +10,23 @@ public class PauseMenu : MonoBehaviour
 
     public Player_CarController carPlayer;
 
+    public LevelLoader levelLoader;
+
+    public AudioSource music, pauseMusic, pauseSound, buttonHighlightedSound, buttonClickedSound;
+
+    public AudioSource[] carSounds;
+
+
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
 
         pauseMenu.SetActive(false);
+
+        music.Play();
+
+        carSounds = carPlayer.GetComponents<AudioSource>();
     }
 
     // Update is called once per frame
@@ -43,6 +55,15 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0;
 
+        music.Pause();
+        pauseMusic.Play();
+        pauseSound.Play();
+        
+        foreach (AudioSource a in carSounds)
+        {
+            a.Pause();
+        }
+
         isPaused = true;
 
         Debug.Log("Paused");
@@ -56,6 +77,15 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1;
 
+        music.UnPause();
+        pauseMusic.Stop();
+        pauseSound.Play();
+
+        foreach (AudioSource a in carSounds)
+        {
+            a.UnPause();
+        }
+
         isPaused = false;
 
         Debug.Log("Resuming");
@@ -63,8 +93,18 @@ public class PauseMenu : MonoBehaviour
 
     public void ExitGame()
     {
-        SceneManager.LoadScene("MainMenu");
+        ResumeGame();
+        levelLoader.LoadLevel("MainMenu");
     }
 
+    public void PlayHighlightedSound()
+    {
+        buttonHighlightedSound.Play();
+    }
+
+    public void PlayClickedSound()
+    {
+        buttonClickedSound.Play();
+    }
 
 }

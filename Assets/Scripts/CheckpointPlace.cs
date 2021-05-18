@@ -55,7 +55,7 @@ public class CheckpointPlace : MonoBehaviour
 
                 }
 
-                if (isPlayer)
+                if (isPlayer && checkPoints[currentCheckPointNum + 1] != null)
                 {
                     if (other.gameObject.transform == checkPoints[1])
                     {

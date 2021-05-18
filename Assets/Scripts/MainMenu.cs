@@ -5,13 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public LevelLoader levelLoader;
+
     public GameObject mainPage, levelSelectPage;
+
+    public AudioSource buttonClickedSound, buttonHighlightedSound;
 
     // Start is called before the first frame update
     void Start()
     {
         mainPage.SetActive(true);
         levelSelectPage.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.None;
     }
 
     // Update is called once per frame
@@ -28,13 +34,24 @@ public class MainMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        Application.Quit();
-
         Debug.Log("Quitting Game");
+
+        Application.Quit();
     }
 
     public void LoadTrack(string trackName)
     {
-        SceneManager.LoadScene(trackName);
+        levelSelectPage.SetActive(false);
+        levelLoader.LoadLevel(trackName);
+    }
+
+    public void PlayHighlightedSound()
+    {
+        buttonHighlightedSound.Play();
+    }
+
+    public void PlayClickedSound()
+    {
+        buttonClickedSound.Play();
     }
 }

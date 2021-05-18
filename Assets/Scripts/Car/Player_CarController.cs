@@ -711,6 +711,11 @@ public class Player_CarController : MonoBehaviour
 
 
         }
+        else if (Input.GetAxisRaw("Horizontal") == 0)
+        {
+            leftFrontWheel.localRotation = Quaternion.Lerp(leftFrontWheel.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 3);
+            rightFrontWheel.localRotation = Quaternion.Lerp(rightFrontWheel.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 3);
+        }
     }
 
 
@@ -797,7 +802,7 @@ public class Player_CarController : MonoBehaviour
 
                 boostParticle.Play();
 
-                if (stopWatch_Boost >= 3 || Input.GetKeyDown(KeyCode.Space))
+                if (stopWatch_Boost >= 2 || Input.GetKeyDown(KeyCode.Space))
                 {
                     StopBoost(); 
                 }
@@ -821,7 +826,7 @@ public class Player_CarController : MonoBehaviour
 
             rb.drag = 0.05f;
 
-            rb.AddForce(-transform.up * 1000);
+            rb.AddForce(-transform.up * 1250);
         }
     }
 

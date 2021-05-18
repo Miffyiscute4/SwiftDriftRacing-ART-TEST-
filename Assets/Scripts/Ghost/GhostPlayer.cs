@@ -16,7 +16,7 @@ public class GhostPlayer : MonoBehaviour
 
     void Update()
     {
-        timeValue += Time.unscaledDeltaTime;
+        timeValue += Time.deltaTime;
 
         if (ghost.isReplay)
         {
