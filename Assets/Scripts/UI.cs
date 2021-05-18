@@ -47,6 +47,10 @@ public class UI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
+
+
         //speedText.text = "Speed: " + Mathf.Abs(car.currentSpeed);
 
         lapText.text = "Lap " + carcol.lapCount;
@@ -300,4 +304,8 @@ public class UI : MonoBehaviour
             car.isStarting = false;
         }
     }
+
+  
+
+
 }
