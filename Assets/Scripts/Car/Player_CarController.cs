@@ -106,6 +106,7 @@ public class Player_CarController : MonoBehaviour
         ui.countDownText.enabled = false;
         ui.coinText.enabled = false;
         ui.timerText.enabled = false;
+        ui.coinUi.SetActive(false);
 
         isStarting = true;
 
@@ -132,6 +133,7 @@ public class Player_CarController : MonoBehaviour
 
                 ui.coinText.enabled = true;
                 ui.timerText.enabled = true;
+                ui.coinUi.SetActive(true);
 
                 ui.startTimer = true;
             }

@@ -8,12 +8,12 @@ public class DifficultySelect : ScriptableObject
     public Ghost difficultyGhost;
     public List<Ghost> ghosts;
 
-    //[HideInInspector] public int ghostNumber;
+    [HideInInspector] public int ghostNumber;
 
     public void SetDifficulty(int difficultyNum)
     {
         difficultyGhost = ghosts[difficultyNum];
 
-        //ghostNumber = difficultyNum;
+        ghostNumber = difficultyNum;
     }
 }

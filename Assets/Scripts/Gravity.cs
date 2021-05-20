@@ -12,4 +12,13 @@ public class Gravity : MonoBehaviour
     {
         rb.AddForce(-transform.up * speed);
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            rb.isKinematic = true;
+        }
+        
+    }
 }

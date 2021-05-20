@@ -42,14 +42,16 @@ public class UI : MonoBehaviour
     public Text endText;
 
     public CheckpointPlace checkPointPlayer, checkPointGhost;
-    
+
     //public InitialCheckPointTrigger ghostCheckPoint;
 
-    public Text leaderBoardText, leaderBoardTextSmall;
+    public Text leaderBoardText, leaderBoardTextSmall, ghostUiText;
 
     public GameObject endPage;
 
     public PauseMenu pauseMenu;
+    public DifficultySelect difficulty;
+    public GameObject coinUi;
 
     // Start is called before the first frame update
     void Start()
@@ -59,6 +61,22 @@ public class UI : MonoBehaviour
 
         leaderBoardText.text = "";
         leaderBoardTextSmall.text = "";
+
+        switch (difficulty.ghostNumber)
+        {
+            case 0:
+                ghostUiText.text = "Ghost (Easy)";
+                break;
+
+            case 1:
+                ghostUiText.text = "Ghost (Normal)";
+                break;
+
+            case 2:
+                ghostUiText.text = "Ghost (Hard)";
+                break;
+        }
+
 
         //endText.enabled = false;
 
@@ -75,7 +93,7 @@ public class UI : MonoBehaviour
             leaderBoardText.color = Color.yellow;
 
             leaderBoardTextSmall.text = "st";
-            leaderBoardText.color = Color.yellow;
+            leaderBoardTextSmall.color = Color.yellow;
         }
         else if (checkPointPlayer.currentPlace < checkPointGhost.currentPlace)
         {
@@ -83,7 +101,7 @@ public class UI : MonoBehaviour
             leaderBoardText.color = Color.gray;
 
             leaderBoardTextSmall.text = "nd";
-            leaderBoardText.color = Color.gray;
+            leaderBoardTextSmall.color = Color.gray;
         }
 
 
@@ -92,7 +110,7 @@ public class UI : MonoBehaviour
 
         lapText.text = "Lap " + carcol.lapCount;
 
-        coinText.text = "Coins: " + colPlayer.coinCount;
+        coinText.text = /*"Coins: " + */colPlayer.coinCount + "";
 
         if (startTimer)
         {
