@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GhostPlayer : MonoBehaviour
 {
+    public DifficultySelect difficultySelect;
     public Ghost ghost;
     float timeValue;
     int index1;
@@ -12,6 +13,11 @@ public class GhostPlayer : MonoBehaviour
     void Awake()
     {
         timeValue = 0;
+    }
+
+    void Start()
+    {
+        ghost = difficultySelect.difficultyGhost;
     }
 
     void Update()

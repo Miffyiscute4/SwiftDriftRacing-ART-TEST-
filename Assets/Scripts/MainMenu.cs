@@ -7,7 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     public LevelLoader levelLoader;
 
-    public GameObject mainPage, levelSelectPage;
+    public GameObject mainPage, levelSelectPage, difficultySelectPage1;
 
     public AudioSource buttonClickedSound, buttonHighlightedSound;
 
@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
     {
         mainPage.SetActive(true);
         levelSelectPage.SetActive(false);
+        difficultySelectPage1.SetActive(false);
 
         Cursor.lockState = CursorLockMode.None;
     }
@@ -30,6 +31,12 @@ public class MainMenu : MonoBehaviour
     {
         mainPage.SetActive(false);
         levelSelectPage.SetActive(true);
+    }
+
+    public void DifficultySelect()
+    {
+        levelSelectPage.SetActive(false);
+        difficultySelectPage1.SetActive(true);
     }
 
     public void QuitGame()

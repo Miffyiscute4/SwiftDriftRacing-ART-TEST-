@@ -20,8 +20,8 @@ public class GhostRecorder : MonoBehaviour
 
     void Update()
     {
-        timer += Time.unscaledDeltaTime;
-        timeValue += Time.unscaledDeltaTime;
+        timer += Time.deltaTime;
+        timeValue += Time.deltaTime;
 
         if (ghost.isRecord && timer >= 1 / ghost.recordFrequency)
         {

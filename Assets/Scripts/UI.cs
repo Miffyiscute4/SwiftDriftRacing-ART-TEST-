@@ -19,6 +19,7 @@ public class UI : MonoBehaviour
 
     public Player_CarController car;
     public CarCollision carcol;
+    public GhostPlayer ghostPlayer;
 
     public GameObject gainPowerUpParticle;
 
@@ -37,17 +38,53 @@ public class UI : MonoBehaviour
     public AudioSource sound_CountDown, sound_CountDownGo;
 
     [HideInInspector] public bool startTimer;
+
+    public Text endText;
+
+    public CheckpointPlace checkPointPlayer, checkPointGhost;
+    
+    //public InitialCheckPointTrigger ghostCheckPoint;
+
+    public Text leaderBoardText, leaderBoardTextSmall;
+
+    public GameObject endPage;
+
+    public PauseMenu pauseMenu;
+
     // Start is called before the first frame update
     void Start()
     {
         transformStore1 = point[1].transform;
         transformStore2 = point[0].transform;
+
+        leaderBoardText.text = "";
+        leaderBoardTextSmall.text = "";
+
+        //endText.enabled = false;
+
+        endPage.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
 
+        if (checkPointPlayer.currentPlace > checkPointGhost.currentPlace)
+        {
+            leaderBoardText.text = "1";
+            leaderBoardText.color = Color.yellow;
+
+            leaderBoardTextSmall.text = "st";
+            leaderBoardText.color = Color.yellow;
+        }
+        else if (checkPointPlayer.currentPlace < checkPointGhost.currentPlace)
+        {
+            leaderBoardText.text = "2";
+            leaderBoardText.color = Color.gray;
+
+            leaderBoardTextSmall.text = "nd";
+            leaderBoardText.color = Color.gray;
+        }
 
 
 
@@ -305,7 +342,34 @@ public class UI : MonoBehaviour
         }
     }
 
-  
 
+
+    public void EndGame()
+    {
+        Cursor.lockState = CursorLockMode.None;
+
+        car.enabled = false;
+        //ghostPlayer.enabled = false;
+
+        endPage.SetActive(true);
+
+        
+        pauseMenu.enabled = false;
+
+        //endText.enabled = true;
+
+        if (checkPointPlayer.lapCount > checkPointGhost.lapCount)
+        {
+            endText.text = "You Win!";
+            endText.color = Color.green;
+        }
+        else if (checkPointPlayer.lapCount > checkPointGhost.lapCount)
+        {
+            endText.text = "You Lose!";
+            endText.color = Color.red;
+        }
+        
+
+    }
 
 }

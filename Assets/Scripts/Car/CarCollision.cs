@@ -78,8 +78,6 @@ public class CarCollision : MonoBehaviour
 
     [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic; public bool isShootingRocket; public bool isShootingIceSpikes;
 
-    
-
 
 
     // Update is called once per frame
@@ -132,7 +130,6 @@ public class CarCollision : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             SwapPowerUp();
-            Debug.Log("PRESSED");
         }
 
         if (powerUpBoxObject != null && !powerUpBoxObject.activeInHierarchy)
@@ -200,7 +197,7 @@ public class CarCollision : MonoBehaviour
                 
                 if (coinCount + 3 >= maxCoinCount)
                 {
-                    coinCount = 10;
+                    coinCount = maxCoinCount;
                 }
                 else
                 {
@@ -595,7 +592,6 @@ public class CarCollision : MonoBehaviour
 
     public void UsePowerUp()
     {
-        Debug.Log(stopwatch_Random);
         if (isBot)
         {
             //int randomDelayTime = Random.Range(1, 5);

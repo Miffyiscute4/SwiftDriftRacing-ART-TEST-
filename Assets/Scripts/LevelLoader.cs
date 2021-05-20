@@ -35,9 +35,9 @@ public class LevelLoader : MonoBehaviour
         {
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
 
-            Debug.Log((int)progress * 100 + "%");
+            Debug.Log((int) (progress * 100) + "%");
 
-            loadingText.text = (int) progress * 100 + "%";
+            loadingText.text = (int)(progress * 100) + "%";
             slider.value = progress;
 
             yield return null;

@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CheckpointPlace : MonoBehaviour
 {
     public bool isPlayer;
+
+    public int maxLaps = 2;
 
     [HideInInspector] public int currentPlace = 0;
 
@@ -18,6 +21,11 @@ public class CheckpointPlace : MonoBehaviour
 
     CarCollision carCol;
     Player_CarController carPlayer;
+
+    public int lapCount = 1;
+    public Text checkPointBoxText;
+
+    public UI ui;
 
     void Start()
     {
@@ -34,6 +42,30 @@ public class CheckpointPlace : MonoBehaviour
             carCol = GetComponent<CarCollision>();
             carPlayer = carCol.carPlayer;
         }    
+
+        /*switch (ghostDifficulty.ghostNumber)
+        {
+            case 0:
+                raceTime = ;
+                break;
+
+            case 1:
+                raceTime = 230;
+                break;
+
+            case 2:
+                raceTime = 193;
+                break;
+        }*/
+    }
+
+    void Update()
+    {
+        if (isPlayer)
+        {
+            checkPointBoxText.text = "Lap " + lapCount;
+        }
+        
     }
 
     void OnTriggerEnter(Collider other)
@@ -43,7 +75,7 @@ public class CheckpointPlace : MonoBehaviour
             if (currentCheckPointNum != checkPoints.Length - 1)
             {
                 if (other.gameObject.transform == checkPoints[currentCheckPointNum + 1])
-            {
+                {
                     currentCheckPointNum++;
                     currentPlace++;
 
@@ -55,20 +87,25 @@ public class CheckpointPlace : MonoBehaviour
 
                 }
 
-                if (isPlayer && checkPoints[currentCheckPointNum + 1] != null)
+                if (isPlayer && currentCheckPointNum != checkPoints.Length - 1)
                 {
                     if (other.gameObject.transform == checkPoints[1])
                     {
                         carCol.PlayAnimation();
                     }
-
+              
                     if (other.gameObject.transform != checkPoints[currentCheckPointNum + 1] && other.gameObject.transform != checkPoints[currentCheckPointNum])
                     {
                         RespawnPlayer();
                     }
                 }
-                
-                
+
+                if (lapCount >= maxLaps)
+                {
+                    ui.EndGame();
+                    Debug.Log("End of game");
+                }
+
             }    
             
             // it is checkpoints[1] because the first gameobject doesn't count
@@ -76,6 +113,9 @@ public class CheckpointPlace : MonoBehaviour
             {
                 currentCheckPointNum = 1;
                 currentPlace++;
+
+                lapCount++;
+
                 isFinished = false;
             }
 
