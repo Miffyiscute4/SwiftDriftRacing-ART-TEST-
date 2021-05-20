@@ -179,7 +179,7 @@ public class Player_CarController : MonoBehaviour
         else
         {
 
-            if (!cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview"))
+            if (!cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview") || !cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview_Tutorial"))
             {
                 stopwatch_StartDelay += Time.deltaTime;
 
