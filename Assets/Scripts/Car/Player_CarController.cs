@@ -87,6 +87,7 @@ public class Player_CarController : MonoBehaviour
 
     CheckpointPlace checkPoint;
 
+    public int cameraPreview;
     //public List<GameObject> trails;
 
 
@@ -179,7 +180,7 @@ public class Player_CarController : MonoBehaviour
         else
         {
 
-            if (!cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview") || !cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview_Tutorial"))
+            if (!cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview") && cameraPreview ==  0 || !cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview_Tutorial") && cameraPreview == 1)
             {
                 stopwatch_StartDelay += Time.deltaTime;
 
