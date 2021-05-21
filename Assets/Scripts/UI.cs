@@ -39,7 +39,7 @@ public class UI : MonoBehaviour
 
     [HideInInspector] public bool startTimer;
 
-    public Text endText;
+    public Text endText, lapUiText;
 
     public CheckpointPlace checkPointPlayer, checkPointGhost;
 
@@ -86,6 +86,7 @@ public class UI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        lapUiText.text = "Lap: " + checkPointPlayer.lapCount + "/" +  checkPointPlayer.maxLaps;
 
         if (checkPointPlayer.currentPlace > checkPointGhost.currentPlace)
         {
@@ -381,7 +382,7 @@ public class UI : MonoBehaviour
             endText.text = "You Win!";
             endText.color = Color.green;
         }
-        else if (checkPointPlayer.lapCount > checkPointGhost.lapCount)
+        else if (checkPointPlayer.lapCount < checkPointGhost.lapCount)
         {
             endText.text = "You Lose!";
             endText.color = Color.red;

@@ -87,7 +87,7 @@ public class Player_CarController : MonoBehaviour
 
     CheckpointPlace checkPoint;
 
-    public int cameraPreview;
+    public int cameraPreview, respawnTime = 3;
     //public List<GameObject> trails;
 
 
@@ -107,6 +107,7 @@ public class Player_CarController : MonoBehaviour
         ui.countDownText.enabled = false;
         ui.coinText.enabled = false;
         ui.timerText.enabled = false;
+        ui.lapUiText.enabled = false;
         ui.coinUi.SetActive(false);
 
         isStarting = true;
@@ -134,6 +135,7 @@ public class Player_CarController : MonoBehaviour
 
                 ui.coinText.enabled = true;
                 ui.timerText.enabled = true;
+                ui.lapUiText.enabled = true;
                 ui.coinUi.SetActive(true);
 
                 ui.startTimer = true;
@@ -167,7 +169,7 @@ public class Player_CarController : MonoBehaviour
             {
                 stopwatch_Respawn += Time.deltaTime;
 
-                if (stopwatch_Respawn >= 5)
+                if (stopwatch_Respawn >= respawnTime)
                 {
                     checkPoint.RespawnPlayer();
                     stopwatch_Respawn = 0;
@@ -180,7 +182,7 @@ public class Player_CarController : MonoBehaviour
         else
         {
 
-            if (!cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview") && cameraPreview ==  0 || !cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview_Tutorial") && cameraPreview == 1)
+            if (!cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera1") && cameraPreview ==  0 || !cameraAnim.GetCurrentAnimatorStateInfo(0).IsName("Camera_TrackPreview_Tutorial") && cameraPreview == 1)
             {
                 stopwatch_StartDelay += Time.deltaTime;
 

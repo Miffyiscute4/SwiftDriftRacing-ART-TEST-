@@ -12,9 +12,20 @@ public class LevelLoader : MonoBehaviour
     AudioSource loadingMusic;
     public AudioSource AudioSourceToDisable;
 
+    public Player_CarController car;
+    AudioSource[] carSounds;
+
+    public bool isMenu = false;
+
     void Start()
     {
         loadingMusic = GetComponent<AudioSource>();
+
+        if (!isMenu)
+        {
+            carSounds = car.GetComponents<AudioSource>();
+        }
+
     }
 
     public void LoadLevel(string sceneName)
@@ -25,6 +36,15 @@ public class LevelLoader : MonoBehaviour
     IEnumerator LoadAsync (string sceneName)
     {
         AudioSourceToDisable.Stop();
+
+        if (!isMenu)
+        {
+            foreach (AudioSource a in carSounds)
+            {
+                a.Stop();
+            }
+        }
+        
 
         loadingScreen.SetActive(true);
         loadingMusic.Play();

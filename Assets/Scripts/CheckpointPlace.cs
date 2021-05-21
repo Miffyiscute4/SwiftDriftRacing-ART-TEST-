@@ -9,7 +9,7 @@ public class CheckpointPlace : MonoBehaviour
 
     public int maxLaps = 2;
 
-    [HideInInspector] public int currentPlace = 0;
+     [HideInInspector] public int currentPlace = 0;
 
     public GameObject checkPointsObject;
 
