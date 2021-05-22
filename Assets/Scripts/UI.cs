@@ -45,13 +45,17 @@ public class UI : MonoBehaviour
 
     //public InitialCheckPointTrigger ghostCheckPoint;
 
-    public Text leaderBoardText, leaderBoardTextSmall, ghostUiText;
+    public Text leaderBoardText, leaderBoardTextSmall, ghostUiText, endScreenTimeText;
 
     public GameObject endPage;
 
     public PauseMenu pauseMenu;
     public DifficultySelect difficulty;
     public GameObject coinUi;
+
+    public Color endScreenColour1, endScreenColour2;
+
+    public AudioSource endMusic;
 
     // Start is called before the first frame update
     void Start()
@@ -86,7 +90,7 @@ public class UI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        lapUiText.text = "Lap: " + checkPointPlayer.lapCount + "/" +  checkPointPlayer.maxLaps;
+        lapUiText.text = "Lap: " + (checkPointPlayer.lapCount) + "/" +  (checkPointPlayer.maxLaps - 1);
 
         if (checkPointPlayer.currentPlace > checkPointGhost.currentPlace)
         {
@@ -379,13 +383,30 @@ public class UI : MonoBehaviour
 
         if (checkPointPlayer.lapCount > checkPointGhost.lapCount)
         {
+            endText.color = endScreenColour2;
             endText.text = "You Win!";
-            endText.color = Color.green;
+            
+            endScreenTimeText.text = "Time:  " + timerText.text;
+
+            foreach (AudioSource a in pauseMenu.carSounds)
+            {
+                a.Stop();
+            }
+
+            pauseMenu.music.Stop();
+
+            endMusic.Play();
         }
         else if (checkPointPlayer.lapCount < checkPointGhost.lapCount)
         {
+            endText.color = endScreenColour1;
             endText.text = "You Lose!";
-            endText.color = Color.red;
+
+            endScreenTimeText.text = "Time:  " + timerText.text;
+
+            pauseMenu.music.Stop();
+
+            endMusic.Play();
         }
         
 

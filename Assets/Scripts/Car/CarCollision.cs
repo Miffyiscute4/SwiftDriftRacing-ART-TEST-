@@ -78,7 +78,7 @@ public class CarCollision : MonoBehaviour
 
     [Header("PowerUp Booleans")] public bool isBoosted; public bool isShootingDart; public bool isInvincible; public bool isShootingBomb; public bool isMagnetic; public bool isShootingRocket; public bool isShootingIceSpikes;
 
-
+    [Header("other")] public bool checkPoint1Sound = true;
 
     // Update is called once per frame
 
@@ -876,10 +876,15 @@ public class CarCollision : MonoBehaviour
 
     public void PlayAnimation()
     {
-        sound_CheckPoint.Play();
+        if (checkPoint1Sound)
+        {
+            sound_CheckPoint.Play();
 
-        checkPointText.SetBool("isTouchingInitialCheckPoint", true);
+            checkPointText.SetBool("isTouchingInitialCheckPoint", true);
 
-        StartCoroutine("StopAnimation");
+            StartCoroutine("StopAnimation");
+        }
+
+        
     }
 }

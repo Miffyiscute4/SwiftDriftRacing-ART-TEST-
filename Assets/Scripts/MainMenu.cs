@@ -61,4 +61,30 @@ public class MainMenu : MonoBehaviour
     {
         buttonClickedSound.Play();
     }
+
+    public void BackButtonDifficultySelect()
+    {
+        difficultySelectPage1.SetActive(false);
+        levelSelectPage.SetActive(true);
+    }
+
+    public void BackButtonLevelSelect()
+    {
+        levelSelectPage.SetActive(false);
+        mainPage.SetActive(true);
+    }
+
+    public void PlayBounceAnimation(Animator anim)
+    {
+        anim.enabled = !anim.enabled;
+
+        if (anim.enabled)
+        {
+            anim.transform.localScale *= 1.25f;
+        }
+        else
+        {
+            anim.transform.localScale /= 1.25f;
+        }
+    }
 }

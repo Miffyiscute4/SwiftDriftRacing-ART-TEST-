@@ -9,7 +9,7 @@ public class CheckpointPlace : MonoBehaviour
 
     public int maxLaps = 2;
 
-     [HideInInspector] public int currentPlace = 0;
+      public int currentPlace = 0;
 
     public GameObject checkPointsObject;
 
@@ -26,6 +26,9 @@ public class CheckpointPlace : MonoBehaviour
     public Text checkPointBoxText;
 
     public UI ui;
+
+    bool gameEnded = false;
+    public bool isTutorial = false;
 
     void Start()
     {
@@ -94,15 +97,18 @@ public class CheckpointPlace : MonoBehaviour
                         carCol.PlayAnimation();
                     }
               
-                    if (other.gameObject.transform != checkPoints[currentCheckPointNum + 1] && other.gameObject.transform != checkPoints[currentCheckPointNum])
+                    if (other.gameObject.transform != checkPoints[currentCheckPointNum + 1] && other.gameObject.transform != checkPoints[currentCheckPointNum] && !isTutorial)
                     {
                         RespawnPlayer();
                     }
                 }
 
-                if (lapCount >= maxLaps)
+                if (lapCount >= maxLaps && !gameEnded)
                 {
                     ui.EndGame();
+
+                    gameEnded = true;
+
                     Debug.Log("End of game");
                 }
 

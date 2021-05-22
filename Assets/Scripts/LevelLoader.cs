@@ -9,13 +9,15 @@ public class LevelLoader : MonoBehaviour
     public GameObject loadingScreen;
     public Slider slider;
     public Text loadingText;
-    AudioSource loadingMusic;
+    AudioSource loadingMusic, endMusic;
     public AudioSource AudioSourceToDisable;
 
     public Player_CarController car;
     AudioSource[] carSounds;
 
-    public bool isMenu = false;
+    public UI ui;
+
+    public bool isMenu = false, isEndScreen = false;
 
     void Start()
     {
@@ -26,6 +28,10 @@ public class LevelLoader : MonoBehaviour
             carSounds = car.GetComponents<AudioSource>();
         }
 
+        if (isEndScreen)
+        {
+            endMusic = ui.endMusic;
+        }
     }
 
     public void LoadLevel(string sceneName)
@@ -43,6 +49,11 @@ public class LevelLoader : MonoBehaviour
             {
                 a.Stop();
             }
+        }
+
+        if (endMusic != null)
+        {
+            endMusic.Stop();
         }
         
 

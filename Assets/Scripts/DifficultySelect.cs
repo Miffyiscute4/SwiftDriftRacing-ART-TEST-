@@ -10,6 +10,11 @@ public class DifficultySelect : ScriptableObject
 
     [HideInInspector] public int ghostNumber;
 
+    void Start()
+    {
+        difficultyGhost = ghosts[1];
+    }
+
     public void SetDifficulty(int difficultyNum)
     {
         difficultyGhost = ghosts[difficultyNum];

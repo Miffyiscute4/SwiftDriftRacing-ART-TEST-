@@ -9,6 +9,10 @@ public class Tutorial : MonoBehaviour
 
     public GameObject checkPointsObject;
     Transform[] checkPoints;
+    bool[] ischeckPointNew = {false, true, true, true, true, true, true, true, true, true};
+
+    public GameObject initialPopup;
+    bool initialPopupShown;
 
     public GameObject popupsObject;
     public Transform[] popups;
@@ -16,23 +20,48 @@ public class Tutorial : MonoBehaviour
 
     AudioSource[] carAudio;
 
+    public AudioSource popupSound;
+
     // Start is called before the first frame update
     void Start()
     {
         checkPoints = checkPointsObject.GetComponentsInChildren<Transform>();
 
+        //ischeckPointNew.Add(false);
+
         for (int i = 1; i < popups.Length; i++)
         {
             popups[i].gameObject.SetActive(false);
+            //ischeckPointNew.Add(true);
         }
 
+        initialPopup.SetActive(false);
+
         carAudio = car.GetComponents<AudioSource>();
+
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (car.stopwatch_StartDelay >= car.startDelay && !initialPopupShown)
+        {
+            initialPopup.SetActive(true);
 
+            car.enabled = false;
+            pauseMenu.enabled = false;
+
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+
+            foreach (AudioSource a in carAudio)
+            {
+                a.Pause();
+            }
+
+            popupSound.Play();
+
+            initialPopupShown = true;
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -51,7 +80,16 @@ public class Tutorial : MonoBehaviour
         pauseMenu.enabled = true;
 
         Time.timeScale = 1;
-        currentPopup.gameObject.SetActive(false);
+
+        if (!initialPopup.activeInHierarchy)
+        {
+            currentPopup.gameObject.SetActive(false);
+        }
+        else
+        {
+            initialPopup.SetActive(false);
+        }
+
         Cursor.lockState = CursorLockMode.Locked;
 
         foreach (AudioSource a in carAudio)
@@ -64,7 +102,7 @@ public class Tutorial : MonoBehaviour
     {
         for (int i = 1; i < checkPoints.Length; i++)
         {
-            if (other.gameObject == checkPoints[i].gameObject)
+            if (other.gameObject == checkPoints[i].gameObject && ischeckPointNew[i])
             {
                 car.enabled = false;
                 pauseMenu.enabled = false;
@@ -79,6 +117,10 @@ public class Tutorial : MonoBehaviour
                 {
                     a.Pause();
                 }
+
+                popupSound.Play();
+
+                ischeckPointNew[i] = false;
             }
         }
     }

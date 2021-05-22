@@ -153,11 +153,11 @@ public class Player_CarController : MonoBehaviour
                 VerticalInput();
                 TurnInput();
 
-                if (Input.GetKey(KeyCode.Q) && Input.GetKeyDown(KeyCode.Q))
+                if (Input.GetKeyDown(KeyCode.J))
                 {
                     vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= -1;
                 }
-                else if (Input.GetKeyUp(KeyCode.Q))
+                else if (Input.GetKeyUp(KeyCode.J))
                 {
                     vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.x), Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y), -Mathf.Abs(vc.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z));
                 }
@@ -416,7 +416,7 @@ public class Player_CarController : MonoBehaviour
 
             if (carModel.transform.localRotation.eulerAngles.y < 45 || carModel.transform.localRotation.eulerAngles.y > 315 && Input.GetAxisRaw("Vertical") != 0)
             {
-                carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.localRotation, Quaternion.Euler(0, Input.GetAxisRaw("Horizontal") * (turnStrength * 1.25f) * 3, 0), Time.deltaTime);
+                carModel.transform.localRotation = Quaternion.Lerp(carModel.transform.localRotation, Quaternion.Euler(0, Input.GetAxisRaw("Horizontal") * Input.GetAxis("Vertical") * (turnStrength * 1.25f) * 3, 0), Time.deltaTime);
             }
 
             if (Input.GetAxisRaw("Vertical") != 0)
@@ -710,8 +710,8 @@ public class Player_CarController : MonoBehaviour
            
 
             //front wheel turn y
-            leftFrontWheel.localRotation = Quaternion.Lerp(leftFrontWheel.localRotation, Quaternion.Euler(0, Input.GetAxis("Horizontal") * (driftStrength + 35), 0), Time.deltaTime * 5);
-            rightFrontWheel.localRotation = Quaternion.Lerp(rightFrontWheel.localRotation, Quaternion.Euler(0, Input.GetAxis("Horizontal") * (driftStrength + 35), 0), Time.deltaTime * 5);
+            leftFrontWheel.localRotation = Quaternion.Lerp(leftFrontWheel.localRotation, Quaternion.Euler(0, Input.GetAxis("Horizontal") * Input.GetAxis("Vertical") * (driftStrength + 35), 0), Time.deltaTime * 5);
+            rightFrontWheel.localRotation = Quaternion.Lerp(rightFrontWheel.localRotation, Quaternion.Euler(0, Input.GetAxis("Horizontal") * Input.GetAxis("Vertical") * (driftStrength + 35), 0), Time.deltaTime * 5);
 
 
 
