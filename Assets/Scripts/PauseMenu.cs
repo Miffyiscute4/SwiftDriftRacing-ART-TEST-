@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
     bool isPaused = false;
-    public GameObject pauseMenu;
+    public GameObject pauseMenu, settingsPage;
 
     public Player_CarController carPlayer;
 
@@ -16,6 +18,11 @@ public class PauseMenu : MonoBehaviour
 
     public AudioSource[] carSounds;
 
+    public AudioMixer audioMixer;
+
+    //settings menu
+    public Slider volumeSlider;
+    public Dropdown graphicsDropDown;
 
 
     void Start()
@@ -27,12 +34,28 @@ public class PauseMenu : MonoBehaviour
         music.Play();
 
         carSounds = carPlayer.GetComponents<AudioSource>();
+
+        //sets volume visuals to current volume settings
+        float volume = 0;
+
+        audioMixer.GetFloat("MainVolume", out volume);
+
+        Debug.Log(volume);
+        volumeSlider.value = volume;
+
+        //sets graphics visuals to current graphics settings
+        int quality;
+
+        quality = QualitySettings.GetQualityLevel();
+
+        Debug.Log(quality);
+        graphicsDropDown.value = quality;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !settingsPage.activeInHierarchy)
         {
             if (!isPaused)
             {
@@ -107,4 +130,26 @@ public class PauseMenu : MonoBehaviour
         buttonClickedSound.Play();
     }
 
+    public void OpenSettingsMenu()
+    {
+        settingsPage.SetActive(true);
+        pauseMenu.SetActive(false);
+    }
+
+    public void BackButtonSettingsMenu()
+    {
+        settingsPage.SetActive(false);
+        pauseMenu.SetActive(true);
+    }
+
+    public void ChangeAudio(float volume)
+    {
+        audioMixer.SetFloat("MainVolume", volume);
+        Debug.Log(volume);
+    }
+
+    public void ChangeGraphics(int Quality)
+    {
+        QualitySettings.SetQualityLevel(Quality);
+    }
 }

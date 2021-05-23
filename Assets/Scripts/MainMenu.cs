@@ -2,14 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     public LevelLoader levelLoader;
 
-    public GameObject mainPage, levelSelectPage, difficultySelectPage1;
+    public GameObject mainPage, levelSelectPage, difficultySelectPage1, settingsPage;
 
     public AudioSource buttonClickedSound, buttonHighlightedSound;
+
+    public AudioMixer audioMixer;
+
+    //settings menu
+    public Slider volumeSlider;
+    public Dropdown graphicsDropDown;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -17,14 +27,26 @@ public class MainMenu : MonoBehaviour
         mainPage.SetActive(true);
         levelSelectPage.SetActive(false);
         difficultySelectPage1.SetActive(false);
+        settingsPage.SetActive(false);
 
         Cursor.lockState = CursorLockMode.None;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+
+        //sets volume visuals to current volume settings
+        float volume = 0;
+
+        audioMixer.GetFloat("MainVolume", out volume);
+
+        Debug.Log(volume);
+        volumeSlider.value = volume;
+
+        //sets graphics visuals to current graphics settings
+        int quality;
+
+        quality = QualitySettings.GetQualityLevel();
+
+        Debug.Log(quality);
+        graphicsDropDown.value = quality;
     }
 
     public void LevelSelect()
@@ -86,5 +108,28 @@ public class MainMenu : MonoBehaviour
         {
             anim.transform.localScale /= 1.25f;
         }
+    }
+
+    public void OpenSettingsMenu()
+    {
+        settingsPage.SetActive(true);
+        mainPage.SetActive(false);
+    }
+
+    public void BackButtonSettingsMenu()
+    {
+        settingsPage.SetActive(false);
+        mainPage.SetActive(true);
+    }
+
+    public void ChangeAudio(float volume)
+    {
+        audioMixer.SetFloat("MainVolume", volume);
+        Debug.Log(volume);
+    }
+
+    public void ChangeGraphics(int Quality)
+    {
+        QualitySettings.SetQualityLevel(Quality);
     }
 }
