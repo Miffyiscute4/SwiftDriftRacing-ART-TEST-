@@ -10,6 +10,8 @@ public class GhostPlayer : MonoBehaviour
     int index1;
     int index2;
 
+    CheckpointPlace checkPoint;
+
     void Awake()
     {
         timeValue = 0;
@@ -18,6 +20,8 @@ public class GhostPlayer : MonoBehaviour
     void Start()
     {
         ghost = difficultySelect.difficultyGhost;
+
+        checkPoint = GetComponent<CheckpointPlace>();
     }
 
     void Update()
@@ -28,6 +32,13 @@ public class GhostPlayer : MonoBehaviour
         {
             GetIndex();
             SetTransform();
+        }
+
+        if (transform.position == ghost.position[ghost.position.Count - 1] && !checkPoint.gameEnded)
+        {
+            checkPoint.lapCount = checkPoint.maxLaps;
+            checkPoint.ui.EndGame();
+            checkPoint.gameEnded = true;
         }
     }
 

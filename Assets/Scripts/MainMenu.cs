@@ -48,10 +48,7 @@ public class MainMenu : MonoBehaviour
         Debug.Log(quality);
         graphicsDropDown.value = quality;
 
-        if (!Screen.fullScreen)
-        {
-            Screen.fullScreen = true;
-        }
+
     }
 
     public void LevelSelect()

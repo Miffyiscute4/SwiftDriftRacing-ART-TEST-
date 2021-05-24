@@ -27,7 +27,7 @@ public class CheckpointPlace : MonoBehaviour
 
     public UI ui;
 
-    bool gameEnded = false;
+    [HideInInspector] public bool gameEnded = false;
     public bool isTutorial = false;
 
     void Start()
@@ -68,7 +68,16 @@ public class CheckpointPlace : MonoBehaviour
         {
             checkPointBoxText.text = "Lap " + lapCount;
         }
-        
+
+        if (lapCount >= maxLaps && !gameEnded)
+        {
+            ui.EndGame();
+
+            gameEnded = true;
+
+            Debug.Log("End of game");
+        }
+
     }
 
     void OnTriggerEnter(Collider other)
@@ -103,16 +112,10 @@ public class CheckpointPlace : MonoBehaviour
                     }
                 }
 
-                if (lapCount >= maxLaps && !gameEnded)
-                {
-                    ui.EndGame();
+                
 
-                    gameEnded = true;
-
-                    Debug.Log("End of game");
-                }
-
-            }    
+            }   
+            
             
             // it is checkpoints[1] because the first gameobject doesn't count
             if (isFinished && other.gameObject.transform == checkPoints[1])
