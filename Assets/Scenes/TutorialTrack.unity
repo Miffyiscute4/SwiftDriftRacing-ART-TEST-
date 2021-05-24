@@ -2322,7 +2322,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "here you can get used to the controls.\n\nwhen you're done,\n press <color=#0000ffff>Escape</color>
+  m_Text: "here you can get used to the controls.\n\nwhen you're done,\n press <color=#0000ffff>Enter</color>
     to open the pause menu & click 'exit'."
 --- !u!222 &164656348
 CanvasRenderer:
@@ -24588,7 +24588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1424476387
 RectTransform:
   m_ObjectHideFlags: 0
